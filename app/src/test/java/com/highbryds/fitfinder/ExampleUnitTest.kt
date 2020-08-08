@@ -1,4 +1,4 @@
-package com.tplcorp.kotlinmvvm
+package com.highbryds.fitfinder
 
 import org.junit.Test
 

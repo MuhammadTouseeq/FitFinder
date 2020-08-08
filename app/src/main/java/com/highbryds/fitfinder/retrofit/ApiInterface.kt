@@ -1,6 +1,6 @@
-package com.tplcorp.kotlinmvvm.Retrofit
+package com.highbryds.fitfinder.retrofit
 
-import com.tplcorp.kotlinmvvm.model.UsersData
+import com.highbryds.fitfinder.model.UsersData
 import retrofit2.Response
 import retrofit2.http.GET
 

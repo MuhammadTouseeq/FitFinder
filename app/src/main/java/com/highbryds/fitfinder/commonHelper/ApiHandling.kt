@@ -1,11 +1,8 @@
-package com.tplcorp.kotlinmvvm.utils
+package com.highbryds.fitfinder.commonHelper
 
 import org.json.JSONObject
 
 // To handle messages and error thrown by apis
-object ApiHandling {
-
-    fun getErrors(error: String):  String{
+fun getErrors(error: String):  String{
        return JSONObject(error).get("message").toString()
     }
-}

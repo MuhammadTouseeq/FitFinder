@@ -1,4 +1,4 @@
-package com.tplcorp.kotlinmvvm.Retrofit
+package com.highbryds.fitfinder.retrofit
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

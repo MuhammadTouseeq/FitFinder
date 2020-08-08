@@ -1,8 +1,8 @@
-package com.tplcorp.kotlinmvvm.di
+package com.highbryds.fitfinder.di
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.tplcorp.kotlinmvvm.Retrofit.ApiInterface
+import com.highbryds.fitfinder.retrofit.ApiInterface
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

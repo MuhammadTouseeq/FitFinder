@@ -1,4 +1,4 @@
-package com.tplcorp.kotlinmvvm.app
+package com.highbryds.fitfinder.app
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
