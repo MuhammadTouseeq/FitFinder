@@ -9,7 +9,7 @@ android {
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "com.highbryds.fitfinder"
+        applicationId "com.android.indigo"
         minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
@@ -73,6 +73,12 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
     // Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:$room_version"
+
+    //SDP - a scalable size unit
+    implementation 'com.intuit.sdp:sdp-android:1.0.6'
+    //Material Design
+    implementation 'com.google.android.material:material:1.2.0'
+
 }
 
 kapt{
