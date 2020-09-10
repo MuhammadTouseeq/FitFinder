@@ -1,0 +1,4 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:top="30dp" android:left="120dp" android:right="120dp" android:bottom="30dp"
+        android:drawable="@drawable/ic_error_big"/>
+</layer-list>
