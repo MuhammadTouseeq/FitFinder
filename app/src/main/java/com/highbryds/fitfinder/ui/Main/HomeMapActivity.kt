@@ -19,19 +19,15 @@ import android.text.TextUtils
 import android.transition.TransitionManager
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
+import android.view.*
 import android.widget.*
 import androidx.core.content.FileProvider
-import androidx.lifecycle.observe
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -51,7 +47,6 @@ import com.highbryds.fitfinder.commonHelper.toast
 import com.highbryds.fitfinder.model.NearbyStory
 import com.highbryds.fitfinder.model.TrendingStory
 import com.highbryds.fitfinder.model.UserStory
-import com.highbryds.fitfinder.model.UsersData
 import com.highbryds.fitfinder.ui.BaseActivity
 import com.highbryds.snapryde.rider_app.recievers.GpsLocationReceiver
 import com.karumi.dexter.Dexter
@@ -263,7 +258,7 @@ homeMapViewModel.observeAllNearByStories().observe(this, androidx.lifecycle.Obse
                 .title("New Message")
                 .snippet(story.storyName+"")
                 .visible(true)
-                .position(LatLng(story.longitude.toDouble(), story.longitude.toDouble()))
+                .position(LatLng(story.latitude.toDouble(), story.longitude.toDouble()))
                 .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
         )
 
@@ -368,7 +363,23 @@ homeMapViewModel.observeAllNearByStories().observe(this, androidx.lifecycle.Obse
         })
 
 
+//                googleMap.setOnCameraMoveCanceledListener(new GoogleMap.OnCameraMoveCanceledListener() {
+//                    @Override
+//                    public void onCameraMoveCanceled() {
+//                        Toast.makeText(context, "Camera move cancelled", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
 
+//                googleMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
+//                    @Override
+//                    public void onCameraMove() {
+//                        Toast.makeText(context, "Camera Move", Toast.LENGTH_SHORT).show();
+//
+//                    }
+//                });
+        mGoogleMap.setOnCameraIdleListener(OnCameraIdleListener {
+            currentLocation=mGoogleMap.getCameraPosition().target
+        })
 
         mGoogleMap.setInfoWindowAdapter(MyInfoWindowAdapter(this))
 //        createCustomMarker(
