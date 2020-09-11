@@ -28,6 +28,7 @@ import com.highbryds.fitfinder.commonHelper.PrefsHelper
 import com.highbryds.fitfinder.commonHelper.toast
 import com.highbryds.fitfinder.model.UserAgent
 import com.highbryds.fitfinder.model.UsersData
+import com.highbryds.fitfinder.ui.Main.HomeMapActivity
 import com.highbryds.fitfinder.ui.Profile.UserProfileMain
 import com.highbryds.fitfinder.vm.AuthViewModels.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -135,7 +136,7 @@ class LoginActivity : AppCompatActivity(), ApiResponseCallBack {
             PrefsHelper.putBoolean(Constants.Pref_IsLogin, true)
             Log.d("USERDATA", it.toString())
 
-            val intent = Intent(this, UserProfileMain::class.java)
+            val intent = Intent(this, HomeMapActivity::class.java)
             startActivity(intent)
         })
 

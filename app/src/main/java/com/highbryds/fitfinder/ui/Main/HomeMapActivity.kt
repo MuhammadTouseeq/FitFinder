@@ -40,8 +40,9 @@ import com.highbryds.fitfinder.BuildConfig
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.adapters.MyInfoWindowAdapter
 import com.highbryds.fitfinder.adapters.TrendingStoriesAdapter
-import com.highbryds.fitfinder.callbacks.ApiErrorsCallBack
+import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
 import com.highbryds.fitfinder.commonHelper.AppUtils
+import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.commonHelper.MapStyling
 import com.highbryds.fitfinder.commonHelper.toast
 import com.highbryds.fitfinder.model.NearbyStory
@@ -54,6 +55,15 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.log4k.d
+import com.mikepenz.materialdrawer.model.DividerDrawerItem
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
+import com.mikepenz.materialdrawer.model.interfaces.withEmail
+import com.mikepenz.materialdrawer.model.interfaces.withIcon
+import com.mikepenz.materialdrawer.model.interfaces.withIdentifier
+import com.mikepenz.materialdrawer.model.interfaces.withName
+import com.mikepenz.materialdrawer.widget.AccountHeaderView
 import com.pakdev.easypicker.utils.EasyImagePicker
 import dagger.hilt.android.AndroidEntryPoint
 import de.hdodenhof.circleimageview.CircleImageView
@@ -78,7 +88,7 @@ import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickListener,
-    ApiErrorsCallBack {
+    ApiResponseCallBack {
 
 
     private val TAG = HomeMapActivity::class.java!!.getSimpleName()
@@ -103,27 +113,28 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
     //=======Audio Recorder Variables
     private var mRecorder: MediaRecorder? = null
     private var mPlayer: MediaPlayer? = null
-     var fileName: String? = null
+    var fileName: String? = null
     private var lastProgress = 0
     private val mHandler = Handler()
     private val RECORD_AUDIO_REQUEST_CODE = 101
     private var isPlaying = false
+
     //========End=====//
     private val SELECT_VIDEO = 1
     private val ACTION_TAKE_VIDEO = 122
 
-lateinit var progressDialog: ProgressDialog
+    lateinit var progressDialog: ProgressDialog
 
-@Inject
-lateinit var homeMapViewModel: HomeMapViewModel
+    @Inject
+    lateinit var homeMapViewModel: HomeMapViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_map)
 
-     //    bindNavigationDrawer(toolbar)
+        //    bindNavigationDrawer(toolbar)
 
-        homeMapViewModel.apiErrorsCallBack=this
+        homeMapViewModel.apiErrorsCallBack = this
 
         bnidBottomSheet()
 
@@ -153,18 +164,22 @@ lateinit var homeMapViewModel: HomeMapViewModel
 
 
 
-homeMapViewModel.observeAllNearByStories().observe(this, androidx.lifecycle.Observer {
+        homeMapViewModel.observeAllNearByStories().observe(this, androidx.lifecycle.Observer {
 
-    for (item: NearbyStory in it) {
-        Log.d("StoryData", item.mediaUrl)
-        if(item.latitude!=0.0)
-        {
-        //   mGoogleMap.clear()
-            addStoryMarker(this,item)
+            for (item: NearbyStory in it) {
+                Log.d("StoryData", item.mediaUrl)
+                if (item.latitude != 0.0) {
+                    //   mGoogleMap.clear()
+                    addStoryMarker(this, item)
+                }
+
+            }
+        })
+
+        drawer()
+        IV_Slider.setOnClickListener {
+            slider.drawerLayout?.openDrawer(slider)
         }
-
-    }
-})
 
     }
 
@@ -256,7 +271,7 @@ homeMapViewModel.observeAllNearByStories().observe(this, androidx.lifecycle.Obse
         val pinMarker: Marker = mGoogleMap.addMarker(
             MarkerOptions()
                 .title("New Message")
-                .snippet(story.storyName+"")
+                .snippet(story.storyName + "")
                 .visible(true)
                 .position(LatLng(story.latitude.toDouble(), story.longitude.toDouble()))
                 .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
@@ -265,6 +280,7 @@ homeMapViewModel.observeAllNearByStories().observe(this, androidx.lifecycle.Obse
 
         return bitmap
     }
+
     open fun createCustomMarker(
         context: Context,
         latLng: LatLng
@@ -318,6 +334,39 @@ homeMapViewModel.observeAllNearByStories().observe(this, androidx.lifecycle.Obse
         return bitmap
     }
 
+    private fun drawer() {
+
+        //drawer header
+        // Create the AccountHeader
+        val headerView = AccountHeaderView(this).apply {
+            attachToSliderView(slider) // attach to the slider
+            addProfiles(
+                ProfileDrawerItem().withName("Mike Penz").withEmail("mikepenz@gmail.com").withIcon(getResources().getDrawable(R.drawable.clap_icon))
+            )
+            onAccountHeaderListener = { view, profile, current ->
+                // react to profile changes
+                false
+            }
+        }
+
+        val item1 = PrimaryDrawerItem().withIdentifier(1).withName("Home")
+        val item2 = PrimaryDrawerItem().withIdentifier(2).withName("Profile")
+
+        slider.itemAdapter.add(
+            item1,
+            item2,
+            SecondaryDrawerItem().withName("Setting")
+        )
+
+        slider.onDrawerItemClickListener = { v, drawerItem, position ->
+            // do something with the clicked item :D
+            false
+        }
+
+        slider.headerView = headerView
+
+    }
+
     //Check the GPS then hide or show view
     private fun hideShowView() {
         if (AppUtils.isGpsEnabled(this)) {
@@ -356,7 +405,10 @@ homeMapViewModel.observeAllNearByStories().observe(this, androidx.lifecycle.Obse
         homeMapViewModel.userLocation.observe(this, androidx.lifecycle.Observer {
 
             it?.let {
-                homeMapViewModel.fetchNearByStoriesData(it.latitude.toString(), it.longitude.toString())
+                homeMapViewModel.fetchNearByStoriesData(
+                    it.latitude.toString(),
+                    it.longitude.toString()
+                )
 
             }//Requesting for nearByStoies
 
@@ -378,7 +430,7 @@ homeMapViewModel.observeAllNearByStories().observe(this, androidx.lifecycle.Obse
 //                    }
 //                });
         mGoogleMap.setOnCameraIdleListener(OnCameraIdleListener {
-            currentLocation=mGoogleMap.getCameraPosition().target
+            currentLocation = mGoogleMap.getCameraPosition().target
         })
 
         mGoogleMap.setInfoWindowAdapter(MyInfoWindowAdapter(this))
@@ -410,7 +462,8 @@ homeMapViewModel.observeAllNearByStories().observe(this, androidx.lifecycle.Obse
 
     lateinit var adapter: TrendingStoriesAdapter
     private fun setupTrendingStories() {
-        recycler_view.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false)
+        recycler_view.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
         adapter = TrendingStoriesAdapter(arrayListOf())
 //        recycler_view.addItemDecoration(
@@ -422,20 +475,20 @@ homeMapViewModel.observeAllNearByStories().observe(this, androidx.lifecycle.Obse
         recycler_view.adapter = adapter
 
 
-        var items =ArrayList<TrendingStory>()
-      for(i in 1..7)
-      {
-          items.add(TrendingStory())
-      }
+        var items = ArrayList<TrendingStory>()
+        for (i in 1..7) {
+            items.add(TrendingStory())
+        }
         adapter.addData(items)
     }
+
     //request permission for location
     private fun requestLocationPermissions() {
 
         Dexter.withActivity(this@HomeMapActivity)
             .withPermissions(
-                android.Manifest.permission.ACCESS_COARSE_LOCATION
-                , android.Manifest.permission.ACCESS_FINE_LOCATION
+                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
             ).withListener(object : MultiplePermissionsListener {
                 override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
                     report?.let {
@@ -498,9 +551,9 @@ homeMapViewModel.observeAllNearByStories().observe(this, androidx.lifecycle.Obse
 
             currentLocation = LatLng(lastLocation.latitude, lastLocation.longitude)
 
-            homeMapViewModel.userLocation.value=currentLocation
+            homeMapViewModel.userLocation.value = currentLocation
 
-stopLocationUpdate()
+            stopLocationUpdate()
             moveGoogleMap(currentLocation)
 
         }
@@ -520,10 +573,9 @@ stopLocationUpdate()
     }
 
 
-    fun stopLocationUpdate()
-    {
+    fun stopLocationUpdate() {
         fusedLocationProviderClient.removeLocationUpdates(locationCallback)
-        homeMapViewModel.userLocation.value=null
+        homeMapViewModel.userLocation.value = null
     }
 
     //getting last location and
@@ -618,7 +670,7 @@ stopLocationUpdate()
         LocationRequest.setPriority(LocationRequest.priority)
         LocationRequest.setInterval(UPDATE_INTERVAL)
         LocationRequest.setFastestInterval(FASTEST_INTERVAL)
-      //  LocationRequest.setSmallestDisplacement(5000f) //15 meter
+        //  LocationRequest.setSmallestDisplacement(5000f) //15 meter
     }
 
 
@@ -657,8 +709,8 @@ stopLocationUpdate()
 
         if (requestCode == ACTION_TAKE_VIDEO) {
 
-               // filePath = getPath(data!!.getData()).toString();
-                prepareVideoPlayer(data!!.getData(),view_video)
+            // filePath = getPath(data!!.getData()).toString();
+            prepareVideoPlayer(data!!.getData(), view_video)
 
 
             return
@@ -680,6 +732,7 @@ stopLocationUpdate()
 
         })
     }
+
     open fun getPath(uri: Uri?): String? {
         val projection =
             arrayOf(MediaStore.Images.Media.DATA)
@@ -692,33 +745,29 @@ stopLocationUpdate()
     }
 
 
-
-
     override fun onClick(view: View?) {
         when (view!!.id) {
 
             R.id.btnSend -> {
 
 
-                if(TextUtils.isEmpty(txtMessage.text.toString().trim()))
-                {
-                    toast(applicationContext,"Message is required")
+                if (TextUtils.isEmpty(txtMessage.text.toString().trim())) {
+                    toast(applicationContext, "Message is required")
                     return
                 }
-                if(filePath.isEmpty())
-                {
-                    toast(applicationContext,"story media is missing")
+                if (filePath.isEmpty()) {
+                    toast(applicationContext, "story media is missing")
                     return
                 }
 
-                val model:UserStory= UserStory(
+                val model: UserStory = UserStory(
                     txtMessage.text.toString(),
-                    "123",
-                   currentLocation.latitude.toString(),
-               currentLocation.longitude.toString(),
+                    KotlinHelper.getUsersData().SocialId,
+                    currentLocation.latitude.toString(),
+                    currentLocation.longitude.toString(),
                     filePath
                 );
-               // showProgressDialog()
+                ///showProgressDialog()
                 homeMapViewModel.uploadStoryData(model)
 
 
@@ -726,12 +775,12 @@ stopLocationUpdate()
             R.id.btnCamera -> {
 
 
-resetAll()
+                resetAll()
                 EasyImagePicker.getInstance().withContext(this, BuildConfig.APPLICATION_ID)
                     .openCamera()
             }
             R.id.btnGallery -> {
-resetAll()
+                resetAll()
                 EasyImagePicker.getInstance().withContext(this, BuildConfig.APPLICATION_ID)
                     .openGallery()
             }
@@ -740,9 +789,7 @@ resetAll()
                 resetAll()
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     requestVideoPermissions()
-                }
-                else
-                {
+                } else {
                     openVideoRecorder()
                 }
             }
@@ -751,9 +798,7 @@ resetAll()
                 resetAll()
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     requestRecordAudioPermissions()
-                }
-                else
-                {
+                } else {
                     mediaTypeAudio.visibility = View.VISIBLE
                     mediaTypeVideo.visibility = View.GONE
                     chronometer.visibility = View.VISIBLE
@@ -788,7 +833,7 @@ resetAll()
     //==============Audio Recorder Functions============//
     private fun prepareStop() {
         TransitionManager.beginDelayedTransition(llRecorder)
-      //  imgBtRecord.visibility = View.VISIBLE
+        //  imgBtRecord.visibility = View.VISIBLE
         imgBtStop.visibility = View.GONE
         llPlay.visibility = View.VISIBLE
 
@@ -831,7 +876,7 @@ resetAll()
 
         fileName = root.absolutePath + "/FitFinder/Audios/" + (System.currentTimeMillis()
             .toString() + ".mp3")
-        filePath=fileName!!
+        filePath = fileName!!
         // Log.d("filename", fileName)
         mRecorder!!.setOutputFile(fileName)
         mRecorder!!.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
@@ -850,10 +895,9 @@ resetAll()
         chronometer.base = SystemClock.elapsedRealtime()
         chronometer.start()
         chronometer.setOnChronometerTickListener {
-            if(it.text.toString().equals("00:31")&&mRecorder!=null)
-            {
+            if (it.text.toString().equals("00:31") && mRecorder != null) {
 
-prepareStop()
+                prepareStop()
                 stopRecording()
             }
         }
@@ -938,8 +982,8 @@ prepareStop()
 
         Dexter.withActivity(this)
             .withPermissions(
-                android.Manifest.permission.RECORD_AUDIO
-                , android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.RECORD_AUDIO,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE
             ).withListener(object : MultiplePermissionsListener {
                 override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
@@ -971,8 +1015,8 @@ prepareStop()
 
         Dexter.withActivity(this)
             .withPermissions(
-                 android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                 android.Manifest.permission.CAMERA,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.CAMERA,
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE
             ).withListener(object : MultiplePermissionsListener {
                 override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
@@ -1022,10 +1066,9 @@ prepareStop()
      * Video Player
      */
 
-    fun prepareVideoPlayer(uri: Uri?, videoview:VideoView)
-    {
-        mediaTypeAudio.visibility=View.GONE
-        mediaTypeVideo.visibility=View.VISIBLE
+    fun prepareVideoPlayer(uri: Uri?, videoview: VideoView) {
+        mediaTypeAudio.visibility = View.GONE
+        mediaTypeVideo.visibility = View.VISIBLE
         try {
             // Start the MediaController
             val mediacontroller = MediaController(
@@ -1033,7 +1076,7 @@ prepareStop()
             )
             mediacontroller.setAnchorView(videoview)
             // Get the URL from String VideoURL
-           // val video = Uri.fromFile(File(path))
+            // val video = Uri.fromFile(File(path))
             videoview.setMediaController(mediacontroller)
 
 //            videoview.setVideoURI(Uri.parse(Environment.getExternalStorageDirectory().path
@@ -1058,7 +1101,7 @@ prepareStop()
 
         videoview.requestFocus()
         videoview.start()
-        videoview.setOnPreparedListener(object : MediaPlayer.OnPreparedListener{
+        videoview.setOnPreparedListener(object : MediaPlayer.OnPreparedListener {
             override fun onPrepared(p0: MediaPlayer?) {
                 videoview.start()
             }
@@ -1068,12 +1111,12 @@ prepareStop()
 
 
     /** Create a file Uri for saving an image or video  */
- fun getOutputMediaFileUri(type: Int): Uri? {
+    fun getOutputMediaFileUri(type: Int): Uri? {
         return Uri.fromFile(getOutputMediaFile(type))
     }
 
     /** Create a File for saving an image or video  */
- fun getOutputMediaFile(type: Int): File? {
+    fun getOutputMediaFile(type: Int): File? {
 
         // Check that the SDCard is mounted
         val mediaStorageDir = File(
@@ -1086,7 +1129,7 @@ prepareStop()
         // Create the storage directory(MyCameraVideo) if it does not exist
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
-               // output.setText("Failed to create directory MyCameraVideo.")
+                // output.setText("Failed to create directory MyCameraVideo.")
                 Toast.makeText(
                     applicationContext, "Failed to create directory MyCameraVideo.",
                     Toast.LENGTH_LONG
@@ -1112,39 +1155,43 @@ prepareStop()
 //                        "VID_" + timeStamp + ".mp4"
 //            )
 
-            File(Environment.getExternalStorageDirectory().absolutePath + "/FitFinder/Audios/VID_" + (System.currentTimeMillis()
-                .toString() + ".mp4"))
+            File(
+                Environment.getExternalStorageDirectory().absolutePath + "/FitFinder/Audios/VID_" + (System.currentTimeMillis()
+                    .toString() + ".mp4")
+            )
         } else {
             return null
         }
-        filePath=mediaFile.path
+        filePath = mediaFile.path
         return mediaFile
     }
 
     override fun getError(error: String) {
-        if(error.contains("Successfully"))
-        {
+        if (error.contains("Successfully")) {
             resetAll()
         }
-            this.toast(this, error)
+        this.toast(this, error)
 
     }
 
+    override fun getSuccess(success: String) {
+        TODO("Not yet implemented")
+    }
 
-    fun resetAll()
-    {
+
+    fun resetAll() {
         mediaTypeAudio.visibility = View.GONE
         mediaTypeVideo.visibility = View.GONE
         imgStory.visibility = View.GONE
-        filePath=""
+        filePath = ""
 
     }
 
 
-    fun showProgressDialog(){
-         progressDialog= ProgressDialog(applicationContext)
+    fun showProgressDialog() {
+        progressDialog = ProgressDialog(applicationContext)
         progressDialog.setMessage("Please wait...")
         progressDialog.window!!.requestFeature(Window.FEATURE_NO_TITLE)
-         progressDialog.show()
+        progressDialog.show()
     }
 }

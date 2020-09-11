@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
-import com.highbryds.fitfinder.callbacks.ApiErrorsCallBack
+import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
 import com.highbryds.fitfinder.commonHelper.getErrors
 import com.highbryds.fitfinder.model.NearbyStory
 import com.highbryds.fitfinder.model.UserStory
@@ -22,9 +22,10 @@ import javax.inject.Inject
 
 class HomeMapViewModel @Inject constructor(private val apiInterface: ApiInterface):ViewModel(){
 
-    lateinit var apiErrorsCallBack: ApiErrorsCallBack
+    lateinit var apiErrorsCallBack: ApiResponseCallBack
     val storiesData = MutableLiveData<List<NearbyStory>>()
     val userLocation = MutableLiveData<LatLng>()
+
 
     fun uploadStoryData(userStory: UserStory)
     {
