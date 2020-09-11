@@ -1,4 +1,4 @@
-package com.highbryds.fitfinder.retrofit
+package com.android.indigo.retrofit
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

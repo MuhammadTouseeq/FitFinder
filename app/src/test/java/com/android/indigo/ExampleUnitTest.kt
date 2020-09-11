@@ -1,4 +1,4 @@
-package com.highbryds.fitfinder
+package com.android.indigo
 
 import org.junit.Test
 

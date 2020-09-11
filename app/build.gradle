@@ -136,6 +136,11 @@ dependencies {
     //lottie
     implementation 'com.airbnb.android:lottie:3.4.2'
 
+    //SDP - a scalable size unit
+    implementation 'com.intuit.sdp:sdp-android:1.0.6'
+    //Material Design
+    implementation 'com.google.android.material:material:1.2.0'
+
 
 
 }

@@ -30,6 +30,7 @@ class MainViewModel @Inject constructor(private val provideApiInterface: ApiInte
                 getDatabaseDAO.insertUser(users)
             }
         }
+
     }
 
 
