@@ -9,13 +9,13 @@ apply plugin: 'com.google.firebase.crashlytics'
 android {
     compileSdkVersion 30
     buildToolsVersion "29.0.3"
-
     defaultConfig {
         applicationId "com.highbryds.fitfinder"
         minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -76,6 +76,38 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
     // Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:$room_version"
+
+//for Google map
+    implementation 'com.google.android.gms:play-services-maps:16.1.0'
+
+//for Google Fused Location
+    implementation 'com.google.android.gms:play-services-location:15.0.1'
+    //for material design components
+    implementation 'com.google.android.material:material:1.0.0'
+
+    //for Runtime Permissions
+    implementation 'com.karumi:dexter:4.2.0'
+    // for settings preference
+    implementation 'androidx.preference:preference:1.1.0'
+
+    //for login in kotlin
+    implementation "com.log4k:log4k:${kotlin_log_version}"
+    implementation "com.log4k:log4k-android:${kotlin_log_version}"
+
+    implementation 'com.squareup.picasso:picasso:2.7+'
+    implementation 'jp.wasabeef:picasso-transformations:2.2.1'
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
+    implementation 'com.github.MuhammadTouseeq:EasyImagePicker:v1.0.0'
+   // implementation 'net.alhazmy13.MediaPicker:libary:2.4.4'
+
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+    //implementation 'com.makeramen:roundedimageview:2.3.0'
+    implementation 'com.mikepenz:materialdrawer:6.0.9'
+
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
+
+    implementation 'com.makeramen:roundedimageview:2.3.0'
+
 
     //SDP - a scalable size unit
     implementation 'com.intuit.sdp:sdp-android:1.0.6'

@@ -13,4 +13,9 @@
         <item name="android:textColor">@color/colorBlack</item>
     </style>
 
+    <style name="PrimaryButton">
+        <item name="android:background">@drawable/shape_rounded_corner</item>
+        <item name="android:textColor">@android:color/white</item>
+
+    </style>
 </resources>
