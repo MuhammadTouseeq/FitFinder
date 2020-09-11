@@ -8,15 +8,13 @@ import androidx.lifecycle.viewModelScope
 import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
 import com.highbryds.fitfinder.retrofit.ApiInterface
 import com.highbryds.fitfinder.model.UsersData
-import com.highbryds.fitfinder.room.Dao
-import com.highbryds.fitfinder.room.tables.Users
+
 import com.highbryds.fitfinder.commonHelper.getErrors
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 // injecting the retrofit singleton until the app is alive - by hilt
-class MainViewModel @Inject constructor(private val provideApiInterface: ApiInterface,
-                                        private val getDatabaseDAO: Dao): ViewModel() {
+class MainViewModel @Inject constructor(private val provideApiInterface: ApiInterface): ViewModel() {
 
     val userdata: LiveData<List<UsersData>>? = MutableLiveData()
     lateinit var apiResponseCallBack: ApiResponseCallBack
@@ -26,8 +24,8 @@ class MainViewModel @Inject constructor(private val provideApiInterface: ApiInte
           userdata as MutableLiveData
             getUsersData()?.let {
                 userdata.value = it
-                var users = Users(0 , "123")
-                getDatabaseDAO.insertUser(users)
+              //  var users = Users(0 , "123")
+              //  getDatabaseDAO.insertUser(users)
             }
         }
     }
