@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_sheet_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="3dp"
+    android:padding="10dp"
+    android:background="@drawable/shape_rounded_white_nobottom"
+    app:behavior_hideable="false"
+    app:behavior_peekHeight="66dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="50dp"
+            android:src="@drawable/marker_thinking_boy"
+            android:padding="5dp"
+            android:background="@drawable/shape_circle_primary"
+            android:layout_height="50dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:padding="10dp"
+        android:letterSpacing="0.1"
+        android:text="Write your story here"
+        android:textColor="@android:color/black"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/shape_rounded_corner_white"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:layout_width="match_parent"
+                android:checked="false"
+                android:text="Current Location"
+                android:textOn="Pick Current"
+                android:textOff="Ghost Mode"
+                android:id="@+id/switchDeliveryType"
+                android:visibility="visible"
+                android:textSize="18sp"
+                android:background="@drawable/shape_rounded_corner"
+                android:textColor="@android:color/white"
+                android:padding="10dp"
+                android:layout_height="wrap_content"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:lines="4"
+            android:gravity="start"
+            android:layout_margin="10dp"
+            android:hint="What's in your mind"
+            android:id="@+id/txtMessage"
+           android:background="@android:color/white"
+            android:layout_height="wrap_content"/>
+
+<include android:visibility="gone" android:id="@+id/mediaTypeAudio" layout="@layout/view_audio_recorder"/>
+<include android:visibility="gone" android:id="@+id/mediaTypeVideo" layout="@layout/view_video_recorder"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:id="@+id/imgStory"
+            android:layout_gravity="center"
+            android:padding="3dp"
+            android:visibility="gone"
+            android:maxHeight="100dp"
+            android:layout_margin="10dp"
+            android:layout_height="wrap_content"/>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:background="@drawable/shape_rounded_base_nobottom"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="wrap_content"
+        android:src="@drawable/camera_alt_white_24dp"
+            android:padding="10dp"
+            android:id="@+id/btnCamera"
+            android:layout_marginLeft="20dp"
+          android:layout_alignParentLeft="true"
+            android:layout_height="50dp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:src="@drawable/add_photo_alternate_white_24dp"
+            android:padding="10dp"
+            android:id="@+id/btnGallery"
+            android:layout_marginLeft="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_height="50dp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:src="@drawable/video_call_white_24dp"
+            android:padding="10dp"
+            android:id="@+id/btnVideo"
+            android:layout_marginLeft="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_height="50dp"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:src="@drawable/mic_white_24dp"
+        android:padding="10dp"
+        android:id="@+id/btnAudioRecorder"
+        android:layout_marginLeft="20dp"
+        android:layout_alignParentLeft="true"
+        android:layout_height="50dp"/>
+    </LinearLayout>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:src="@drawable/send_white_24dp"
+        android:padding="10dp"
+        android:id="@+id/btnSend"
+        android:layout_alignParentRight="true"
+        android:layout_height="50dp"/>
+
+</RelativeLayout>
+
+
+    </LinearLayout>
+    </ScrollView>
+</LinearLayout>

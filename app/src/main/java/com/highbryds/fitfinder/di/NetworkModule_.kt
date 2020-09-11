@@ -1,7 +1,11 @@
 package com.highbryds.fitfinder.di
 
+import android.app.Application
+import android.app.ProgressDialog
+import android.view.Window
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.retrofit.ApiInterface
 import dagger.Module
 import dagger.Provides
@@ -49,4 +53,5 @@ object NetworkModule_ {
     fun provideApiInterface(retrofit: Retrofit.Builder): ApiInterface{
         return retrofit.build().create(ApiInterface::class.java)
     }
+
 }
