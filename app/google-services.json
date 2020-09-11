@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "457068488697",
+    "firebase_url": "https://fitfinder-c15fe.firebaseio.com",
+    "project_id": "fitfinder-c15fe",
+    "storage_bucket": "fitfinder-c15fe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:457068488697:android:9854ae1d69870704a17f28",
+        "android_client_info": {
+          "package_name": "com.highbryds.fitfinder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "457068488697-4grdamspb1iuj3joreh5slkkqbjj3365.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAd1Jvoh3fZ98AKruNxmJQzRUGSm2UpfE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "457068488697-4grdamspb1iuj3joreh5slkkqbjj3365.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

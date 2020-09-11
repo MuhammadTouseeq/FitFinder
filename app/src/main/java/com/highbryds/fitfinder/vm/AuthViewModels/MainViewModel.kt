@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.highbryds.fitfinder.callbacks.ApiErrorsCallBack
+import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
 import com.highbryds.fitfinder.retrofit.ApiInterface
 import com.highbryds.fitfinder.model.UsersData
 import com.highbryds.fitfinder.room.Dao
@@ -19,18 +19,17 @@ class MainViewModel @Inject constructor(private val provideApiInterface: ApiInte
                                         private val getDatabaseDAO: Dao): ViewModel() {
 
     val userdata: LiveData<List<UsersData>>? = MutableLiveData()
-    lateinit var apiErrorsCallBack: ApiErrorsCallBack
+    lateinit var apiResponseCallBack: ApiResponseCallBack
 
     init {
         viewModelScope.launch {
-            userdata as MutableLiveData
+          userdata as MutableLiveData
             getUsersData()?.let {
                 userdata.value = it
                 var users = Users(0 , "123")
                 getDatabaseDAO.insertUser(users)
             }
         }
-
     }
 
 
@@ -39,7 +38,7 @@ class MainViewModel @Inject constructor(private val provideApiInterface: ApiInte
         val errBody = provideApiInterface.getUsers().errorBody()?.string()
         return if (errBody != null) {
             Log.d("ERRORVIEWMODEL", getErrors(errBody))
-            apiErrorsCallBack.getError(getErrors(errBody))
+            apiResponseCallBack.getError(getErrors(errBody))
             null
         } else {
             provideApiInterface.getUsers().body()

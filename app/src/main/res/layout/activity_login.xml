@@ -1,9 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/si2"
     tools:context=".ui.Auth.LoginActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/imageView"
+        android:layout_width="@dimen/_200sdp"
+        android:layout_height="@dimen/_200sdp"
+        android:layout_centerHorizontal="true"
+        app:lottie_autoPlay="true"
+        app:lottie_rawRes="@raw/socialconnect"
+        app:lottie_loop="true"
+        app:lottie_speed="0.9"
+        android:layout_marginTop="@dimen/_80sdp"/>
+
+    <ProgressBar
+        android:id="@+id/loadingProgress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/_20sdp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome to FitFinder"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_18sdp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:text="Social Connect"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_12sdp" />
+
+
+        <Button
+            android:id="@+id/btnFB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginRight="@dimen/_20sdp"
+            android:background="@color/colorFB"
+            app:backgroundTint="@null"
+            android:text="Continue with Facebook"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_14sdp"/>
+
+<!--        <com.google.android.gms.common.SignInButton-->
+<!--            android:id="@+id/btnGoogle"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_marginLeft="@dimen/_20sdp"-->
+<!--            android:layout_marginRight="@dimen/_20sdp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textSize="@dimen/_14sdp" />-->
+
+        <Button
+            android:id="@+id/btnGoogle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginRight="@dimen/_20sdp"
+            android:background="@color/colorGoogle"
+            app:backgroundTint="@null"
+            android:text="Continue with google"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_14sdp"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginRight="@dimen/_20sdp"
+            android:background="@color/colorLinkedin"
+            app:backgroundTint="@null"
+            android:text="Continue with Linkedin"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_14sdp"/>
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

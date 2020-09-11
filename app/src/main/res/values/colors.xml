@@ -3,4 +3,12 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="colorBlack">#000</color>
+    <color name="colorGray">#CCCCCC</color>
+    <color name="colorWhite">#fff</color>
+    <color name="colorSky">#3ACCE1</color>
+
+    <color name="colorFB">#395795</color>
+    <color name="colorGoogle">#D9534F</color>
+    <color name="colorLinkedin">#0077B7</color>
 </resources>
