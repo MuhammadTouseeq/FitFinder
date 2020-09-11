@@ -34,7 +34,7 @@ interface ApiInterface {
     suspend fun userStories(@Path("socialID") socialID: String) : Response<List<UserStoriesModel>>
 
     @Multipart
-    @POST("uploadStories")
+    @POST("users/uploadStories")
     suspend fun uploadStory(
         @Part storyMedia: MultipartBody.Part,
         @Part("storyName") storyName: RequestBody,
@@ -44,7 +44,7 @@ interface ApiInterface {
 
     ): Response<UserStory>
 
-    @POST("getnearbystories")
+    @POST("users/getnearbystories")
     suspend fun getAllNearByStories(
         @Query("lat") latitude: String,
         @Query("longi") longitude: String

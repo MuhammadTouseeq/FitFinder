@@ -5,7 +5,6 @@ import android.os.Bundle
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
 import com.highbryds.fitfinder.commonHelper.toast
-import com.highbryds.fitfinder.vm.AuthViewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
