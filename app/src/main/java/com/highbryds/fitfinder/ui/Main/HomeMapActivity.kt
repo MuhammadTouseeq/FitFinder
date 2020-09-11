@@ -40,7 +40,7 @@ import com.highbryds.fitfinder.BuildConfig
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.adapters.MyInfoWindowAdapter
 import com.highbryds.fitfinder.adapters.TrendingStoriesAdapter
-import com.highbryds.fitfinder.callbacks.ApiErrorsCallBack
+import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
 import com.highbryds.fitfinder.commonHelper.AppUtils
 import com.highbryds.fitfinder.commonHelper.MapStyling
 import com.highbryds.fitfinder.commonHelper.toast
@@ -78,7 +78,7 @@ import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickListener,
-    ApiErrorsCallBack {
+    ApiResponseCallBack {
 
 
     private val TAG = HomeMapActivity::class.java!!.getSimpleName()
@@ -1128,6 +1128,10 @@ prepareStop()
         }
             this.toast(this, error)
 
+    }
+
+    override fun getSuccess(success: String) {
+        TODO("Not yet implemented")
     }
 
 
