@@ -17,7 +17,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:scaleType="centerCrop"
-            android:id="@+id/storyImage"
+            android:id="@+id/IV_Story"
             android:background="@drawable/bg_round_green"
             android:src="@drawable/movie"
             android:layout_height="150dp"/>
@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:text="4.5"
             android:padding="5dp"
-           android:layout_alignBottom="@+id/storyImage"
+           android:layout_alignBottom="@+id/IV_Story"
             android:layout_alignParentRight="true"
             android:textSize="18sp"
             android:gravity="center"

@@ -38,8 +38,6 @@ class UserProfileMain : AppCompatActivity() {
         setUserData();
     }
 
-    override fun onBackPressed() {}
-
     private fun setUserData() {
 
         Glide

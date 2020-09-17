@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-
     <application
         android:name=".app.MainApplication"
         android:allowBackup="true"
@@ -23,10 +22,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.Profile.UserStories"></activity>
-        <activity android:name=".ui.Splash.SplashActivity"/>
-        <activity android:name=".ui.Auth.LoginActivity"></activity>
-        <activity android:name=".ui.Main.VoiceRecorderActivity"></activity>
+        <activity android:name=".ui.Profile.UserProfileSetting"></activity>
+        <activity android:name=".ui.Profile.UserStories" />
+        <activity android:name=".ui.Splash.SplashActivity" />
+        <activity android:name=".ui.Auth.LoginActivity" />
+        <activity android:name=".ui.Main.VoiceRecorderActivity" />
         <activity android:name=".ui.Main.HomeMapActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,9 +47,7 @@
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-        </service>
-
-        <!--Google Map-->
+        </service> <!-- Google Map -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBGDEQg9iXtNpY_NEwrtYt2i8R2NlP50Qk" />
