@@ -50,5 +50,9 @@ class KotlinHelper {
             var ud: UsersData = gson.fromJson(usersData, UsersData::class.java)
             return ud
         }
+
+        fun getSocialID()="112528012612593803039"
+//        fun getSocialID()=getUsersData()?.SocialId
+
     }
 }

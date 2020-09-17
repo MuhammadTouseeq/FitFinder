@@ -2,6 +2,7 @@ package com.highbryds.fitfinder.ui.Main
 
 
 import android.app.Activity
+import android.app.Instrumentation
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
@@ -22,6 +23,7 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.core.content.FileProvider
+import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -36,6 +38,8 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.chip.Chip
+import com.google.gson.Gson
 import com.highbryds.fitfinder.BuildConfig
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.adapters.MyInfoWindowAdapter
@@ -49,6 +53,7 @@ import com.highbryds.fitfinder.model.NearbyStory
 import com.highbryds.fitfinder.model.TrendingStory
 import com.highbryds.fitfinder.model.UserStory
 import com.highbryds.fitfinder.ui.BaseActivity
+import com.highbryds.fitfinder.ui.StoryView.StoryFullViewActivity
 import com.highbryds.snapryde.rider_app.recievers.GpsLocationReceiver
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -77,6 +82,8 @@ import kotlinx.android.synthetic.main.record_audio_activity.llRecorder
 import kotlinx.android.synthetic.main.record_audio_activity.seekBar
 import kotlinx.android.synthetic.main.view_audio_recorder.*
 import kotlinx.android.synthetic.main.view_bottom_sheet.*
+import kotlinx.android.synthetic.main.view_category_selection.*
+import kotlinx.android.synthetic.main.view_chip.*
 import kotlinx.android.synthetic.main.view_turn_location_on.*
 import kotlinx.android.synthetic.main.view_video_recorder.*
 import java.io.File
@@ -163,11 +170,34 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
 
 
+        homeMapViewModel.categoriesData.observe(this, androidx.lifecycle.Observer {
+
+            it?.let{
+
+                for((index,category) in it.withIndex())
+                {
+                    var mChip = this.layoutInflater.inflate(R.layout.view_chip, null, false) as Chip
+                    mChip.text=category
+                    mChip.id=index
+                    mChip.isChipIconVisible=true
+                    chipGroup.addView(mChip)
+                }
+            }
+
+        })
+
+        chipGroup.setOnCheckedChangeListener { group, checkedId ->
+
+val chip:Chip=chipGroup.findViewById(checkedId)
+            toast(applicationContext,chip.text.toString())
+
+        }
+
 
         homeMapViewModel.observeAllNearByStories().observe(this, androidx.lifecycle.Observer {
 
             for (item: NearbyStory in it) {
-                Log.d("StoryData", item.mediaUrl)
+               // Log.d("StoryData", item.mediaUrl)
                 if (item.latitude != 0.0) {
                     //   mGoogleMap.clear()
                     addStoryMarker(this, item)
@@ -184,63 +214,6 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
     }
 
 
-/* fun buildNavigationDrawer() {
-
-
-        // Create the AccountHeader
-        val headerResult: AccountHeader = AccountHeaderBuilder()
-            .withActivity(this)
-            .withHeaderBackground(R.color.colorPrimary)
-            .addProfiles(
-                ProfileDrawerItem().withName("Muhammad Touseeq").withEmail("touseeq@gmail.com")
-                    .withTextColor(resources.getColor(R.color.colorPrimary))
-            )
-            .withOnAccountHeaderListener(object : OnAccountHeaderListener() {
-                fun onProfileChanged(
-                    view: View?,
-                    profile: IProfile?,
-                    current: Boolean
-                ): Boolean {
-
-                    //addDockableFragment(ProfileFragment.newInstance());
-                    return false
-                }
-            })
-            .build()
-        //create the drawer and remember the `Drawer` result object
-        result = DrawerBuilder()
-            .withActivity(this)
-            .withAccountHeader(headerResult) //                .withToolbar(toolbar)
-            .addDrawerItems(
-                PrimaryDrawerItem().withName("Home").withIdentifier(1),
-                PrimaryDrawerItem().withName("My Stories").withIdentifier(2),
-                PrimaryDrawerItem().withName("Contact Us").withIdentifier(3),
-                PrimaryDrawerItem().withName("Settings").withIdentifier(4),
-                PrimaryDrawerItem().withName("About App")
-                    .withIdentifier(5) // expandableItemOrderNow
-                //                        new DividerDrawerItem(),
-            ).withOnDrawerItemClickListener(object : OnDrawerItemClickListener() {
-                fun onItemClick(
-                    view: View?,
-                    position: Int,
-                    drawerItem: IDrawerItem
-                ): Boolean {
-                    val itemName: String = (drawerItem as Nameable).getName().toString()
-                    when (position) {
-                        1 -> {
-                            result.closeDrawer()
-                        }
-                        2 -> {
-                            result.closeDrawer()
-                        }
-                        4 -> {
-                            result.closeDrawer()
-                        }
-                    }
-                    return true
-                }
-            }).build()
-    }*/
 
     open fun addStoryMarker(
         context: Context,
@@ -271,7 +244,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         val pinMarker: Marker = mGoogleMap.addMarker(
             MarkerOptions()
                 .title("New Message")
-                .snippet(story.storyName + "")
+                .snippet(Gson().toJson(story))
                 .visible(true)
                 .position(LatLng(story.latitude.toDouble(), story.longitude.toDouble()))
                 .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
@@ -434,6 +407,15 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         })
 
         mGoogleMap.setInfoWindowAdapter(MyInfoWindowAdapter(this))
+
+        mGoogleMap.setOnInfoWindowClickListener {
+
+            val intent = Intent(this, StoryFullViewActivity::class.java)
+intent.putExtra("storyData",it.snippet)
+
+            startActivityForResult(intent,777)
+
+        }
 //        createCustomMarker(
 //            this,
 //            LatLng(24.9132197, 67.0671513)
@@ -707,7 +689,14 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         super.onActivityResult(requestCode, resultCode, data)
 
 
-        if (requestCode == ACTION_TAKE_VIDEO) {
+        if(requestCode==777&&resultCode== Activity.RESULT_OK)
+        {
+            homeMapViewModel.fetchNearByStoriesData(
+                currentLocation.latitude.toString(),
+                currentLocation.longitude.toString()
+            )
+        }
+        else if (requestCode == ACTION_TAKE_VIDEO) {
 
             // filePath = getPath(data!!.getData()).toString();
             prepareVideoPlayer(data!!.getData(), view_video)
@@ -715,22 +704,25 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
             return
         }
+        else if(requestCode==EasyImagePicker.REQUEST_TAKE_PHOTO||requestCode==EasyImagePicker.REQUEST_GALLERY_PHOTO) {
+           if(data?.data==null)
+               return
+            EasyImagePicker.getInstance().passActivityResult(requestCode, resultCode, data, object :
+                EasyImagePicker.easyPickerCallback {
+                override fun onFailed(error: String?) {
+                    Toast.makeText(applicationContext, "Failed to pick image", Toast.LENGTH_LONG)
+                }
 
-        EasyImagePicker.getInstance().passActivityResult(requestCode, resultCode, data, object :
-            EasyImagePicker.easyPickerCallback {
-            override fun onFailed(error: String?) {
-                Toast.makeText(applicationContext, "Failed to pick image", Toast.LENGTH_LONG)
-            }
+                override fun onMediaFilePicked(result: String?) {
 
-            override fun onMediaFilePicked(result: String?) {
-
-                filePath = result!!
-                imgStory.visibility = View.VISIBLE
-                imgStory.setImageURI(Uri.fromFile(File(result)))
-            }
+                    filePath = result!!
+                    imgStory.visibility = View.VISIBLE
+                    imgStory.setImageURI(Uri.fromFile(File(result)))
+                }
 
 
-        })
+            })
+        }
     }
 
     open fun getPath(uri: Uri?): String? {
@@ -762,7 +754,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
                 val model: UserStory = UserStory(
                     txtMessage.text.toString(),
-                    KotlinHelper.getUsersData().SocialId,
+                    KotlinHelper.getSocialID(),
                     currentLocation.latitude.toString(),
                     currentLocation.longitude.toString(),
                     filePath
@@ -1167,15 +1159,14 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
     }
 
     override fun getError(error: String) {
-        if (error.contains("Successfully")) {
-            resetAll()
-        }
-        this.toast(this, error)
 
+        spin_kit.visibility=View.GONE
     }
 
     override fun getSuccess(success: String) {
-        TODO("Not yet implemented")
+        resetAll()
+        spin_kit.visibility=View.GONE
+
     }
 
 

@@ -24,6 +24,7 @@ class HomeMapViewModel @Inject constructor(private val apiInterface: ApiInterfac
 
     lateinit var apiErrorsCallBack: ApiResponseCallBack
     val storiesData = MutableLiveData<List<NearbyStory>>()
+    val categoriesData = MutableLiveData<List<String>>()
     val userLocation = MutableLiveData<LatLng>()
 
 
@@ -49,13 +50,14 @@ return storiesData;
 
         viewModelScope.launch {
             val allNearByStories = apiInterface.getAllNearByStories(lat, lng)
-            if (allNearByStories.code() == 200) {
+            if (allNearByStories.code() == 200&&allNearByStories.body()?.status.equals("1")) {
                storiesData.value = allNearByStories.body()?.data
+               categoriesData.value = allNearByStories.body()?.categories
 
                 apiErrorsCallBack.getError(allNearByStories.message())
             } else
             {
-                apiErrorsCallBack.getError(allNearByStories.message())
+                apiErrorsCallBack.getSuccess(allNearByStories.message())
             }
         }
 

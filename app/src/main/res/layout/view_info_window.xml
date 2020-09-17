@@ -70,7 +70,17 @@
             android:textColor="@android:color/darker_gray"
             android:textSize="13sp"
             android:visibility="visible" />
+        <TextView
+            android:id="@+id/txtDateTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
+            android:fontFamily="sans-serif"
+            android:paddingEnd="16dp"
+            android:text=""
+            android:textColor="@android:color/darker_gray"
+            android:textSize="13sp"
+            android:visibility="visible" />
         <LinearLayout
             android:layout_width="wrap_content"
             android:orientation="horizontal"
@@ -78,6 +88,13 @@
             android:layout_gravity="end"
             android:padding="5dp"
             android:layout_height="wrap_content">
+
+
+            <ImageView
+                android:layout_width="40dp"
+                android:padding="8dp"
+                android:id="@+id/imgMediaType"
+                android:layout_height="40dp"/>
 <ImageView
     android:layout_width="30dp"
     android:padding="8dp"
@@ -86,10 +103,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:text="20"
+                android:id="@+id/clapCount"
                 android:gravity="center"
                 android:layout_height="wrap_content"/>
 
-        </LinearLayout>     ​
+        </LinearLayout>
+
+
+
+        ​
     </LinearLayout>
 
     ​

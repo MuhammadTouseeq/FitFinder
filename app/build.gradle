@@ -113,6 +113,10 @@ dependencies {
 
     implementation 'com.makeramen:roundedimageview:2.3.0'
 
+    implementation 'com.github.AmrDeveloper.ReactButton:reactbutton:1.0.7'
+    implementation 'com.github.rtoshiro.fullscreenvideoview:fullscreenvideoview:1.1.2'
+
+
 
     //SDP - a scalable size unit
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
@@ -141,7 +145,7 @@ dependencies {
     //Material Design
     implementation 'com.google.android.material:material:1.2.0'
 
-
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 
 }
 

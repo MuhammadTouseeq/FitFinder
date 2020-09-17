@@ -1,14 +1,9 @@
 package com.highbryds.fitfinder.retrofit
 
-import com.highbryds.fitfinder.model.GeneralResponse
-import com.highbryds.fitfinder.model.UserAgent
-import com.highbryds.fitfinder.model.UserStoriesModel
-import com.highbryds.fitfinder.model.UserStory
-import com.highbryds.fitfinder.model.UsersData
+import com.highbryds.fitfinder.model.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
-import com.highbryds.fitfinder.model.WrapperStory
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -50,4 +45,24 @@ interface ApiInterface {
         @Query("longi") longitude: String
 
     ): Response<WrapperStory>
+
+
+    @POST("users/InsertClap/{SocialId}/{storyid}")
+    suspend fun insertStoryClap(
+        @Path("SocialId") socialID: String,
+        @Path("storyid") storyid: String
+    ) : Response<WrapperStory>
+    @FormUrlEncoded
+@POST("users/insertComments")
+    suspend fun insertStoryComment(
+        @Field("SocialId") socialID: String,
+        @Field("storyid") storyid: String,
+        @Field("comment") comment: String
+    ):Response<WrapperStoryComment>
+
+
+    @POST("users/getcomments/{storyid}")
+    suspend fun getStorycomments(
+        @Path("storyid") storyid: String
+    ) : Response<List<StoryComment>>
 }
