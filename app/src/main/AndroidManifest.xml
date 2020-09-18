@@ -24,15 +24,17 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".ui.Profile.UserProfileSetting"></activity>
         <activity android:name=".ui.Profile.UserStories" />
-        <activity android:name=".ui.Splash.SplashActivity" />
-        <activity android:name=".ui.Auth.LoginActivity" />
-        <activity android:name=".ui.Main.VoiceRecorderActivity" />
-        <activity android:name=".ui.Main.HomeMapActivity">
+        <activity android:name=".ui.Splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".ui.Auth.LoginActivity" />
+        <activity android:name=".ui.Main.VoiceRecorderActivity" />
+        <activity android:name=".ui.Main.HomeMapActivity">
+
         </activity>
         <activity android:name=".ui.Profile.UpdateProfile" />
         <activity android:name=".ui.Profile.UserProfileMain" />

@@ -34,7 +34,7 @@ public class FTPHelper {
         protected String doInBackground(String... strings) {
             try {
 
-                fileName = strings[1];
+                fileName = System.currentTimeMillis()+strings[1];
                 ftpClient = new FTPClient();
                 ftpClient.connect(InetAddress.getByName("maarkaz.co.uk"));
                 ftpClient.login("highbryds@maarkaz.co.uk", "!@#$%^&*()");
@@ -76,6 +76,7 @@ public class FTPHelper {
             }else{
                 ftpCallback.isFTPUpload(false,fileName);
             }
+
         }
     }
 }

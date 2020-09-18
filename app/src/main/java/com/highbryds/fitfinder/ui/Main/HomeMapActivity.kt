@@ -231,7 +231,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         slider.itemAdapter.add(
             home, profile, story,
             DividerDrawerItem(),
-            settings,logout
+            settings, logout
         )
 
         slider.headerView = headerView
@@ -257,7 +257,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                 6 -> {
 
                     logoutViewModel.logoutUser(KotlinHelper.getUsersData().SocialId)
-                    PrefsHelper.putBoolean(Constants.Pref_IsLogin , false)
+                    PrefsHelper.putBoolean(Constants.Pref_IsLogin, false)
                 }
             }
             false
@@ -772,7 +772,11 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
             override fun onMediaFilePicked(result: String?) {
 
-                filePath = result!!
+                val uri: Uri? = data?.data
+                val file: File = File(PathUtil.getPath(this@HomeMapActivity, uri))
+                filePath = JavaHelper.CompressPic(file , this@HomeMapActivity)
+
+               // filePath = result!!
                 imgStory.visibility = View.VISIBLE
                 imgStory.setImageURI(Uri.fromFile(File(result)))
             }
@@ -815,9 +819,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                     val filename: String = filePath.substring(filePath.lastIndexOf("/") + 1)
                     val ftpHelper: FTPHelper = FTPHelper()
                     ftpHelper.init(this)
-                    ftpHelper.AsyncTaskExample().execute(
-                        filePath, filename
-                    )
+                    ftpHelper.AsyncTaskExample().execute(filePath, filename)
 
                 }
 
@@ -1276,7 +1278,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         Log.d("HOMEMAPACTIVITY_", fileName)
 
         val model: UserStory = UserStory(
-            txtMessage.text.toString(),
+            JavaHelper.badWordReplace(txtMessage.text.toString()),
             KotlinHelper.getUsersData().SocialId,
             currentLocation.latitude.toString(),
             currentLocation.longitude.toString(),
@@ -1284,7 +1286,13 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             "http://highbryds.com/fitfinder/stories/" + fileName
         );
 
-        Log.d("HOMEMAPACTIVITY_" , JavaHelper.getAddress(this ,  currentLocation.latitude ,  currentLocation.longitude))
+        Log.d(
+            "HOMEMAPACTIVITY_", JavaHelper.getAddress(
+                this,
+                currentLocation.latitude,
+                currentLocation.longitude
+            )
+        )
 
         // showProgressDialog()
         homeMapViewModel.uploadStoryData(model)

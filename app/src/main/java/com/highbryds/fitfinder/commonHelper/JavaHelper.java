@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
@@ -18,11 +19,16 @@ import com.highbryds.fitfinder.callbacks.videoCompressionCallback;
 import com.iceteck.silicompressorr.SiliCompressor;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
+
+import id.zelory.compressor.Compressor;
 
 public class JavaHelper {
 
@@ -107,5 +113,21 @@ public class JavaHelper {
         }
     }
 
+    public static String CompressPic(File file , Context context) throws IOException {
+
+        File compressedImageFile = new Compressor(context).compressToFile(file);
+        return compressedImageFile.getAbsolutePath();
+
+    }
+
+
+    public static String badWordReplace(String input){
+        for (String word : JavaBadWordList.words) {
+            Pattern rx = Pattern.compile("\\b" + word + "\\b", Pattern.CASE_INSENSITIVE);
+            input = rx.matcher(input).replaceAll(new String(new char[word.length()]).replace('\0', '*'));
+        }
+
+        return input;
+    }
 
 }
