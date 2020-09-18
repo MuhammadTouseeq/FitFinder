@@ -200,6 +200,7 @@ class LoginActivity : AppCompatActivity(), ApiResponseCallBack {
     }
 
     override fun getError(error: String) {
+        googleSignInClient.signOut()
         loadingProgress.visibility = View.GONE
         this.toast(this, error)
     }

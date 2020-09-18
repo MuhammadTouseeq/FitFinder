@@ -13,9 +13,9 @@
         android:layout_height="match_parent"
         android:background="@android:color/transparent">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
             <fragment
                 android:id="@+id/map"
@@ -79,43 +79,39 @@
                 android:layout_gravity="center"
                 app:SpinKit_Color="@color/colorPrimary" />
 
-            <LinearLayout
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <include android:visibility="gone" layout="@layout/view_toolbar_transparent"/>
+
+
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:orientation="vertical">
+                android:layout_below="@+id/toolbar"
+                app:cardElevation="10dp"
+                android:id="@+id/cardTurnOnLocation"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="10dp"
+                android:layout_height="wrap_content">
 
-                <include
-                    layout="@layout/view_toolbar_transparent"
-                    android:visibility="gone" />
+                <include layout="@layout/view_turn_location_on"/>
 
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardTurnOnLocation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/toolbar"
-                    android:layout_margin="10dp"
-                    app:cardCornerRadius="10dp"
-                    app:cardElevation="10dp">
-
-                    <include layout="@layout/view_turn_location_on" />
-
-                </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/button"
-                style="@style/PrimaryButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginTop="16dp"
-                android:text="Click me"
-                android:visibility="gone" />
-        </RelativeLayout>
-
-        <include layout="@layout/view_bottom_sheet" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_marginTop="16dp"
+            android:text="Click me"
+            android:visibility="gone"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/button"
+            style="@style/PrimaryButton"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+    <include layout="@layout/view_bottom_sheet"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

@@ -4,7 +4,7 @@ import android.os.Build
 import com.google.gson.Gson
 import com.highbryds.fitfinder.model.UsersData
 import org.json.JSONObject
-import retrofit2.Response
+import java.io.File
 import java.util.*
 
 class KotlinHelper {
@@ -47,12 +47,20 @@ class KotlinHelper {
         fun getUsersData():UsersData{
             val gson = Gson()
             val usersData = PrefsHelper.getString(Constants.Pref_UserData)
-            var ud: UsersData = gson.fromJson(usersData, UsersData::class.java)
+            val ud: UsersData = gson.fromJson(usersData, UsersData::class.java)
             return ud
         }
 
         fun getSocialID()="112528012612593803039"
 //        fun getSocialID()=getUsersData()?.SocialId
+
+
+        fun videoCompression(path: String, desPath: String){
+            val root = android.os.Environment.getExternalStorageDirectory()
+            val file = File(root.absolutePath + "/FitFinder/test.mp4")
+
+        }
+
 
     }
 }

@@ -20,11 +20,15 @@ import android.text.TextUtils
 import android.transition.TransitionManager
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.Window
 import android.widget.*
 import androidx.core.content.FileProvider
 import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -49,11 +53,20 @@ import com.highbryds.fitfinder.commonHelper.AppUtils
 import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.commonHelper.MapStyling
 import com.highbryds.fitfinder.commonHelper.toast
+import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
+import com.highbryds.fitfinder.callbacks.FTPCallback
+import com.highbryds.fitfinder.callbacks.videoCompressionCallback
+import com.highbryds.fitfinder.commonHelper.*
 import com.highbryds.fitfinder.model.NearbyStory
 import com.highbryds.fitfinder.model.TrendingStory
 import com.highbryds.fitfinder.model.UserStory
+import com.highbryds.fitfinder.ui.Auth.LoginActivity
 import com.highbryds.fitfinder.ui.BaseActivity
 import com.highbryds.fitfinder.ui.StoryView.StoryFullViewActivity
+import com.highbryds.fitfinder.ui.Profile.UserProfileMain
+import com.highbryds.fitfinder.ui.Profile.UserProfileSetting
+import com.highbryds.fitfinder.ui.Profile.UserStories
+import com.highbryds.fitfinder.vm.AuthViewModels.LogoutViewModel
 import com.highbryds.snapryde.rider_app.recievers.GpsLocationReceiver
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -66,6 +79,14 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.withEmail
 import com.mikepenz.materialdrawer.model.interfaces.withIcon
+import com.mikepenz.materialdrawer.model.interfaces.withIdentifier
+import com.mikepenz.materialdrawer.model.interfaces.withName
+import com.mikepenz.materialdrawer.widget.AccountHeaderView
+import com.mikepenz.materialdrawer.model.DividerDrawerItem
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
+import com.mikepenz.materialdrawer.model.interfaces.withEmail
 import com.mikepenz.materialdrawer.model.interfaces.withIdentifier
 import com.mikepenz.materialdrawer.model.interfaces.withName
 import com.mikepenz.materialdrawer.widget.AccountHeaderView
@@ -95,7 +116,7 @@ import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickListener,
-    ApiResponseCallBack {
+    ApiResponseCallBack, videoCompressionCallback, FTPCallback {
 
 
     private val TAG = HomeMapActivity::class.java!!.getSimpleName()
@@ -135,6 +156,10 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
     @Inject
     lateinit var homeMapViewModel: HomeMapViewModel
 
+    @Inject
+    lateinit var logoutViewModel: LogoutViewModel
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_map)
@@ -142,6 +167,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         //    bindNavigationDrawer(toolbar)
 
         homeMapViewModel.apiErrorsCallBack = this
+        logoutViewModel.apiResponseCallBack = this
 
         bnidBottomSheet()
 
@@ -197,6 +223,12 @@ val chip:Chip=chipGroup.findViewById(checkedId)
         homeMapViewModel.observeAllNearByStories().observe(this, androidx.lifecycle.Observer {
 
             for (item: NearbyStory in it) {
+                Log.d("StoryData", item.mediaUrl)
+                if (item.latitude != 0.0) {
+                    //   mGoogleMap.clear()
+                    addStoryMarker(this, item)
+                }
+            for (item: NearbyStory in it) {
                // Log.d("StoryData", item.mediaUrl)
                 if (item.latitude != 0.0) {
                     //   mGoogleMap.clear()
@@ -206,10 +238,82 @@ val chip:Chip=chipGroup.findViewById(checkedId)
             }
         })
 
-        drawer()
+        drawerSetup()
         IV_Slider.setOnClickListener {
             slider.drawerLayout?.openDrawer(slider)
         }
+
+    }
+
+    fun drawerSetup() {
+
+        // Create the AccountHeader
+        val headerView = AccountHeaderView(this).apply {
+            attachToSliderView(slider) // attach to the slider
+            addProfiles(
+                ProfileDrawerItem().withName(KotlinHelper.getUsersData().name).withEmail(
+                    KotlinHelper.getUsersData().emailAdd
+                )
+            )
+            onAccountHeaderListener = { view, profile, current ->
+                // react to profile changes
+                false
+            }
+        }
+
+
+        val imageView = headerView.currentProfileView
+        Glide
+            .with(this)
+            .load(KotlinHelper.getUsersData().imageUrl)
+            .placeholder(R.drawable.ic_launcher_foreground)
+            .into(imageView);
+
+        //if you want to update the items at a later time it is recommended to keep it in a variable
+        val home = PrimaryDrawerItem().withIdentifier(1).withName("Home")
+        val story = PrimaryDrawerItem().withIdentifier(2).withName("My Story")
+        val profile = PrimaryDrawerItem().withIdentifier(3).withName("Profile")
+        val settings = SecondaryDrawerItem().withIdentifier(5).withName("Settings")
+        val logout = SecondaryDrawerItem().withIdentifier(4).withName("Logout")
+
+
+        // get the reference to the slider and add the items
+        slider.itemAdapter.add(
+            home, profile, story,
+            DividerDrawerItem(),
+            settings, logout
+        )
+
+        slider.headerView = headerView
+
+        // specify a click listener
+        slider.onDrawerItemClickListener = { v, drawerItem, position ->
+            when (position) {
+                1 -> {
+                    this.toast(this, "Home")
+                }
+                2 -> {
+                    val intent = Intent(this, UserProfileMain::class.java)
+                    startActivity(intent)
+                }
+                3 -> {
+                    val intent = Intent(this, UserStories::class.java)
+                    startActivity(intent)
+                }
+                5 -> {
+                    val intent = Intent(this, UserProfileSetting::class.java)
+                    startActivity(intent)
+                }
+                6 -> {
+
+                    logoutViewModel.logoutUser(KotlinHelper.getUsersData().SocialId)
+                    PrefsHelper.putBoolean(Constants.Pref_IsLogin, false)
+                }
+            }
+            false
+        }
+
+    }
 
     }
 
@@ -245,6 +349,7 @@ val chip:Chip=chipGroup.findViewById(checkedId)
             MarkerOptions()
                 .title("New Message")
                 .snippet(Gson().toJson(story))
+                .snippet(story.storyName + "")
                 .visible(true)
                 .position(LatLng(story.latitude.toDouble(), story.longitude.toDouble()))
                 .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
@@ -701,7 +806,6 @@ intent.putExtra("storyData",it.snippet)
             // filePath = getPath(data!!.getData()).toString();
             prepareVideoPlayer(data!!.getData(), view_video)
 
-
             return
         }
         else if(requestCode==EasyImagePicker.REQUEST_TAKE_PHOTO||requestCode==EasyImagePicker.REQUEST_GALLERY_PHOTO) {
@@ -715,10 +819,14 @@ intent.putExtra("storyData",it.snippet)
 
                 override fun onMediaFilePicked(result: String?) {
 
-                    filePath = result!!
-                    imgStory.visibility = View.VISIBLE
-                    imgStory.setImageURI(Uri.fromFile(File(result)))
-                }
+                val uri: Uri? = data?.data
+                val file: File = File(PathUtil.getPath(this@HomeMapActivity, uri))
+                filePath = JavaHelper.CompressPic(file , this@HomeMapActivity)
+
+               // filePath = result!!
+                imgStory.visibility = View.VISIBLE
+                imgStory.setImageURI(Uri.fromFile(File(result)))
+            }
 
 
             })
@@ -737,6 +845,8 @@ intent.putExtra("storyData",it.snippet)
     }
 
 
+
+
     override fun onClick(view: View?) {
         when (view!!.id) {
 
@@ -752,15 +862,28 @@ intent.putExtra("storyData",it.snippet)
                     return
                 }
 
-                val model: UserStory = UserStory(
-                    txtMessage.text.toString(),
-                    KotlinHelper.getSocialID(),
-                    currentLocation.latitude.toString(),
-                    currentLocation.longitude.toString(),
-                    filePath
-                );
-                ///showProgressDialog()
-                homeMapViewModel.uploadStoryData(model)
+
+                if (filePath.contains("mp4")) {
+                    JavaHelper.compress(filePath, this, this)
+                } else {
+                    val filename: String = filePath.substring(filePath.lastIndexOf("/") + 1)
+                    val ftpHelper: FTPHelper = FTPHelper()
+                    ftpHelper.init(this)
+                    ftpHelper.AsyncTaskExample().execute(filePath, filename)
+
+                }
+
+
+//                    val model: UserStory = UserStory(
+//                        txtMessage.text.toString(),
+//                        KotlinHelper.getUsersData().SocialId,
+//                        currentLocation.latitude.toString(),
+//                        currentLocation.longitude.toString(),
+//                        "",
+//                        ""
+//                    );
+//                    // showProgressDialog()
+//                    homeMapViewModel.uploadStoryData(model)
 
 
             }
@@ -1169,6 +1292,14 @@ intent.putExtra("storyData",it.snippet)
 
     }
 
+    override fun getSuccess(success: String) {
+        if (success.equals("User Logout Successfully", true)) {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            PrefsHelper.putString(Constants.Pref_UserData, "")
+            this.finish()
+        }
+    }
 
     fun resetAll() {
         mediaTypeAudio.visibility = View.GONE
@@ -1185,4 +1316,39 @@ intent.putExtra("storyData",it.snippet)
         progressDialog.window!!.requestFeature(Window.FEATURE_NO_TITLE)
         progressDialog.show()
     }
+
+    override fun isCompress(success: Boolean, filePath: String) {
+
+        val filename: String = filePath.substring(filePath.lastIndexOf("/") + 1)
+        val ftpHelper: FTPHelper = FTPHelper()
+        ftpHelper.init(this)
+        ftpHelper.AsyncTaskExample().execute(filePath, filename)
+    }
+
+    override fun isFTPUpload(isUploaded: Boolean, fileName: String) {
+        Log.d("HOMEMAPACTIVITY_", isUploaded.toString())
+        Log.d("HOMEMAPACTIVITY_", fileName)
+
+        val model: UserStory = UserStory(
+            JavaHelper.badWordReplace(txtMessage.text.toString()),
+            KotlinHelper.getUsersData().SocialId,
+            currentLocation.latitude.toString(),
+            currentLocation.longitude.toString(),
+            "",
+            "http://highbryds.com/fitfinder/stories/" + fileName
+        );
+
+        Log.d(
+            "HOMEMAPACTIVITY_", JavaHelper.getAddress(
+                this,
+                currentLocation.latitude,
+                currentLocation.longitude
+            )
+        )
+
+        // showProgressDialog()
+        homeMapViewModel.uploadStoryData(model)
+    }
+
+
 }

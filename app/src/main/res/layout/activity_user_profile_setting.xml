@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context=".ui.Profile.UserStories"
+    tools:context=".ui.Profile.UserProfileSetting"
     android:padding="@dimen/_10sdp">
 
 
@@ -25,7 +25,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="My Stories"
+            android:text="Settings"
             android:textSize="@dimen/_18sdp"
             android:textColor="@color/colorLinkedin"
             android:fontFamily="sans-serif-condensed-medium"
@@ -34,28 +34,27 @@
 
     </LinearLayout>
 
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/loading"
-        android:layout_width="@dimen/_200sdp"
-        android:layout_height="@dimen/_200sdp"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/_80sdp"
-        app:lottie_autoPlay="true"
-        app:lottie_rawRes="@raw/loading"
-        app:lottie_loop="true"
-        app:lottie_speed="0.9"
-        />
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/RV_Stories"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="@dimen/_5sdp"/>
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:weightSum="5">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="Notifications"
+            android:textSize="@dimen/_15sdp"
+            android:textColor="@color/colorPrimary"/>
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2" />
+
+    </LinearLayout>
 
 
 </LinearLayout>

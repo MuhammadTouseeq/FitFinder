@@ -4,6 +4,8 @@
     package="com.highbryds.fitfinder">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -23,6 +25,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ui.Profile.UserProfileSetting"></activity>
+        <activity android:name=".ui.Profile.UserStories" />
+        <activity android:name=".ui.Splash.SplashActivity">
         <activity android:name=".ui.Profile.UserStories"/>
         <activity android:name=".ui.Splash.SplashActivity"/>
         <activity android:name=".ui.Main.VoiceRecorderActivity"/>
@@ -34,8 +39,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.Auth.LoginActivity" />
+        <activity android:name=".ui.Main.VoiceRecorderActivity" />
+        <activity android:name=".ui.Main.HomeMapActivity">
         <activity android:name=".ui.StoryView.StoryFullViewActivity"/>
 
+        </activity>
         <activity android:name=".ui.Profile.UpdateProfile" />
         <activity android:name=".ui.Profile.UserProfileMain" />
 <!--        <activity-->
@@ -54,6 +63,10 @@
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
+        </service> <!-- Google Map -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBGDEQg9iXtNpY_NEwrtYt2i8R2NlP50Qk" />
         </service>
 
         <!--Google Map-->
