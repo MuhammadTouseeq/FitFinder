@@ -144,8 +144,8 @@ dependencies {
     //lottie
     implementation 'com.airbnb.android:lottie:3.4.2'
     // video compression
-    implementation 'com.iceteck.silicompressorr:silicompressor:2.2.3'
-    implementation 'com.googlecode.mp4parser:isoparser:1.1.22'
+    implementation 'com.iceteck.silicompressorr:silicompressor:2.2.2'
+   // implementation 'com.googlecode.mp4parser:isoparser:1.1.22'
     // image compression
     implementation 'id.zelory:compressor:2.1.0'
 
