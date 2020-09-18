@@ -18,9 +18,6 @@ interface ApiInterface {
     @GET("users")
     suspend fun getUsers(): Response<List<UsersData>>
 
-    @POST("users/create")
-    suspend fun createUsers(@Body usersData: UsersData): Response<UsersData>
-
     @Multipart
     @POST("users/UpdateProfilePicture")
     suspend fun uploadProfilePic(@Part profilePic: MultipartBody.Part , @Part("SocialId") name: RequestBody) : Response<GeneralResponse>
@@ -31,8 +28,8 @@ interface ApiInterface {
     @POST("users/agent")
     suspend fun userAgent(@Body userAgent: UserAgent) : Response<GeneralResponse>
 
-    @POST("users/getallStories/{socialID}")
-    suspend fun userStories(@Path("socialID") socialID: String) : Response<List<UserStoriesModel>>
+//    @POST("users/getallStories/{socialID}")
+//    suspend fun userStories(@Path("socialID") socialID: String) : Response<List<UserStoriesModel>>
 
     @Multipart
     @POST("users/uploadStories")
@@ -91,17 +88,17 @@ interface ApiInterface {
         @Field("SocialId") socialID: String,
         @Field("latitude") latitude: String,
         @Field("longitude") longitude: String,
-        @Field("mediaUrl") mediaUrl: String
-
+        @Field("mediaUrl") mediaUrl: String,
+        @Field("Category") Category: String
     ): Response<UserStory>
 
 
-    @POST("users/getnearbystories")
-    suspend fun getAllNearByStories(
-        @Query("lat") latitude: String,
-        @Query("longi") longitude: String
-
-    ): Response<WrapperStory>
+//    @POST("users/getnearbystories")
+//    suspend fun getAllNearByStories(
+//        @Query("lat") latitude: String,
+//        @Query("longi") longitude: String
+//
+//    ): Response<WrapperStory>
 
     @POST("users/logout/{SocialID}")
     suspend fun logoutUser(@Path("SocialID") SocialID: String) : Response<GeneralResponse>

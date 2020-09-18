@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
 import com.highbryds.fitfinder.commonHelper.getErrors
-import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
 import com.highbryds.fitfinder.model.NearbyStory
 import com.highbryds.fitfinder.model.UserStory
 import com.highbryds.fitfinder.retrofit.ApiInterface
@@ -81,11 +80,12 @@ return storiesData;
                     SocialId,
                     latitude,
                     longitude,
-                    mediaUrl
+                    mediaUrl,
+                    chipText
                 )
 
                 if (uploadStory.code() == 200) {
-                    apiErrorsCallBack.getError("Successfully uploaded story")
+                    apiErrorsCallBack.getSuccess("Successfully uploaded story")
                 } else {
                     apiErrorsCallBack.getError(uploadStory.message())
                 }

@@ -53,7 +53,6 @@ import com.highbryds.fitfinder.commonHelper.AppUtils
 import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.commonHelper.MapStyling
 import com.highbryds.fitfinder.commonHelper.toast
-import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
 import com.highbryds.fitfinder.callbacks.FTPCallback
 import com.highbryds.fitfinder.callbacks.videoCompressionCallback
 import com.highbryds.fitfinder.commonHelper.*
@@ -79,14 +78,6 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.withEmail
 import com.mikepenz.materialdrawer.model.interfaces.withIcon
-import com.mikepenz.materialdrawer.model.interfaces.withIdentifier
-import com.mikepenz.materialdrawer.model.interfaces.withName
-import com.mikepenz.materialdrawer.widget.AccountHeaderView
-import com.mikepenz.materialdrawer.model.DividerDrawerItem
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
-import com.mikepenz.materialdrawer.model.interfaces.withEmail
 import com.mikepenz.materialdrawer.model.interfaces.withIdentifier
 import com.mikepenz.materialdrawer.model.interfaces.withName
 import com.mikepenz.materialdrawer.widget.AccountHeaderView
@@ -146,6 +137,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
     private val mHandler = Handler()
     private val RECORD_AUDIO_REQUEST_CODE = 101
     private var isPlaying = false
+    private lateinit var chipText: String
 
     //========End=====//
     private val SELECT_VIDEO = 1
@@ -198,14 +190,13 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
         homeMapViewModel.categoriesData.observe(this, androidx.lifecycle.Observer {
 
-            it?.let{
+            it?.let {
 
-                for((index,category) in it.withIndex())
-                {
+                for ((index, category) in it.withIndex()) {
                     var mChip = this.layoutInflater.inflate(R.layout.view_chip, null, false) as Chip
-                    mChip.text=category
-                    mChip.id=index
-                    mChip.isChipIconVisible=true
+                    mChip.text = category
+                    mChip.id = index
+                    mChip.isChipIconVisible = true
                     chipGroup.addView(mChip)
                 }
             }
@@ -214,9 +205,9 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
         chipGroup.setOnCheckedChangeListener { group, checkedId ->
 
-val chip:Chip=chipGroup.findViewById(checkedId)
-            toast(applicationContext,chip.text.toString())
-
+            val chip: Chip = chipGroup.findViewById(checkedId)
+            //toast(applicationContext, chip.text.toString())
+            chipText =  chip.text.toString()
         }
 
 
@@ -228,14 +219,16 @@ val chip:Chip=chipGroup.findViewById(checkedId)
                     //   mGoogleMap.clear()
                     addStoryMarker(this, item)
                 }
-            for (item: NearbyStory in it) {
-               // Log.d("StoryData", item.mediaUrl)
-                if (item.latitude != 0.0) {
-                    //   mGoogleMap.clear()
-                    addStoryMarker(this, item)
-                }
-
+//                for (item: NearbyStory in it) {
+//                    // Log.d("StoryData", item.mediaUrl)
+//                    if (item.latitude != 0.0) {
+//                        //   mGoogleMap.clear()
+//                        addStoryMarker(this, item)
+//                    }
+//
+//                }
             }
+
         })
 
         drawerSetup()
@@ -244,6 +237,7 @@ val chip:Chip=chipGroup.findViewById(checkedId)
         }
 
     }
+
 
     fun drawerSetup() {
 
@@ -314,9 +308,6 @@ val chip:Chip=chipGroup.findViewById(checkedId)
         }
 
     }
-
-    }
-
 
 
     open fun addStoryMarker(
@@ -419,7 +410,8 @@ val chip:Chip=chipGroup.findViewById(checkedId)
         val headerView = AccountHeaderView(this).apply {
             attachToSliderView(slider) // attach to the slider
             addProfiles(
-                ProfileDrawerItem().withName("Mike Penz").withEmail("mikepenz@gmail.com").withIcon(getResources().getDrawable(R.drawable.clap_icon))
+                ProfileDrawerItem().withName("Mike Penz").withEmail("mikepenz@gmail.com")
+                    .withIcon(getResources().getDrawable(R.drawable.clap_icon))
             )
             onAccountHeaderListener = { view, profile, current ->
                 // react to profile changes
@@ -516,9 +508,9 @@ val chip:Chip=chipGroup.findViewById(checkedId)
         mGoogleMap.setOnInfoWindowClickListener {
 
             val intent = Intent(this, StoryFullViewActivity::class.java)
-intent.putExtra("storyData",it.snippet)
+            intent.putExtra("storyData", it.snippet)
 
-            startActivityForResult(intent,777)
+            startActivityForResult(intent, 777)
 
         }
 //        createCustomMarker(
@@ -794,23 +786,20 @@ intent.putExtra("storyData",it.snippet)
         super.onActivityResult(requestCode, resultCode, data)
 
 
-        if(requestCode==777&&resultCode== Activity.RESULT_OK)
-        {
+        if (requestCode == 777 && resultCode == Activity.RESULT_OK) {
             homeMapViewModel.fetchNearByStoriesData(
                 currentLocation.latitude.toString(),
                 currentLocation.longitude.toString()
             )
-        }
-        else if (requestCode == ACTION_TAKE_VIDEO) {
+        } else if (requestCode == ACTION_TAKE_VIDEO) {
 
             // filePath = getPath(data!!.getData()).toString();
             prepareVideoPlayer(data!!.getData(), view_video)
 
             return
-        }
-        else if(requestCode==EasyImagePicker.REQUEST_TAKE_PHOTO||requestCode==EasyImagePicker.REQUEST_GALLERY_PHOTO) {
-           if(data?.data==null)
-               return
+        } else if (requestCode == EasyImagePicker.REQUEST_TAKE_PHOTO || requestCode == EasyImagePicker.REQUEST_GALLERY_PHOTO) {
+            if (data?.data == null)
+                return
             EasyImagePicker.getInstance().passActivityResult(requestCode, resultCode, data, object :
                 EasyImagePicker.easyPickerCallback {
                 override fun onFailed(error: String?) {
@@ -819,14 +808,14 @@ intent.putExtra("storyData",it.snippet)
 
                 override fun onMediaFilePicked(result: String?) {
 
-                val uri: Uri? = data?.data
-                val file: File = File(PathUtil.getPath(this@HomeMapActivity, uri))
-                filePath = JavaHelper.CompressPic(file , this@HomeMapActivity)
+                    val uri: Uri? = data?.data
+                    val file: File = File(PathUtil.getPath(this@HomeMapActivity, uri))
+                    filePath = JavaHelper.CompressPic(file, this@HomeMapActivity)
 
-               // filePath = result!!
-                imgStory.visibility = View.VISIBLE
-                imgStory.setImageURI(Uri.fromFile(File(result)))
-            }
+                    // filePath = result!!
+                    imgStory.visibility = View.VISIBLE
+                    imgStory.setImageURI(Uri.fromFile(File(result)))
+                }
 
 
             })
@@ -843,8 +832,6 @@ intent.putExtra("storyData",it.snippet)
             cursor.getString(column_index)
         } else null
     }
-
-
 
 
     override fun onClick(view: View?) {
@@ -1283,13 +1270,7 @@ intent.putExtra("storyData",it.snippet)
 
     override fun getError(error: String) {
 
-        spin_kit.visibility=View.GONE
-    }
-
-    override fun getSuccess(success: String) {
-        resetAll()
-        spin_kit.visibility=View.GONE
-
+        spin_kit.visibility = View.GONE
     }
 
     override fun getSuccess(success: String) {
@@ -1299,6 +1280,8 @@ intent.putExtra("storyData",it.snippet)
             PrefsHelper.putString(Constants.Pref_UserData, "")
             this.finish()
         }
+        resetAll()
+        spin_kit.visibility = View.GONE
     }
 
     fun resetAll() {
@@ -1335,7 +1318,8 @@ intent.putExtra("storyData",it.snippet)
             currentLocation.latitude.toString(),
             currentLocation.longitude.toString(),
             "",
-            "http://highbryds.com/fitfinder/stories/" + fileName
+            "http://highbryds.com/fitfinder/stories/" + fileName,
+            chipText
         );
 
         Log.d(
