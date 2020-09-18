@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
+import com.highbryds.fitfinder.model.NearbyStory
 import com.highbryds.fitfinder.model.UserStoriesModel
 import com.highbryds.fitfinder.retrofit.ApiInterface
 import kotlinx.coroutines.launch
@@ -13,7 +14,7 @@ import javax.inject.Inject
 class UserStoriesViewModel @Inject constructor(private val provideApiInterface: ApiInterface) :
     ViewModel() {
 
-    val storiesModel: LiveData<List<UserStoriesModel>>? = MutableLiveData()
+    val storiesModel: LiveData<List<NearbyStory>>? = MutableLiveData()
     lateinit var apiResponseCallBack: ApiResponseCallBack
 
     fun getUserStories(userStories: String) {
@@ -31,7 +32,7 @@ class UserStoriesViewModel @Inject constructor(private val provideApiInterface: 
         }
     }
 
-    private suspend fun userStories(userStories: String): List<UserStoriesModel>? {
+    private suspend fun userStories(userStories: String): List<NearbyStory>? {
         try {
             val response = provideApiInterface.userStories(userStories)
             return if (response.isSuccessful && !response.body().isNullOrEmpty()) {

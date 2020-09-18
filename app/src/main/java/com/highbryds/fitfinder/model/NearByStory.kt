@@ -13,6 +13,7 @@ data class NearbyStory (
     @SerializedName("longitude") val longitude : Double,
     @SerializedName("createdAt") val createdAt : String,
     @SerializedName("__v") val __v : Int,
+    @SerializedName("Category") val Category : String?,
     @SerializedName("users_data") val userData : List<UsersData>,
     @SerializedName("clap_data") val storyClapData : List<StoryClap>
 

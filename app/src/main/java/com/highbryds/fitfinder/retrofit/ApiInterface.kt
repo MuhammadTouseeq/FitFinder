@@ -20,13 +20,16 @@ interface ApiInterface {
 
     @Multipart
     @POST("users/UpdateProfilePicture")
-    suspend fun uploadProfilePic(@Part profilePic: MultipartBody.Part , @Part("SocialId") name: RequestBody) : Response<GeneralResponse>
+    suspend fun uploadProfilePic(
+        @Part profilePic: MultipartBody.Part,
+        @Part("SocialId") name: RequestBody
+    ): Response<GeneralResponse>
 
     @POST("users/update")
     suspend fun updateUsers(@Body usersData: UsersData): Response<UsersData>
 
     @POST("users/agent")
-    suspend fun userAgent(@Body userAgent: UserAgent) : Response<GeneralResponse>
+    suspend fun userAgent(@Body userAgent: UserAgent): Response<GeneralResponse>
 
 //    @POST("users/getallStories/{socialID}")
 //    suspend fun userStories(@Path("socialID") socialID: String) : Response<List<UserStoriesModel>>
@@ -48,6 +51,7 @@ interface ApiInterface {
         @Query("longi") longitude: String
 
     ): Response<WrapperStory>
+
     @POST("users/create")
     suspend fun createUsers(@Body usersData: UsersData): Response<UsersData>
 
@@ -56,18 +60,19 @@ interface ApiInterface {
     suspend fun insertStoryClap(
         @Path("SocialId") socialID: String,
         @Path("storyid") storyid: String
-    ) : Response<WrapperStory>
+    ): Response<WrapperStory>
+
     @FormUrlEncoded
-@POST("users/insertComments")
+    @POST("users/insertComments")
     suspend fun insertStoryComment(
         @Field("SocialId") socialID: String,
         @Field("storyid") storyid: String,
         @Field("comment") comment: String
-    ):Response<WrapperStoryComment>
+    ): Response<WrapperStoryComment>
 
 
     @POST("users/getallStories/{socialID}")
-    suspend fun userStories(@Path("socialID") socialID: String) : Response<List<UserStoriesModel>>
+    suspend fun userStories(@Path("socialID") socialID: String): Response<List<NearbyStory>>
 
 //    @Multipart
 //    @POST("uploadStories")
@@ -101,12 +106,13 @@ interface ApiInterface {
 //    ): Response<WrapperStory>
 
     @POST("users/logout/{SocialID}")
-    suspend fun logoutUser(@Path("SocialID") SocialID: String) : Response<GeneralResponse>
+    suspend fun logoutUser(@Path("SocialID") SocialID: String): Response<GeneralResponse>
 
     @POST("users/deactiveStory/{id}")
-    suspend fun deactivateStory(@Path("id") id : String) : Response<GeneralResponse>
+    suspend fun deactivateStory(@Path("id") id: String): Response<GeneralResponse>
+
     @POST("users/getcomments/{storyid}")
     suspend fun getStorycomments(
         @Path("storyid") storyid: String
-    ) : Response<List<StoryComment>>
+    ): Response<List<StoryComment>>
 }

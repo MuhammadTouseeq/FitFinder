@@ -18,7 +18,7 @@ import java.io.File
 import javax.inject.Inject
 
 
-class HomeMapViewModel @Inject constructor(private val apiInterface: ApiInterface):ViewModel(){
+class HomeMapViewModel @Inject constructor(private val apiInterface: ApiInterface) : ViewModel() {
 
     lateinit var apiErrorsCallBack: ApiResponseCallBack
     val storiesData = MutableLiveData<List<NearbyStory>>()
@@ -26,35 +26,32 @@ class HomeMapViewModel @Inject constructor(private val apiInterface: ApiInterfac
     val userLocation = MutableLiveData<LatLng>()
 
 
-    fun uploadStoryData(userStory: UserStory)
-    {
+    fun uploadStoryData(userStory: UserStory) {
         viewModelScope.launch {
             postStoryData(userStory)
         }
     }
 
-    fun fetchNearByStoriesData(lat:String,lng:String)
-    {
+    fun fetchNearByStoriesData(lat: String, lng: String) {
         viewModelScope.launch {
-           getNearByStories(lat,lng)
+            getNearByStories(lat, lng)
         }
     }
-    fun observeAllNearByStories(): LiveData<List<NearbyStory>>
-    {
-return storiesData;
+
+    fun observeAllNearByStories(): LiveData<List<NearbyStory>> {
+        return storiesData;
     }
 
-    suspend fun getNearByStories(lat:String,lng:String) {
+    suspend fun getNearByStories(lat: String, lng: String) {
 
         viewModelScope.launch {
             val allNearByStories = apiInterface.getAllNearByStories(lat, lng)
-            if (allNearByStories.code() == 200&&allNearByStories.body()?.status.equals("1")) {
-               storiesData.value = allNearByStories.body()?.data
-               categoriesData.value = allNearByStories.body()?.categories
+            if (allNearByStories.code() == 200 && allNearByStories.body()?.status.equals("1")) {
+                storiesData.value = allNearByStories.body()?.data
+                categoriesData.value = allNearByStories.body()?.categories
 
                 apiErrorsCallBack.getError(allNearByStories.message())
-            } else
-            {
+            } else {
                 apiErrorsCallBack.getSuccess(allNearByStories.message())
             }
 

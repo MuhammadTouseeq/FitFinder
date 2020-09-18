@@ -15,6 +15,7 @@ import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
 import com.highbryds.fitfinder.callbacks.StoryCallback
 import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.commonHelper.toast
+import com.highbryds.fitfinder.model.NearbyStory
 import com.highbryds.fitfinder.model.UserStoriesModel
 import com.highbryds.fitfinder.vm.Profile.UserStoriesViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,7 +27,7 @@ class UserStories : AppCompatActivity(), ApiResponseCallBack , StoryCallback{
 
     @Inject
     lateinit var userStoriesViewModel: UserStoriesViewModel
-    var userStoriesModel: ArrayList<UserStoriesModel> = ArrayList()
+    var userStoriesModel: ArrayList<NearbyStory> = ArrayList()
     var itemPosition: Int = 0
     lateinit var adapter: UserStoriesAdapter
 
@@ -41,16 +42,18 @@ class UserStories : AppCompatActivity(), ApiResponseCallBack , StoryCallback{
         userStoriesViewModel.getUserStories(KotlinHelper.getUsersData().SocialId)
         userStoriesViewModel.storiesModel?.observe(this@UserStories, Observer {
             userStoriesModel.addAll(it)
-            loading.visibility = View.GONE
+            loadingProgress.visibility = View.GONE
             adapter = UserStoriesAdapter(userStoriesModel, this , this)
             RV_Stories.adapter = adapter
         });
+
 
 
     }
 
     override fun getError(error: String) {
         this.toast(this, error)
+        loadingProgress.visibility = View.GONE
     }
 
     override fun getSuccess(success: String) {

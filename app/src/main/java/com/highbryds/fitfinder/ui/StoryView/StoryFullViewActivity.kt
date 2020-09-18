@@ -41,22 +41,20 @@ import java.io.IOException
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class StoryFullViewActivity : AppCompatActivity(),View.OnClickListener {
+class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener {
 
-   @Inject
-   lateinit var storyFullViewModel: StoryFullViewModel
+    @Inject
+    lateinit var storyFullViewModel: StoryFullViewModel
 
     @Inject
     lateinit var storyCommentViewModel: StoryCommentViewModel
 
-    lateinit var storyData:NearbyStory
+    lateinit var storyData: NearbyStory
 
-    var storyClapCounter=0
+    var storyClapCounter = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_story_view)
-
-
 
 
         val v: View =
@@ -72,49 +70,46 @@ class StoryFullViewActivity : AppCompatActivity(),View.OnClickListener {
         }
 
 
+        //  })
+        //  val popup_btn: Button = v.findViewById(R.id.popupbutton)
 
-
-      //  })
-      //  val popup_btn: Button = v.findViewById(R.id.popupbutton)
-
-       // popup_btn.setOnClickListener(View.OnClickListener { popup_btn.setBackgroundColor(Color.RED) })
+        // popup_btn.setOnClickListener(View.OnClickListener { popup_btn.setBackgroundColor(Color.RED) })
 
         imgViewPlay.setOnClickListener(this)
         imgClapStory.setOnClickListener(this)
         imgCancel.setOnClickListener(this)
         btnSendComment.setOnClickListener(this)
 
-        val json=intent?.getStringExtra("storyData")
 
-        storyData=Gson().fromJson(json,NearbyStory::class.java)
+        val json = intent?.getStringExtra("storyData")
+
+        storyData = Gson().fromJson(json, NearbyStory::class.java)
+
+
 
 
         with(storyData)
         {
 
-            if(mediaUrl.contains(".mp3"))
-            {
+            if (mediaUrl.contains(".mp3")) {
 
                 resetAllViews()
-               containerAudioPlayer.visibility=View.VISIBLE
-                if (!isPlaying ) {
+                containerAudioPlayer.visibility = View.VISIBLE
+                if (!isPlaying) {
                     isPlaying = true
                     startPlaying()
                 }
 
-            }
-            else if(mediaUrl.contains(".mp4"))
-            {
+            } else if (mediaUrl.contains(".mp4")) {
                 resetAllViews()
-                videoAnimation.visibility=View.VISIBLE
-                view_video.visibility=View.VISIBLE
-                        val videoUri: Uri = Uri.parse(storyData?.mediaUrl)
-        prepareVideoPlayer(videoUri,view_video)
-            }
-            else{
+                videoAnimation.visibility = View.VISIBLE
+                view_video.visibility = View.VISIBLE
+                val videoUri: Uri = Uri.parse(storyData?.mediaUrl)
+                prepareVideoPlayer(videoUri, view_video)
+            } else {
 
                 resetAllViews()
-                imgStory.visibility=View.VISIBLE
+                imgStory.visibility = View.VISIBLE
                 Glide
                     .with(applicationContext)
                     .load(mediaUrl)
@@ -131,35 +126,43 @@ class StoryFullViewActivity : AppCompatActivity(),View.OnClickListener {
                     .placeholder(R.drawable.man_cartoon)
                     .circleCrop()
                     .into(userImage);
-userName.setText(userData.get(0).name)
+                userName.setText(userData.get(0).name)
 
             } else {
-                userImage.setImageDrawable(application.resources.getDrawable(R.drawable
-                    .man_cartoon))
+                userImage.setImageDrawable(
+                    application.resources.getDrawable(
+                        R.drawable
+                            .man_cartoon
+                    )
+                )
             }
             if (storyClapData?.size > 0) let {
 
                 storyClapCount.text = storyClapData?.size.toString()
-                storyClapCounter=storyClapData?.size
+                storyClapCounter = storyClapData?.size
 
             }
-            else {storyClapCount.text = ""}
+            else {
+                storyClapCount.text = ""
+            }
 
         }
 
 
         storyFullViewModel.clapsData.observe(this, Observer {
 
-            if(it==1)
-            {
-                isClap=true
-                storyClapCount.startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.scale_anim))
-                storyClapCounter+=1
+            if (it == 1) {
+                isClap = true
+                storyClapCount.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        applicationContext,
+                        R.anim.scale_anim
+                    )
+                )
+                storyClapCounter += 1
                 storyClapCount.setText(storyClapCounter.toString())
-            }
-            else
-            {
-                isClap=false
+            } else {
+                isClap = false
             }
 
         })
@@ -167,12 +170,12 @@ userName.setText(userData.get(0).name)
         //Observing comment data
         storyCommentViewModel.commentsData.observe(this, Observer {
 
-           it?.let {
-               edtComment.setText("")
-               adapter.clearData()
-               adapter.addData(it)
-               adapter.notifyDataSetChanged()
-           }
+            it?.let {
+                edtComment.setText("")
+                adapter.clearData()
+                adapter.addData(it)
+                adapter.notifyDataSetChanged()
+            }
         })
         storyCommentViewModel.storyCommentsData.observe(this, Observer {
 
@@ -208,12 +211,12 @@ userName.setText(userData.get(0).name)
         }
         return bitmap
     }
+
     /**
      * Video Player
      */
 
-    fun prepareVideoPlayer(uri: Uri?, videoview: VideoView)
-    {
+    fun prepareVideoPlayer(uri: Uri?, videoview: VideoView) {
 
         try {
             // Start the MediaController
@@ -231,12 +234,12 @@ userName.setText(userData.get(0).name)
         }
 
         videoview.requestFocus()
-       // videoview.start()
-        videoview.setOnPreparedListener(object : MediaPlayer.OnPreparedListener{
+        // videoview.start()
+        videoview.setOnPreparedListener(object : MediaPlayer.OnPreparedListener {
             override fun onPrepared(p0: MediaPlayer?) {
 
                 videoview.start()
-                videoAnimation.visibility=View.INVISIBLE
+                videoAnimation.visibility = View.INVISIBLE
 
             }
 
@@ -249,7 +252,7 @@ userName.setText(userData.get(0).name)
         recycler_view.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-        adapter = StoryCommentsAdapter(applicationContext,arrayListOf())
+        adapter = StoryCommentsAdapter(applicationContext, arrayListOf())
         recycler_view.addItemDecoration(
             DividerItemDecoration(
                 recycler_view.context,
@@ -269,10 +272,15 @@ userName.setText(userData.get(0).name)
     private var isPlaying = false
 
     private fun startPlaying() {
-        audioAnimation.visibility=View.VISIBLE
+        audioAnimation.visibility = View.VISIBLE
         mPlayer = MediaPlayer()
         try {
-            mPlayer!!.setDataSource( if (storyData?.mediaUrl.contains("https")) storyData?.mediaUrl.replace("https","http") else storyData?.mediaUrl)
+            mPlayer!!.setDataSource(
+                if (storyData?.mediaUrl.contains("https")) storyData?.mediaUrl.replace(
+                    "https",
+                    "http"
+                ) else storyData?.mediaUrl
+            )
             mPlayer!!.prepare()
             mPlayer!!.start()
         } catch (e: IOException) {
@@ -293,7 +301,7 @@ userName.setText(userData.get(0).name)
         mPlayer!!.setOnCompletionListener(MediaPlayer.OnCompletionListener {
             imgViewPlay.setImageResource(R.drawable.ic_play_circle)
             isPlaying = false
-            audioAnimation.visibility=View.INVISIBLE
+            audioAnimation.visibility = View.INVISIBLE
             chronometerAudio.stop()
             chronometerAudio.base = SystemClock.elapsedRealtime()
             mPlayer!!.seekTo(0)
@@ -330,53 +338,62 @@ userName.setText(userData.get(0).name)
         when (view!!.id) {
 
             R.id.imgViewPlay -> {
-                if (!isPlaying ) {
+                if (!isPlaying) {
                     isPlaying = true
                     startPlaying()
-                }
-                else {
+                } else {
                     isPlaying = false
                     stopPlaying()
                 }
 
             }
-            R.id.imgCancel->{
+            R.id.imgCancel -> {
 
                 setResult(777)
                 finish()
             }
-            R.id.btnSendComment->{
+            R.id.btnSendComment -> {
 
-                if(TextUtils.isEmpty(edtComment.text.toString()))
-                {
-                    toast(applicationContext,"comment is missing")
+                if (TextUtils.isEmpty(edtComment.text.toString())) {
+                    toast(applicationContext, "comment is missing")
                     return
                 }
-                btnSendComment.startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.scale_anim))
-           storyCommentViewModel.addStoryComment(KotlinHelper.getSocialID(),storyData?._id,edtComment.text.toString())
+                btnSendComment.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        applicationContext,
+                        R.anim.scale_anim
+                    )
+                )
+                storyCommentViewModel.addStoryComment(
+                    KotlinHelper.getSocialID(),
+                    storyData?._id,
+                    edtComment.text.toString()
+                )
 
             }
-            R.id.imgClapStory->
-            {
+            R.id.imgClapStory -> {
 
 
-     val exist=storyData?.storyClapData?.find {it.SocialId.equals(KotlinHelper.getSocialID()) }
-             if (exist==null&&isClap==false)
-             {
-                 imgClap.startAnimation(AnimationUtils.loadAnimation(applicationContext,R.anim.scale_anim))
-                 storyFullViewModel.insetStoryClap(KotlinHelper.getSocialID(),storyData?._id)
-             }
-                else
-             {
-                 toast(this,"you have already clap this story")
-             }
+                val exist =
+                    storyData?.storyClapData?.find { it.SocialId.equals(KotlinHelper.getSocialID()) }
+                if (exist == null && isClap == false) {
+                    imgClap.startAnimation(
+                        AnimationUtils.loadAnimation(
+                            applicationContext,
+                            R.anim.scale_anim
+                        )
+                    )
+                    storyFullViewModel.insetStoryClap(KotlinHelper.getSocialID(), storyData?._id)
+                } else {
+                    toast(this, "you have already clap this story")
+                }
 
             }
 
         }
     }
 
-    var isClap:Boolean=false
+    var isClap: Boolean = false
     private fun stopPlaying() {
         try {
             mPlayer!!.release()
@@ -385,7 +402,7 @@ userName.setText(userData.get(0).name)
         }
 
         mPlayer = null
-        audioAnimation.visibility=View.INVISIBLE
+        audioAnimation.visibility = View.INVISIBLE
         //showing the play button
         imgViewPlay.setImageResource(R.drawable.ic_play_circle)
         chronometerAudio.stop()
@@ -396,10 +413,9 @@ userName.setText(userData.get(0).name)
         stopPlaying()
     }
 
-    fun resetAllViews()
-    {
-        containerAudioPlayer.visibility=View.GONE
-        view_video.visibility=View.GONE
-        imgStory.visibility=View.GONE
+    fun resetAllViews() {
+        containerAudioPlayer.visibility = View.GONE
+        view_video.visibility = View.GONE
+        imgStory.visibility = View.GONE
     }
 }

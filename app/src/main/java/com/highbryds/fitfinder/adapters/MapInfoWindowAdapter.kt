@@ -22,52 +22,56 @@ class MyInfoWindowAdapter(context: Activity) : GoogleMap.InfoWindowAdapter {
     private val context: Activity
 
     override fun getInfoWindow(marker: Marker): View {
-        var txtDescription = myContentsView.findViewById(R.id.txtItemDesc) as TextView
-        var txtDateTime = myContentsView.findViewById(R.id.txtDateTime) as TextView
-        var clapCount = myContentsView.findViewById(R.id.clapCount) as TextView
-        var imgProfile = myContentsView.findViewById(R.id.imgProfile) as ImageView
-        var imgMediaType = myContentsView.findViewById(R.id.imgMediaType) as ImageView
 
-        marker.snippet?.let {
-            val storyData = Gson().fromJson(marker.snippet, NearbyStory::class.java)
+            var txtDescription = myContentsView.findViewById(R.id.txtItemDesc) as TextView
+            var txtDateTime = myContentsView.findViewById(R.id.txtDateTime) as TextView
+            var clapCount = myContentsView.findViewById(R.id.clapCount) as TextView
+            var imgProfile = myContentsView.findViewById(R.id.imgProfile) as ImageView
+            var imgMediaType = myContentsView.findViewById(R.id.imgMediaType) as ImageView
+            var txtItemName = myContentsView.findViewById(R.id.txtItemName) as TextView
 
-            with(storyData)
-            {
+            txtItemName.text = marker.title
 
-                txtDateTime.setText(Utils.getDateTimeFromServer(createdAt,"EEE, d MMM yyyy h:mm a"))
+            marker.snippet?.let {
+                val storyData = Gson().fromJson(marker.snippet, NearbyStory::class.java)
 
-                if(mediaUrl.contains(".mp3"))
+                with(storyData)
                 {
-                    imgMediaType.setImageDrawable(context.resources.getDrawable(R.drawable.icon_audio))
-                }
-                else if(mediaUrl.contains(".mp4"))
-                {
-                    imgMediaType.setImageDrawable(context.resources.getDrawable(R.drawable.icon_video))
-                }
-                else{
-                    imgMediaType.setImageDrawable(context.resources.getDrawable(R.drawable.icon_image))
-                }
 
-                txtDescription.text = storyName
-                if (userData?.size > 0) let {
-                    Glide
-                        .with(context)
-                        .load(userData?.get(0)?.imageUrl)
-                        .placeholder(R.drawable.ic_launcher_foreground)
-                        .circleCrop()
-                        .into(imgProfile);
+                    txtDateTime.setText(Utils.getDateTimeFromServer(createdAt,"EEE, d MMM yyyy h:mm a"))
 
-                } else {
-                    imgProfile.setImageDrawable(context.resources.getDrawable(R.drawable
-                        .man_cartoon))
+                    if(mediaUrl.contains(".mp3"))
+                    {
+                        imgMediaType.setImageDrawable(context.resources.getDrawable(R.drawable.icon_audio))
+                    }
+                    else if(mediaUrl.contains(".mp4"))
+                    {
+                        imgMediaType.setImageDrawable(context.resources.getDrawable(R.drawable.icon_video))
+                    }
+                    else{
+                        imgMediaType.setImageDrawable(context.resources.getDrawable(R.drawable.icon_image))
+                    }
+
+                    txtDescription.text = storyName
+                    if (userData?.size > 0) let {
+                        Glide
+                            .with(context)
+                            .load(userData?.get(0)?.imageUrl)
+                            .placeholder(R.drawable.ic_launcher_foreground)
+                            .circleCrop()
+                            .into(imgProfile);
+
+                    } else {
+                        imgProfile.setImageDrawable(context.resources.getDrawable(R.drawable.man_cartoon))
+                    }
+                    if (storyClapData?.size > 0) let {
+                        clapCount.text = storyClapData?.size.toString()
+                    } else {clapCount.text = ""}
+
                 }
-                if (storyClapData?.size > 0) let {
-                    clapCount.text = storyClapData?.size.toString()
-                } else {clapCount.text = ""}
 
             }
 
-        }
             return myContentsView
     }
 

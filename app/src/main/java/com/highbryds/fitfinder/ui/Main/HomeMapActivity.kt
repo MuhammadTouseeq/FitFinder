@@ -1,6 +1,5 @@
 package com.highbryds.fitfinder.ui.Main
 
-
 import android.app.Activity
 import android.app.Instrumentation
 import android.app.ProgressDialog
@@ -80,6 +79,7 @@ import com.mikepenz.materialdrawer.model.interfaces.withEmail
 import com.mikepenz.materialdrawer.model.interfaces.withIcon
 import com.mikepenz.materialdrawer.model.interfaces.withIdentifier
 import com.mikepenz.materialdrawer.model.interfaces.withName
+import com.mikepenz.materialdrawer.util.addStickyFooterItem
 import com.mikepenz.materialdrawer.widget.AccountHeaderView
 import com.pakdev.easypicker.utils.EasyImagePicker
 import dagger.hilt.android.AndroidEntryPoint
@@ -104,6 +104,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
+
 
 @AndroidEntryPoint
 open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickListener,
@@ -256,6 +257,11 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         }
 
 
+        headerView.setBackgroundColor(resources.getColor(R.color.colorAccent))
+        headerView.selectionListEnabledForSingleProfile= false
+
+
+
         val imageView = headerView.currentProfileView
         Glide
             .with(this)
@@ -279,6 +285,8 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         )
 
         slider.headerView = headerView
+        slider.addStickyFooterItem(PrimaryDrawerItem().withName("©Copyright FitFinder. V1.0"))
+
 
         // specify a click listener
         slider.onDrawerItemClickListener = { v, drawerItem, position ->
@@ -338,9 +346,9 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
         val pinMarker: Marker = mGoogleMap.addMarker(
             MarkerOptions()
-                .title("New Message")
+                .title(story.Category?:"Unknown")
                 .snippet(Gson().toJson(story))
-                .snippet(story.storyName + "")
+                //.snippet(story.storyName + "")
                 .visible(true)
                 .position(LatLng(story.latitude.toDouble(), story.longitude.toDouble()))
                 .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
@@ -850,6 +858,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                 }
 
 
+                loadingProgress.visibility = View.VISIBLE
                 if (filePath.contains("mp4")) {
                     JavaHelper.compress(filePath, this, this)
                 } else {
@@ -1269,11 +1278,12 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
     }
 
     override fun getError(error: String) {
-
+        loadingProgress.visibility = View.GONE
         spin_kit.visibility = View.GONE
     }
 
     override fun getSuccess(success: String) {
+        loadingProgress.visibility = View.GONE
         if (success.equals("User Logout Successfully", true)) {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
