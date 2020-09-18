@@ -51,7 +51,8 @@ class KotlinHelper {
             return ud
         }
 
-        fun getSocialID()="112528012612593803039"
+        //fun getSocialID() = "112528012612593803039"
+        fun getSocialID() = getUsersData().SocialId
 //        fun getSocialID()=getUsersData()?.SocialId
 
 

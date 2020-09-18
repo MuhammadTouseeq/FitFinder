@@ -273,8 +273,8 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         val home = PrimaryDrawerItem().withIdentifier(1).withName("Home")
         val story = PrimaryDrawerItem().withIdentifier(2).withName("My Story")
         val profile = PrimaryDrawerItem().withIdentifier(3).withName("Profile")
-        val settings = SecondaryDrawerItem().withIdentifier(5).withName("Settings")
-        val logout = SecondaryDrawerItem().withIdentifier(4).withName("Logout")
+        val settings = PrimaryDrawerItem().withIdentifier(5).withName("Settings")
+        val logout = PrimaryDrawerItem().withIdentifier(4).withName("Logout")
 
 
         // get the reference to the slider and add the items
@@ -285,7 +285,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         )
 
         slider.headerView = headerView
-        slider.addStickyFooterItem(PrimaryDrawerItem().withName("©Copyright FitFinder. V1.0"))
+        slider.addStickyFooterItem(PrimaryDrawerItem().withName("Powered By HIGHBRYDS | V 1.0"))
 
 
         // specify a click listener
