@@ -1,44 +1,49 @@
 package com.highbryds.fitfinder.ui.StoryView
 
+import android.app.AlertDialog
 import android.graphics.Bitmap
-import android.graphics.Color
+import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.net.Uri
-import android.opengl.Visibility
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.SystemClock
+import android.os.*
 import android.text.TextUtils
 import android.util.Log
-import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.*
+import android.widget.LinearLayout
+import android.widget.MediaController
+import android.widget.SeekBar
+import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.adapters.StoryCommentsAdapter
-import com.highbryds.fitfinder.adapters.TrendingStoriesAdapter
+import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
+import com.highbryds.fitfinder.callbacks.StoryCallback
 import com.highbryds.fitfinder.commonHelper.KotlinHelper
+import com.highbryds.fitfinder.commonHelper.SwipeToDeleteCallback
 import com.highbryds.fitfinder.commonHelper.toast
 import com.highbryds.fitfinder.model.NearbyStory
 import com.highbryds.fitfinder.model.StoryComment
-import com.highbryds.fitfinder.model.TrendingStory
 import com.highbryds.fitfinder.ui.StoryComment.StoryCommentViewModel
+import com.petersamokhin.android.floatinghearts.HeartsRenderer
+import com.petersamokhin.android.floatinghearts.HeartsView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_story_view.*
-import kotlinx.android.synthetic.main.activity_story_view.audioAnimation
 import kotlinx.android.synthetic.main.view_bottom_sheet_comments.*
 import java.io.IOException
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.HashMap
 
 @AndroidEntryPoint
 class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener {
@@ -50,25 +55,13 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var storyCommentViewModel: StoryCommentViewModel
 
     lateinit var storyData: NearbyStory
-
+    lateinit var heartView:HeartsView;
     var storyClapCounter = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_story_view)
-
-
-        val v: View =
-            LayoutInflater.from(applicationContext).inflate(R.layout.view_popupwindow, null, false)
-        val pw = PopupWindow(v, 500, 500, true)
-        imgAction.setOnClickListener {
-            pw.showAtLocation(
-                imgAction,
-                Gravity.CENTER,
-                0,
-                0
-            )
-        }
-
+         heartView = HeartsView(applicationContext)
+        bindBottomSheet()
 
         //  })
         //  val popup_btn: Button = v.findViewById(R.id.popupbutton)
@@ -81,6 +74,7 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener {
         btnSendComment.setOnClickListener(this)
 
 
+
         val json = intent?.getStringExtra("storyData")
 
         storyData = Gson().fromJson(json, NearbyStory::class.java)
@@ -90,6 +84,35 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener {
 
         with(storyData)
         {
+
+
+
+
+            heartView.applyConfig(HeartsRenderer.Config(5f, 2f, 2f))
+
+            rootview.addView(
+                heartView,
+                LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT
+                )
+            )
+/*
+            val bitmap = BitmapFactory.decodeResource(resources, R.drawable.clap_icon)
+            Thread(Runnable {
+                try {
+                    Thread.sleep(500)
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
+                }
+                runOnUiThread {
+
+                    for(i in 0 until storyClapData?.size!!)
+                    {
+                        heartView.emitHeart(HeartsView.Model(0, bitmap), HeartsView.MAX_Y_FULL)
+                    }
+                }
+            }).start()*/
 
             if (mediaUrl.contains(".mp3")) {
 
@@ -119,14 +142,14 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener {
 
             txtStoryMessage.setText(storyName)
 
-            if (userData?.size > 0) let {
+            if (userData!=null&&userData?.size!! > 0) let {
                 Glide
                     .with(applicationContext)
                     .load(userData?.get(0)?.imageUrl)
                     .placeholder(R.drawable.man_cartoon)
                     .circleCrop()
                     .into(userImage);
-                userName.setText(userData.get(0).name)
+                userName.setText(userData?.get(0)?.name)
 
             } else {
                 userImage.setImageDrawable(
@@ -136,18 +159,49 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener {
                     )
                 )
             }
-            if (storyClapData?.size > 0) let {
+            if (storyClapData!=null&&storyClapData?.size!! > 0) let {
 
                 storyClapCount.text = storyClapData?.size.toString()
-                storyClapCounter = storyClapData?.size
+                storyClapCounter = storyClapData?.size!!
 
             }
             else {
                 storyClapCount.text = ""
             }
 
+
+            //check user clap this story already or not
+            val exist =
+                if(storyData!=null)storyData?.storyClapData?.find { it.SocialId.equals(KotlinHelper.getSocialID()) }else null
+
+            if(exist==null)
+            {
+                imgClapStory.setImageDrawable(applicationContext.resources.getDrawable(R.drawable.not_clap_icon))
+            }
+            else
+            {
+                imgClapStory.setImageDrawable(applicationContext.resources.getDrawable(R.drawable.clap_icon))
+            }
         }
 
+
+        storyFullViewModel.updateViews(KotlinHelper.getSocialID(),storyData?._id)
+
+        storyFullViewModel.viewsdata.observe(this, Observer {
+
+                viewsCount.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        applicationContext,
+                        R.anim.scale_anim
+                    )
+                )
+
+                viewsCount.setText(it.toString())
+
+
+
+
+        })
 
         storyFullViewModel.clapsData.observe(this, Observer {
 
@@ -161,6 +215,8 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener {
                 )
                 storyClapCounter += 1
                 storyClapCount.setText(storyClapCounter.toString())
+
+                imgClapStory.setImageDrawable(applicationContext.resources.getDrawable(R.drawable.clap_icon))
             } else {
                 isClap = false
             }
@@ -172,23 +228,43 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener {
 
             it?.let {
                 edtComment.setText("")
+                bottomSheetBehavior.state=BottomSheetBehavior.STATE_HALF_EXPANDED
                 adapter.clearData()
                 adapter.addData(it)
                 adapter.notifyDataSetChanged()
+                storyCommentCount.setText(it?.size.toString())
             }
         })
         storyCommentViewModel.storyCommentsData.observe(this, Observer {
 
             it?.let {
 
+
+
+                storyCommentCount.setText(it?.size.toString())
                 adapter.clearData()
                 adapter.addData(it)
                 adapter.notifyDataSetChanged()
+
             }
         })
 
         storyCommentViewModel.fetchStoryComments(storyData?._id)
         bindStoryComments()
+
+        storyCommentViewModel.apiErrorsCallBack = object : ApiResponseCallBack {
+            override fun getError(error: String) {
+
+                toast(applicationContext,error)
+            }
+
+            override fun getSuccess(success: String) {
+
+                toast(applicationContext,success)
+                adapter.deleteComment(deleteCommentPosition)
+            }
+
+        }
     }
 
     @Throws(Throwable::class)
@@ -215,6 +291,50 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener {
     /**
      * Video Player
      */
+    lateinit var videoPlayer: MediaPlayer
+
+lateinit var handler: Handler
+    var flyingCount:Int=0;
+    override fun onResume() {
+        super.onResume()
+
+        var bitmap = BitmapFactory.decodeResource(resources, R.drawable.clap_icon)
+        bitmap=Bitmap.createScaledBitmap(bitmap, 30, 30, false)
+
+        handler = Handler(Looper.getMainLooper())
+        runnable =
+            Runnable {
+               if(flyingCount!= storyData?.storyClapData?.size!!)
+               {
+                   heartView.emitHeart(HeartsView.Model(Random().nextInt(100), bitmap), HeartsView.MAX_Y_FULL)
+                   flyingCount++
+                   handler.postDelayed(runnable, 1000)
+               }
+                else
+               {
+                   handler.removeCallbacks { runnable }
+               }
+
+
+            }
+        handler.postDelayed(runnable, 1000)
+
+
+//        Thread(Runnable {
+//            try {
+//                //Thread.sleep(500)
+//            } catch (e: InterruptedException) {
+//                e.printStackTrace()
+//            }
+//            runOnUiThread {
+//
+//                for(i in 0 until storyData?.storyClapData?.size!!)
+//                {
+//                    heartView.emitHeart(HeartsView.Model(0, bitmap), HeartsView.MAX_Y_FULL)
+//                }
+//            }
+//        }).start()
+    }
 
     fun prepareVideoPlayer(uri: Uri?, videoview: VideoView) {
 
@@ -238,6 +358,7 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener {
         videoview.setOnPreparedListener(object : MediaPlayer.OnPreparedListener {
             override fun onPrepared(p0: MediaPlayer?) {
 
+              videoPlayer=p0!!
                 videoview.start()
                 videoAnimation.visibility = View.INVISIBLE
 
@@ -246,7 +367,7 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener {
         })
     }
 
-
+var deleteCommentPosition:Int=0;
     lateinit var adapter: StoryCommentsAdapter
     private fun bindStoryComments() {
         recycler_view.layoutManager =
@@ -259,8 +380,26 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener {
                 (recycler_view.layoutManager as LinearLayoutManager).orientation
             )
         )
+        val swipeHandler = object : SwipeToDeleteCallback(this) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val adapter = recycler_view.adapter as StoryCommentsAdapter
+//                adapter.deleteComment(viewHolder.adapterPosition)
+                val storyComment:StoryComment=  adapter.getitem(viewHolder.adapterPosition)
+                storyCommentViewModel.deleteStoryComments(storyComment?._id,storyComment?.story_id)
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(swipeHandler)
+        itemTouchHelper.attachToRecyclerView(recycler_view)
         recycler_view.adapter = adapter
 
+        adapter.storyCallback=object : StoryCallback {
+            override fun storyItemPosition(position: Int) {
+
+                deleteCommentPosition=position
+showConfirmationDialog()
+            }
+
+        }
     }
 
     //=========Audio Player
@@ -375,7 +514,7 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener {
 
 
                 val exist =
-                    storyData?.storyClapData?.find { it.SocialId.equals(KotlinHelper.getSocialID()) }
+                   if(storyData!=null)storyData?.storyClapData?.find { it.SocialId.equals(KotlinHelper.getSocialID()) }else null
                 if (exist == null && isClap == false) {
                     imgClap.startAnimation(
                         AnimationUtils.loadAnimation(
@@ -385,7 +524,7 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener {
                     )
                     storyFullViewModel.insetStoryClap(KotlinHelper.getSocialID(), storyData?._id)
                 } else {
-                    toast(this, "you have already clap this story")
+                   // toast(this, "you have already clap this story")
                 }
 
             }
@@ -410,12 +549,110 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        stopPlaying()
+        if (storyData?.mediaUrl.contains(".mp3")) {
+            stopPlaying()
+        }
+        else if(storyData?.mediaUrl.contains(".mp4"))
+        {
+            videoPlayer?.release()
+        }
     }
 
     fun resetAllViews() {
         containerAudioPlayer.visibility = View.GONE
         view_video.visibility = View.GONE
         imgStory.visibility = View.GONE
+    }
+
+    lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
+
+    //bottom sheet binding
+    private fun bindBottomSheet() {
+
+        viewComment.setOnClickListener {
+
+            bottomSheetBehavior.state=BottomSheetBehavior.STATE_HALF_EXPANDED
+        }
+
+        bottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet_layout_comment)
+
+        coordinatorLayout.setOnClickListener(View.OnClickListener {
+            if (bottomSheetBehavior.getState() === BottomSheetBehavior.STATE_HALF_EXPANDED) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
+            }
+        })
+
+
+        bottom_sheet_layout_comment.setOnClickListener {
+            toggleBottomSheet(bottomSheetBehavior)
+        }
+
+        bottomSheetBehavior.setBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+
+
+                // React to state change
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                    }
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                    }
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                    }
+                    BottomSheetBehavior.STATE_DRAGGING -> {
+                    }
+                    BottomSheetBehavior.STATE_SETTLING -> {
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                // React to dragging events
+
+            }
+        })
+    }
+
+    private fun toggleBottomSheet(bottomSheetBehavior: BottomSheetBehavior<LinearLayout>) {
+        if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_HALF_EXPANDED) {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HALF_EXPANDED)
+        } else {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
+        }
+    }
+
+
+    fun showConfirmationDialog()
+    {
+        // Initialize a new instance of
+        val builder = AlertDialog.Builder(this@StoryFullViewActivity)
+
+        // Set the alert dialog title
+        builder.setTitle("Delete")
+
+        // Display a message on alert dialog
+        builder.setMessage("Are you sure want to delete this comment?")
+
+        // Set a positive button and its click listener on alert dialog
+        builder.setPositiveButton("YES"){dialog, which ->
+
+            val storyComment:StoryComment=  adapter.getitem(deleteCommentPosition)
+            storyCommentViewModel.deleteStoryComments(storyComment?._id,storyComment?.story_id)
+            dialog.dismiss()
+        }
+
+
+        // Display a negative button on alert dialog
+        builder.setNegativeButton("No"){dialog,which ->
+            dialog.dismiss()
+        }
+
+
+        // Finally, make the alert dialog using builder
+        val dialog: AlertDialog = builder.create()
+
+        // Display the alert dialog on app interface
+        dialog.show()
     }
 }

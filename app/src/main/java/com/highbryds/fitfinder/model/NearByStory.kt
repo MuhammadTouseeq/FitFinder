@@ -4,17 +4,18 @@ import com.google.gson.annotations.SerializedName
 
 data class NearbyStory (
 
-    @SerializedName("isActive") val isActive : Int,
-    @SerializedName("mediaUrl") val mediaUrl : String,
-    @SerializedName("storyName") val storyName : String,
-    @SerializedName("_id") val _id : String,
-    @SerializedName("SocialId") val socialId : String,
-    @SerializedName("latitude") val latitude : Double,
-    @SerializedName("longitude") val longitude : Double,
-    @SerializedName("createdAt") val createdAt : String,
-    @SerializedName("__v") val __v : Int,
-    @SerializedName("Category") val Category : String?,
-    @SerializedName("users_data") val userData : List<UsersData>,
-    @SerializedName("clap_data") val storyClapData : List<StoryClap>
+    @SerializedName("isActive") var isActive : Int,
+    @SerializedName("mediaUrl") var mediaUrl : String,
+    @SerializedName("storyName") var storyName : String,
+    @SerializedName("_id") var _id : String,
+    @SerializedName("SocialId") var socialId : String,
+    @SerializedName("latitude") var latitude : Double,
+    @SerializedName("longitude") var longitude : Double,
+    @SerializedName("createdAt") var createdAt : String,
+    @SerializedName("__v") var __v : Int,
+    @SerializedName("Category") var Category : String?,
+    @SerializedName("users_data") var userData : List<UsersData>?,
+    @SerializedName("clap_data") var storyClapData : List<StoryClap>?,
+    @SerializedName("views_data") var storyViewsData : List<StoryViews>?
 
 )

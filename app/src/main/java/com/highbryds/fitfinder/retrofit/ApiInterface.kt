@@ -95,7 +95,7 @@ interface ApiInterface {
         @Field("longitude") longitude: String,
         @Field("mediaUrl") mediaUrl: String,
         @Field("Category") Category: String
-    ): Response<UserStory>
+    ): Response<WrapperUploadStory>
 
 
 //    @POST("users/getnearbystories")
@@ -115,4 +115,21 @@ interface ApiInterface {
     suspend fun getStorycomments(
         @Path("storyid") storyid: String
     ): Response<List<StoryComment>>
+
+    @POST("users/deletecomment/{commentId}/{storyid}")
+    suspend fun deletecomment(
+        @Path("commentId") commentId: String,
+        @Path("storyid") storyid: String
+    ): Response<GeneralResponse>
+
+    @POST("users/updateviews/{SocialId}/{StoryId}")
+    suspend fun updateViews(
+        @Path("SocialId") SocialId: String,
+        @Path("StoryId") StoryId: String
+    ): Response<WrapperStoryViews>
+
+
+
+    @POST("users/gettrendingStories")
+    suspend fun getTrendingStories(): Response<WrapperStory>
 }

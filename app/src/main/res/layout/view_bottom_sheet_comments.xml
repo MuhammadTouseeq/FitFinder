@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/bottom_sheet_layout"
+    android:id="@+id/bottom_sheet_layout_comment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_margin="3dp"
     android:background="@drawable/shape_rounded_white_nobottom"
     app:behavior_hideable="false"
-    app:behavior_peekHeight="@dimen/_60sdp"
+    app:behavior_peekHeight="@dimen/_55sdp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <LinearLayout
@@ -45,8 +45,8 @@
             android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
-
             android:background="@drawable/shape_rounded_black_nobottom"
+         android:layout_gravity="center_vertical"
             android:orientation="horizontal"
             android:layout_height="wrap_content">
 
@@ -55,21 +55,45 @@
                 android:layout_width="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center"
-                android:layout_gravity="end"
-                android:padding="8dp"
-                android:layout_height="wrap_content">
+                android:padding="3dp"
+                android:layout_height="match_parent">
 
                 <ImageView
-                    android:layout_width="45dp"
-                    android:padding="8dp"
+                    android:layout_width="@dimen/_20sdp"
                     android:id="@+id/imgClapStory"
+                    android:padding="@dimen/_3sdp"
                     android:src="@drawable/clap_icon"
-                    android:layout_height="45dp"/>
+                    android:layout_height="@dimen/_20sdp"/>
                 <TextView
                     android:layout_width="wrap_content"
-                    android:text="20"
-                    android:textSize="18sp"
+                    android:text=""
+                    android:textSize="16sp"
+                    android:layout_marginLeft="@dimen/_5sdp"
                     android:id="@+id/storyClapCount"
+                    android:textColor="@android:color/white"
+                    android:gravity="center"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:id="@+id/viewComment"
+                android:padding="3dp"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:padding="@dimen/_3sdp"
+                    android:src="@drawable/ic_baseline_mode_comment_24"
+                    android:layout_height="@dimen/_20sdp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text=""
+                    android:textSize="16sp"
+                    android:id="@+id/storyCommentCount"
+                    android:layout_marginLeft="@dimen/_5sdp"
                     android:textColor="@android:color/white"
                     android:gravity="center"
                     android:layout_height="wrap_content"/>

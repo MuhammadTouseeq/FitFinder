@@ -157,7 +157,11 @@ dependencies {
 
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 
+    implementation 'com.github.stfalcon:multiimageview:0.1'
 
+    implementation 'com.github.petersamokhin:floating-hearts-view:0.0.3'
+
+    implementation 'org.rajawali3d:rajawali:1.1.970@aar'
 }
 
 kapt{

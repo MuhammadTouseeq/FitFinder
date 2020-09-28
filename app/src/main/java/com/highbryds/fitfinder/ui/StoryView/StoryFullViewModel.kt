@@ -26,6 +26,7 @@ class StoryFullViewModel @Inject constructor(private val apiInterface: ApiInterf
     lateinit var apiErrorsCallBack: ApiResponseCallBack
 
     val clapsData = MutableLiveData<Int>()
+    val viewsdata = MutableLiveData<Int>()
 
     fun insetStoryClap(socialId:String,storyId:String)
     {
@@ -34,7 +35,12 @@ class StoryFullViewModel @Inject constructor(private val apiInterface: ApiInterf
         }
     }
 
-
+    fun updateViews(socialId:String,storyId:String)
+    {
+        viewModelScope.launch {
+            updateStoryViews(socialId,storyId)
+        }
+    }
      suspend fun insertClap(socialId:String,storyId:String)
     {
 
@@ -55,4 +61,27 @@ class StoryFullViewModel @Inject constructor(private val apiInterface: ApiInterf
 
     }
 
+
+
+    suspend fun updateStoryViews(socialId:String,storyId:String)
+    {
+        try {
+            val response = apiInterface.updateViews(socialId,storyId)
+
+            if (response.code()==200&&response.body()?.status.equals("1"))
+            {
+                viewsdata.value=response.body()?.data?.size
+
+            }
+            else{
+                apiErrorsCallBack.getError("Failed to add comment")
+            }
+        }
+        catch (e:Exception)
+        {
+            apiErrorsCallBack.getError(e.toString())
+        }
+
+
+    }
 }

@@ -28,7 +28,12 @@ class StoryCommentViewModel  @Inject constructor(private val apiInterface: ApiIn
             getStoryComments(storyId)
         }
     }
-
+    fun deleteStoryComments(commmentId: String,storyId:String)
+    {
+        viewModelScope.launch {
+            deleteComment(commmentId,storyId)
+        }
+    }
 
     suspend fun getStoryComments(storyId:String)
     {
@@ -47,17 +52,41 @@ class StoryCommentViewModel  @Inject constructor(private val apiInterface: ApiIn
 
     suspend fun insertStoryComment(socialId:String,storyId:String,comment:String)
     {
-        val response = apiInterface.insertStoryComment(socialId,storyId,comment)
+       try {
+           val response = apiInterface.insertStoryComment(socialId,storyId,comment)
 
-        if (response.code()==200&&response.body()?.status.equals("1"))
-        {
-           commentsData.value=response.body()?.data
+           if (response.code()==200&&response.body()?.status.equals("1"))
+           {
+               commentsData.value=response.body()?.data
+              // apiErrorsCallBack.getSuccess("comment added Successfully")
+           }
+           else{
+               commentsData.value=null
+               apiErrorsCallBack.getError("Failed to add comment")
+           }
+       }
+       catch (e:Exception)
+       {
+           apiErrorsCallBack.getError(e.toString())
+       }
+
+
+    }
+
+
+    private suspend fun deleteComment(commmentId: String,storyId: String) {
+        try {
+            val resposne = apiInterface.deletecomment(commmentId,storyId)
+            if (resposne.isSuccessful) {
+                if (resposne.body()?.status == 1) {
+                    apiErrorsCallBack.getSuccess("comment deleted Successfully")
+                }
+            } else {
+                apiErrorsCallBack.getError(resposne.errorBody().toString())
+            }
+        } catch (e: Exception) {
+            apiErrorsCallBack.getError(e.toString())
         }
-        else{
-            commentsData.value=null
-        }
-
-
     }
 
 }
