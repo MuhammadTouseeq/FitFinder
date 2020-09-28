@@ -253,6 +253,14 @@ it?.let {
                     //   mGoogleMap.clear()
                     addStoryMarker(this, item)
                 }
+//                for (item: NearbyStory in it) {
+//                    // Log.d("StoryData", item.mediaUrl)
+//                    if (item.latitude != 0.0) {
+//                        //   mGoogleMap.clear()
+//                        addStoryMarker(this, item)
+//                    }
+//
+//                }
             }
 
 
@@ -293,172 +301,170 @@ it?.let {
         }
 
         override fun onPostExecute(bitmap: Bitmap?) {
-
             bitmap?.let {
-            multiImage.addImage(bitmap)
+                multiImage.addImage(bitmap)
 
             }
         }
-    }
+          fun showStoryImage(storyview:CircleImageView,url:String)
+          {
+              Glide
+                  .with(applicationContext)
+                  .load(url)
+                  .placeholder(R.drawable.placeholder)
+                  .into(storyview);
+          }
+    fun drawerSetup() {
 
-    fun showStoryImage(storyview:CircleImageView,url:String)
-    {
-        Glide
-            .with(applicationContext)
-            .load(url)
-            .placeholder(R.drawable.placeholder)
-            .into(storyview);
-    }
-        fun drawerSetup() {
-
-            // Create the AccountHeader
-            val headerView = AccountHeaderView(this).apply {
-                attachToSliderView(slider) // attach to the slider
-                addProfiles(
-                    ProfileDrawerItem().withName(KotlinHelper.getUsersData().name).withEmail(
-                        KotlinHelper.getUsersData().emailAdd
-                    )
+        // Create the AccountHeader
+        val headerView = AccountHeaderView(this).apply {
+            attachToSliderView(slider) // attach to the slider
+            addProfiles(
+                ProfileDrawerItem().withName(KotlinHelper.getUsersData().name).withEmail(
+                    KotlinHelper.getUsersData().emailAdd
                 )
-                onAccountHeaderListener = { view, profile, current ->
-                    // react to profile changes
-                    false
-                }
-            }
-
-
-            headerView.setBackgroundColor(resources.getColor(R.color.colorAccent))
-            headerView.selectionListEnabledForSingleProfile = false
-
-
-            val imageView = headerView.currentProfileView
-            Glide
-                .with(this)
-                .load(KotlinHelper.getUsersData().imageUrl)
-                .placeholder(R.drawable.ic_launcher_foreground)
-                .into(imageView);
-
-            //if you want to update the items at a later time it is recommended to keep it in a variable
-            val home = PrimaryDrawerItem().withIdentifier(1).withName("Home")
-            val story = PrimaryDrawerItem().withIdentifier(2).withName("My Story")
-            val profile = PrimaryDrawerItem().withIdentifier(3).withName("Profile")
-            val settings = SecondaryDrawerItem().withIdentifier(5).withName("Settings")
-            val logout = SecondaryDrawerItem().withIdentifier(4).withName("Logout")
-
-
-            // get the reference to the slider and add the items
-            slider.itemAdapter.add(
-                home, profile, story,
-                DividerDrawerItem(),
-                settings, logout
             )
-
-            slider.headerView = headerView
-            slider.addStickyFooterItem(PrimaryDrawerItem().withName("©Copyright FitFinder. V1.0"))
-
-
-            // specify a click listener
-            slider.onDrawerItemClickListener = { v, drawerItem, position ->
-                when (position) {
-                    1 -> {
-                        this.toast(this, "Home")
-                    }
-                    2 -> {
-                        val intent = Intent(this, UserProfileMain::class.java)
-                        startActivity(intent)
-                    }
-                    3 -> {
-                        val intent = Intent(this, UserStories::class.java)
-                        startActivity(intent)
-                    }
-                    5 -> {
-                        val intent = Intent(this, UserProfileSetting::class.java)
-                        startActivity(intent)
-                    }
-                    6 -> {
-
-                        logoutViewModel.logoutUser(KotlinHelper.getUsersData().SocialId)
-                        PrefsHelper.putBoolean(Constants.Pref_IsLogin, false)
-                    }
-                }
+            onAccountHeaderListener = { view, profile, current ->
+                // react to profile changes
                 false
             }
-
         }
 
 
-        open fun addStoryMarker(
-            context: Context,
-            story: NearbyStory
-        ): Bitmap? {
-            val marker: View =
-                (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(
-                    com.highbryds.fitfinder.R.layout.marker_view,
-                    null
-                )
-            val markerImage: ImageView =
-                marker.findViewById<View>(com.highbryds.fitfinder.R.id.imgProfile) as CircleImageView
-            markerImage.setImageDrawable(resources.getDrawable(com.highbryds.fitfinder.R.drawable.marker_thinking_boy))
-            val displayMetrics = DisplayMetrics()
-            (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
-            marker.layoutParams = ViewGroup.LayoutParams(52, ViewGroup.LayoutParams.WRAP_CONTENT)
-            marker.measure(displayMetrics.widthPixels, displayMetrics.heightPixels)
-            marker.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels)
-            marker.buildDrawingCache()
-            val bitmap = Bitmap.createBitmap(
-                marker.measuredWidth,
-                marker.measuredHeight,
-                Bitmap.Config.ARGB_8888
-            )
-            val canvas = Canvas(bitmap)
-            marker.draw(canvas)
-
-            val pinMarker: Marker = mGoogleMap.addMarker(
-                MarkerOptions()
-                    .title(story.Category ?: "Unknown")
-                    .snippet(Gson().toJson(story))
-                    //.snippet(story.storyName + "")
-                    .visible(true)
-                    .position(LatLng(story.latitude.toDouble(), story.longitude.toDouble()))
-                    .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
-            )
+        headerView.setBackgroundColor(resources.getColor(R.color.colorAccent))
+        headerView.selectionListEnabledForSingleProfile= false
 
 
-            return bitmap
+
+        val imageView = headerView.currentProfileView
+        Glide
+            .with(this)
+            .load(KotlinHelper.getUsersData().imageUrl)
+            .placeholder(R.drawable.ic_launcher_foreground)
+            .into(imageView);
+
+        //if you want to update the items at a later time it is recommended to keep it in a variable
+        val home = PrimaryDrawerItem().withIdentifier(1).withName("Home")
+        val story = PrimaryDrawerItem().withIdentifier(2).withName("My Story")
+        val profile = PrimaryDrawerItem().withIdentifier(3).withName("Profile")
+        val settings = PrimaryDrawerItem().withIdentifier(5).withName("Settings")
+        val logout = PrimaryDrawerItem().withIdentifier(4).withName("Logout")
+
+
+        // get the reference to the slider and add the items
+        slider.itemAdapter.add(
+            home, profile, story,
+            DividerDrawerItem(),
+            settings, logout
+        )
+
+        slider.headerView = headerView
+        slider.addStickyFooterItem(PrimaryDrawerItem().withName("Powered By HIGHBRYDS | V 1.0"))
+
+
+        // specify a click listener
+        slider.onDrawerItemClickListener = { v, drawerItem, position ->
+            when (position) {
+                1 -> {
+                    this.toast(this, "Home")
+                }
+                2 -> {
+                    val intent = Intent(this, UserProfileMain::class.java)
+                    startActivity(intent)
+                }
+                3 -> {
+                    val intent = Intent(this, UserStories::class.java)
+                    startActivity(intent)
+                }
+                5 -> {
+                    val intent = Intent(this, UserProfileSetting::class.java)
+                    startActivity(intent)
+                }
+                6 -> {
+
+                    logoutViewModel.logoutUser(KotlinHelper.getUsersData().SocialId)
+                    PrefsHelper.putBoolean(Constants.Pref_IsLogin, false)
+                }
+            }
+            false
         }
 
-        open fun createCustomMarker(
-            context: Context,
-            latLng: LatLng
-        ): Bitmap? {
-            val marker: View =
-                (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(
-                    com.highbryds.fitfinder.R.layout.marker_view,
-                    null
-                )
-            val markerImage: ImageView =
-                marker.findViewById<View>(com.highbryds.fitfinder.R.id.imgProfile) as CircleImageView
-            markerImage.setImageDrawable(resources.getDrawable(com.highbryds.fitfinder.R.drawable.marker_thinking_boy))
-            val displayMetrics = DisplayMetrics()
-            (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
-            marker.layoutParams = ViewGroup.LayoutParams(52, ViewGroup.LayoutParams.WRAP_CONTENT)
-            marker.measure(displayMetrics.widthPixels, displayMetrics.heightPixels)
-            marker.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels)
-            marker.buildDrawingCache()
-            val bitmap = Bitmap.createBitmap(
-                marker.measuredWidth,
-                marker.measuredHeight,
-                Bitmap.Config.ARGB_8888
-            )
-            val canvas = Canvas(bitmap)
-            marker.draw(canvas)
+    }
 
-            val pinMarker: Marker = mGoogleMap.addMarker(
-                MarkerOptions()
-                    .title("New Message")
-                    .snippet("Too much traffic jam in Karachi")
-                    .position(latLng)
-                    .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
+
+    open fun addStoryMarker(
+        context: Context,
+        story: NearbyStory
+    ): Bitmap? {
+        val marker: View =
+            (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(
+                com.highbryds.fitfinder.R.layout.marker_view,
+                null
             )
+        val markerImage: ImageView =
+            marker.findViewById<View>(com.highbryds.fitfinder.R.id.imgProfile) as CircleImageView
+        markerImage.setImageDrawable(resources.getDrawable(com.highbryds.fitfinder.R.drawable.marker_thinking_boy))
+        val displayMetrics = DisplayMetrics()
+        (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
+        marker.layoutParams = ViewGroup.LayoutParams(52, ViewGroup.LayoutParams.WRAP_CONTENT)
+        marker.measure(displayMetrics.widthPixels, displayMetrics.heightPixels)
+        marker.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels)
+        marker.buildDrawingCache()
+        val bitmap = Bitmap.createBitmap(
+            marker.measuredWidth,
+            marker.measuredHeight,
+            Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(bitmap)
+        marker.draw(canvas)
+
+        val pinMarker: Marker = mGoogleMap.addMarker(
+            MarkerOptions()
+                .title(story.Category?:"Unknown")
+                .snippet(Gson().toJson(story))
+                //.snippet(story.storyName + "")
+                .visible(true)
+                .position(LatLng(story.latitude.toDouble(), story.longitude.toDouble()))
+                .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
+        )
+
+
+        return bitmap
+    }
+
+    open fun createCustomMarker(
+        context: Context,
+        latLng: LatLng
+    ): Bitmap? {
+        val marker: View =
+            (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(
+                com.highbryds.fitfinder.R.layout.marker_view,
+                null
+            )
+        val markerImage: ImageView =
+            marker.findViewById<View>(com.highbryds.fitfinder.R.id.imgProfile) as CircleImageView
+        markerImage.setImageDrawable(resources.getDrawable(com.highbryds.fitfinder.R.drawable.marker_thinking_boy))
+        val displayMetrics = DisplayMetrics()
+        (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
+        marker.layoutParams = ViewGroup.LayoutParams(52, ViewGroup.LayoutParams.WRAP_CONTENT)
+        marker.measure(displayMetrics.widthPixels, displayMetrics.heightPixels)
+        marker.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels)
+        marker.buildDrawingCache()
+        val bitmap = Bitmap.createBitmap(
+            marker.measuredWidth,
+            marker.measuredHeight,
+            Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(bitmap)
+        marker.draw(canvas)
+
+        val pinMarker: Marker = mGoogleMap.addMarker(
+            MarkerOptions()
+                .title("New Message")
+                .snippet("Too much traffic jam in Karachi")
+                .position(latLng)
+                .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
+        )
 
 //        Picasso.get().load(filePath).fit().centerCrop().into(markerImage,object :Callback{
 //            override fun onSuccess() {
@@ -476,89 +482,89 @@ it?.let {
 //        } )
 
 
-            return bitmap
-        }
+        return bitmap
+    }
 
-        private fun drawer() {
+    private fun drawer() {
 
-            //drawer header
-            // Create the AccountHeader
-            val headerView = AccountHeaderView(this).apply {
-                attachToSliderView(slider) // attach to the slider
-                addProfiles(
-                    ProfileDrawerItem().withName("Mike Penz").withEmail("mikepenz@gmail.com")
-                        .withIcon(getResources().getDrawable(R.drawable.clap_icon))
-                )
-                onAccountHeaderListener = { view, profile, current ->
-                    // react to profile changes
-                    false
-                }
-            }
-
-            val item1 = PrimaryDrawerItem().withIdentifier(1).withName("Home")
-            val item2 = PrimaryDrawerItem().withIdentifier(2).withName("Profile")
-
-            slider.itemAdapter.add(
-                item1,
-                item2,
-                SecondaryDrawerItem().withName("Setting")
+        //drawer header
+        // Create the AccountHeader
+        val headerView = AccountHeaderView(this).apply {
+            attachToSliderView(slider) // attach to the slider
+            addProfiles(
+                ProfileDrawerItem().withName("Mike Penz").withEmail("mikepenz@gmail.com")
+                    .withIcon(getResources().getDrawable(R.drawable.clap_icon))
             )
-
-            slider.onDrawerItemClickListener = { v, drawerItem, position ->
-                // do something with the clicked item :D
+            onAccountHeaderListener = { view, profile, current ->
+                // react to profile changes
                 false
             }
-
-            slider.headerView = headerView
-
         }
 
-        //Check the GPS then hide or show view
-        private fun hideShowView() {
-            if (AppUtils.isGpsEnabled(this)) {
-                view.visibility = View.GONE
-                cardTurnOnLocation.visibility = View.GONE
+        val item1 = PrimaryDrawerItem().withIdentifier(1).withName("Home")
+        val item2 = PrimaryDrawerItem().withIdentifier(2).withName("Profile")
 
-                startLocationUpdates()
-            } else {
-                view.visibility = View.VISIBLE
-                cardTurnOnLocation.visibility = View.VISIBLE
-            }
+        slider.itemAdapter.add(
+            item1,
+            item2,
+            SecondaryDrawerItem().withName("Setting")
+        )
+
+        slider.onDrawerItemClickListener = { v, drawerItem, position ->
+            // do something with the clicked item :D
+            false
         }
 
+        slider.headerView = headerView
 
-        //Register broadcast reciever for location
-        private fun registerLocationBroadcast() {
+    }
 
-            val filter: IntentFilter = IntentFilter()
-            filter.addAction("android.location.PROVIDERS_CHANGED");
-            reciever = GpsLocationReceiver()
-            registerReceiver(reciever, filter)
+    //Check the GPS then hide or show view
+    private fun hideShowView() {
+        if (AppUtils.isGpsEnabled(this)) {
+            view.visibility = View.GONE
+            cardTurnOnLocation.visibility = View.GONE
 
+            startLocationUpdates()
+        } else {
+            view.visibility = View.VISIBLE
+            cardTurnOnLocation.visibility = View.VISIBLE
         }
-
-        private fun bindGoogleMap() {
-            mMapGoogleFragment =
-                supportFragmentManager.findFragmentById(com.highbryds.fitfinder.R.id.map) as SupportMapFragment
-            mMapGoogleFragment.getMapAsync(this)
-        }
-
-        override fun onMapReady(map: GoogleMap?) {
-            mGoogleMap = map!!
-            configMap()
+    }
 
 
-            homeMapViewModel.userLocation.observe(this, androidx.lifecycle.Observer {
+    //Register broadcast reciever for location
+    private fun registerLocationBroadcast() {
 
-                it?.let {
-                    homeMapViewModel.fetchNearByStoriesData(
-                        it.latitude.toString(),
-                        it.longitude.toString()
-                    )
+        val filter: IntentFilter = IntentFilter()
+        filter.addAction("android.location.PROVIDERS_CHANGED");
+        reciever = GpsLocationReceiver()
+        registerReceiver(reciever, filter)
 
-                }//Requesting for nearByStoies
+    }
 
-            })
+    private fun bindGoogleMap() {
+        mMapGoogleFragment =
+            supportFragmentManager.findFragmentById(com.highbryds.fitfinder.R.id.map) as SupportMapFragment
+        mMapGoogleFragment.getMapAsync(this)
+    }
+
+    override fun onMapReady(map: GoogleMap?) {
+        mGoogleMap = map!!
+        configMap()
+
+
+        homeMapViewModel.userLocation.observe(this, androidx.lifecycle.Observer {
+
+            it?.let {
+                homeMapViewModel.fetchNearByStoriesData(
+                    it.latitude.toString(),
+                    it.longitude.toString()
+                )
+
+            }//Requesting for nearByStoies
+
+        })
 
 
 //                googleMap.setOnCameraMoveCanceledListener(new GoogleMap.OnCameraMoveCanceledListener() {
@@ -575,20 +581,20 @@ it?.let {
 //
 //                    }
 //                });
-            mGoogleMap.setOnCameraIdleListener(OnCameraIdleListener {
-                currentLocation = mGoogleMap.getCameraPosition().target
-            })
+        mGoogleMap.setOnCameraIdleListener(OnCameraIdleListener {
+            currentLocation = mGoogleMap.getCameraPosition().target
+        })
 
-            mGoogleMap.setInfoWindowAdapter(MyInfoWindowAdapter(this))
+        mGoogleMap.setInfoWindowAdapter(MyInfoWindowAdapter(this))
 
-            mGoogleMap.setOnInfoWindowClickListener {
+        mGoogleMap.setOnInfoWindowClickListener {
 
-                val intent = Intent(this, StoryFullViewActivity::class.java)
-                intent.putExtra("storyData", it.snippet)
+            val intent = Intent(this, StoryFullViewActivity::class.java)
+            intent.putExtra("storyData", it.snippet)
 
-                startActivityForResult(intent, 777)
+            startActivityForResult(intent, 777)
 
-            }
+        }
 //        createCustomMarker(
 //            this,
 //            LatLng(24.9132197, 67.0671513)
@@ -601,366 +607,371 @@ it?.let {
 //            this,
 //            LatLng(24.8728378, 67.0236955)
 //        );
-            mGoogleMap.setOnMapClickListener {
+        mGoogleMap.setOnMapClickListener {
 
-                bottomSheetBehavior?.setState(BottomSheetBehavior.STATE_COLLAPSED)
-            }
-
-
-        }
-
-        private fun configMap() {
-            mGoogleMap.setMapStyle(MapStyling.styleMap())
-            mGoogleMap.uiSettings.isMyLocationButtonEnabled = true
-
+            bottomSheetBehavior?.setState(BottomSheetBehavior.STATE_COLLAPSED)
         }
 
 
-        private fun setupTrendingStories() {
-            recycler_view.layoutManager =
-                LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+    }
 
-            adapter = TrendingStoriesAdapter(arrayListOf(), applicationContext)
+    private fun configMap() {
+        mGoogleMap.setMapStyle(MapStyling.styleMap())
+        mGoogleMap.uiSettings.isMyLocationButtonEnabled = true
+
+    }
+
+    lateinit var adapter: TrendingStoriesAdapter
+    private fun setupTrendingStories() {
+        recycler_view.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        adapter = TrendingStoriesAdapter(arrayListOf())
 //        recycler_view.addItemDecoration(
 //            DividerItemDecoration(
 //                recycler_view.context,
 //                (recycler_view.layoutManager as LinearLayoutManager).orientation
 //            )
 //        )
-            recycler_view.adapter = adapter
+        recycler_view.adapter = adapter
 
 
-//        var items = ArrayList<TrendingStory>()
-//        for (i in 1..7) {
-//            items.add(TrendingStory())
-//        }
-
+        var items = ArrayList<TrendingStory>()
+        for (i in 1..7) {
+            items.add(TrendingStory())
         }
 
-        //request permission for location
-        private fun requestLocationPermissions() {
+    //request permission for location
+    private fun requestLocationPermissions() {
 
-            Dexter.withActivity(this@HomeMapActivity)
-                .withPermissions(
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
-                    android.Manifest.permission.ACCESS_FINE_LOCATION
-                ).withListener(object : MultiplePermissionsListener {
-                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                        report?.let {
+        Dexter.withActivity(this@HomeMapActivity)
+            .withPermissions(
+                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ).withListener(object : MultiplePermissionsListener {
+                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                    report?.let {
 
-                            if (report.areAllPermissionsGranted()) {
+                        if (report.areAllPermissionsGranted()) {
 
-                                startLocationUpdates()
-                                d("All permisssion granted")
-                                showAutoGPSDialog()
+                            startLocationUpdates()
+                            d("All permisssion granted")
+                            showAutoGPSDialog()
 
 
-                            }
                         }
                     }
+                }
 
-                    override fun onPermissionRationaleShouldBeShown(
-                        permissions: MutableList<com.karumi.dexter.listener.PermissionRequest>?,
-                        token: PermissionToken?
-                    ) {
+                override fun onPermissionRationaleShouldBeShown(
+                    permissions: MutableList<com.karumi.dexter.listener.PermissionRequest>?,
+                    token: PermissionToken?
+                ) {
 
-                    }
+                }
 
-                }).check()
-        }
-
-
-        //binding Fused location provider client and location request for getting location from GPS
-        private fun bindGoogleFusedLocationClient() {
-
-            bindLocationRequest()
-
-            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+            }).check()
+    }
 
 
-        }
+    //binding Fused location provider client and location request for getting location from GPS
+    private fun bindGoogleFusedLocationClient() {
+
+        bindLocationRequest()
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
 
-        override fun onResume() {
-            super.onResume()
-            registerLocationBroadcast()
-        }
+    }
 
-        override fun onPause() {
-            super.onPause()
+
+    override fun onResume() {
+        super.onResume()
+        registerLocationBroadcast()
+    }
+
+    override fun onPause() {
+        super.onPause()
 //Remove location updates
-            if (fusedLocationProviderClient != null) {
-                fusedLocationProviderClient.removeLocationUpdates(locationCallback!!)
-            }
-
-            if (reciever != null) {
-                unregisterReceiver(reciever)
-            }
+        if (fusedLocationProviderClient != null) {
+            fusedLocationProviderClient.removeLocationUpdates(locationCallback!!)
         }
 
-        //location callback for fusedLocation provider client
+        if (reciever != null) {
+            unregisterReceiver(reciever)
+        }
+    }
+
+    //location callback for fusedLocation provider client
 //location updates
-        val locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult?) {
-                val lastLocation: Location = locationResult!!.getLastLocation()
+    val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult?) {
+            val lastLocation: Location = locationResult!!.getLastLocation()
 
-                currentLocation = LatLng(lastLocation.latitude, lastLocation.longitude)
+            currentLocation = LatLng(lastLocation.latitude, lastLocation.longitude)
 
-                homeMapViewModel.userLocation.value = currentLocation
+            homeMapViewModel.userLocation.value = currentLocation
 
-                stopLocationUpdate()
-                moveGoogleMap(currentLocation)
+            stopLocationUpdate()
+            moveGoogleMap(currentLocation)
 
-            }
         }
+    }
 
 
-        //Add marker on location get from fused location api
-        private fun moveGoogleMap(latLng: LatLng) {
+    //Add marker on location get from fused location api
+    private fun moveGoogleMap(latLng: LatLng) {
 
-            //mGoogeMap.clear()
-            // lat/lng: (24.9132197,67.0671513)
+        //mGoogeMap.clear()
+        // lat/lng: (24.9132197,67.0671513)
 
 //        currentMarker = mGoogeMap.addMarker(createMarkerFromBitmap(latLng))
 //        currentMarker = mGoogeMap.addMarker(MarkerOptions().title("Location").position(latLng))
-            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
-            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
-        }
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+    }
 
 
-        fun stopLocationUpdate() {
-            fusedLocationProviderClient.removeLocationUpdates(locationCallback)
-            homeMapViewModel.userLocation.value = null
-        }
+    fun stopLocationUpdate() {
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+        homeMapViewModel.userLocation.value = null
+    }
 
-        //getting last location and
-        private fun startLocationUpdates() {
+    //getting last location and
+    private fun startLocationUpdates() {
 
-            fusedLocationProviderClient.lastLocation.addOnSuccessListener {
+        fusedLocationProviderClient.lastLocation.addOnSuccessListener {
 
 
-                view.visibility = View.GONE
-                cardTurnOnLocation.visibility = View.GONE
+            view.visibility = View.GONE
+            cardTurnOnLocation.visibility = View.GONE
 
-                if (it != null) {
-                    moveGoogleMap(LatLng(it.latitude, it.longitude))
-                }
-            }.addOnFailureListener {
-
-                view.visibility = View.VISIBLE
-                cardTurnOnLocation.visibility = View.VISIBLE
+            if (it != null) {
+                moveGoogleMap(LatLng(it.latitude, it.longitude))
             }
+        }.addOnFailureListener {
 
-
-
-            fusedLocationProviderClient.requestLocationUpdates(
-                LocationRequest,
-                locationCallback,
-                Looper.getMainLooper()
-            )
-
-
+            view.visibility = View.VISIBLE
+            cardTurnOnLocation.visibility = View.VISIBLE
         }
 
-        //bottom sheet binding
-        private fun bnidBottomSheet() {
-
-            bottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet_layout)
-
-            coordinatorLayout.setOnClickListener(View.OnClickListener {
-                if (bottomSheetBehavior.getState() === BottomSheetBehavior.STATE_EXPANDED) {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
-                }
-            })
 
 
-            bottom_sheet_layout.setOnClickListener {
-                toggleBottomSheet(bottomSheetBehavior)
-            }
+        fusedLocationProviderClient.requestLocationUpdates(
+            LocationRequest,
+            locationCallback,
+            Looper.getMainLooper()
+        )
 
 
+    }
 
-            bottomSheetBehavior.setBottomSheetCallback(object :
-                BottomSheetBehavior.BottomSheetCallback() {
-                override fun onStateChanged(bottomSheet: View, newState: Int) {
+    //bottom sheet binding
+    private fun bnidBottomSheet() {
 
+        bottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet_layout)
 
-                    // React to state change
-                    when (newState) {
-                        BottomSheetBehavior.STATE_HIDDEN -> {
-                        }
-                        BottomSheetBehavior.STATE_EXPANDED -> {
-                        }
-                        BottomSheetBehavior.STATE_COLLAPSED -> {
-                        }
-                        BottomSheetBehavior.STATE_DRAGGING -> {
-                        }
-                        BottomSheetBehavior.STATE_SETTLING -> {
-                        }
-                    }
-                }
-
-                override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                    // React to dragging events
-
-                }
-            })
-        }
-
-        private fun toggleBottomSheet(bottomSheetBehavior: BottomSheetBehavior<LinearLayout>) {
-            if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_HALF_EXPANDED) {
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HALF_EXPANDED)
-            } else {
+        coordinatorLayout.setOnClickListener(View.OnClickListener {
+            if (bottomSheetBehavior.getState() === BottomSheetBehavior.STATE_EXPANDED) {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
             }
+        })
+
+
+        bottom_sheet_layout.setOnClickListener {
+            toggleBottomSheet(bottomSheetBehavior)
         }
 
-        //binding location request
-        private fun bindLocationRequest() {
-            LocationRequest = LocationRequest()
-            LocationRequest.setPriority(LocationRequest.priority)
-            LocationRequest.setInterval(UPDATE_INTERVAL)
-            LocationRequest.setFastestInterval(FASTEST_INTERVAL)
-            //  LocationRequest.setSmallestDisplacement(5000f) //15 meter
+        button.setOnClickListener {
+            toggleBottomSheet(bottomSheetBehavior)
         }
 
 
-        //Auto GPS Enable Dialog
-        private fun showAutoGPSDialog() {
-            val builder = LocationSettingsRequest.Builder()
-                .addLocationRequest(LocationRequest)
-            builder.setAlwaysShow(true)
+
+        bottomSheetBehavior.setBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
 
 
-            val task: Task<LocationSettingsResponse> =
-                LocationServices.getSettingsClient(this).checkLocationSettings(builder.build())
-            task.addOnSuccessListener {
-                d("GPS Enable -> start getting location")
-
-                view.visibility = View.GONE
-                cardTurnOnLocation.visibility = View.GONE
-
-                startLocationUpdates()
+                // React to state change
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                    }
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                    }
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                    }
+                    BottomSheetBehavior.STATE_DRAGGING -> {
+                    }
+                    BottomSheetBehavior.STATE_SETTLING -> {
+                    }
+                }
             }
 
-            task.addOnFailureListener {
-                d("GPS Disable -> failed to start getting location")
-                val resolvableApiException = it as ResolvableApiException
-                resolvableApiException.startResolutionForResult(
-                    this@HomeMapActivity,
-                    REQUEST_SETTINGS
-                )
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                // React to dragging events
+
             }
+        })
+    }
+
+    private fun toggleBottomSheet(bottomSheetBehavior: BottomSheetBehavior<LinearLayout>) {
+        if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED)
+        } else {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
+        }
+    }
+
+    //binding location request
+    private fun bindLocationRequest() {
+        LocationRequest = LocationRequest()
+        LocationRequest.setPriority(LocationRequest.priority)
+        LocationRequest.setInterval(UPDATE_INTERVAL)
+        LocationRequest.setFastestInterval(FASTEST_INTERVAL)
+        //  LocationRequest.setSmallestDisplacement(5000f) //15 meter
+    }
 
 
+    //Auto GPS Enable Dialog
+    private fun showAutoGPSDialog() {
+        val builder = LocationSettingsRequest.Builder()
+            .addLocationRequest(LocationRequest)
+        builder.setAlwaysShow(true)
+
+
+        val task: Task<LocationSettingsResponse> =
+            LocationServices.getSettingsClient(this).checkLocationSettings(builder.build())
+        task.addOnSuccessListener {
+            d("GPS Enable -> start getting location")
+
+            view.visibility = View.GONE
+            cardTurnOnLocation.visibility = View.GONE
+
+            startLocationUpdates()
         }
 
-        var filePath: String = ""
+        task.addOnFailureListener {
+            d("GPS Disable -> failed to start getting location")
+            val resolvableApiException = it as ResolvableApiException
+            resolvableApiException.startResolutionForResult(this@HomeMapActivity, REQUEST_SETTINGS)
+        }
 
-        override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-            super.onActivityResult(requestCode, resultCode, data)
+
+    }
+
+    var filePath: String = ""
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
 
-            if (requestCode == 777 && resultCode == Activity.RESULT_OK) {
-                homeMapViewModel.fetchNearByStoriesData(
-                    currentLocation.latitude.toString(),
-                    currentLocation.longitude.toString()
-                )
-            } else if (requestCode == ACTION_TAKE_VIDEO) {
+        if (requestCode == 777 && resultCode == Activity.RESULT_OK) {
+            homeMapViewModel.fetchNearByStoriesData(
+                currentLocation.latitude.toString(),
+                currentLocation.longitude.toString()
+            )
+        } else if (requestCode == ACTION_TAKE_VIDEO) {
 
-                // filePath = getPath(data!!.getData()).toString();
-                prepareVideoPlayer(data!!.getData(), view_video)
+            // filePath = getPath(data!!.getData()).toString();
+            prepareVideoPlayer(data!!.getData(), view_video)
 
+            return
+        } else if (requestCode == EasyImagePicker.REQUEST_TAKE_PHOTO || requestCode == EasyImagePicker.REQUEST_GALLERY_PHOTO) {
+            if (data?.data == null)
                 return
-            } else if (requestCode == EasyImagePicker.REQUEST_TAKE_PHOTO || requestCode == EasyImagePicker.REQUEST_GALLERY_PHOTO) {
-                if (data?.data == null)
+            EasyImagePicker.getInstance().passActivityResult(requestCode, resultCode, data, object :
+                EasyImagePicker.easyPickerCallback {
+                override fun onFailed(error: String?) {
+                    Toast.makeText(applicationContext, "Failed to pick image", Toast.LENGTH_LONG)
+                }
+
+                override fun onMediaFilePicked(result: String?) {
+
+                    val uri: Uri? = data?.data
+                    val file: File = File(PathUtil.getPath(this@HomeMapActivity, uri))
+                    filePath = JavaHelper.CompressPic(file, this@HomeMapActivity)
+
+                    // filePath = result!!
+                    imgStory.visibility = View.VISIBLE
+                    imgStory.setImageURI(Uri.fromFile(File(result)))
+                }
+
+
+            })
+        }
+    }
+
+    open fun getPath(uri: Uri?): String? {
+        val projection =
+            arrayOf(MediaStore.Images.Media.DATA)
+        val cursor: Cursor? = managedQuery(uri, projection, null, null, null)
+        return if (cursor != null) {
+            val column_index: Int = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)
+            cursor.moveToFirst()
+            cursor.getString(column_index)
+        } else null
+    }
+
+
+    override fun onClick(view: View?) {
+        when (view!!.id) {
+
+            R.id.btnSend -> {
+
+                if (chipText == null) {
+                    toast(applicationContext, "Please select category")
                     return
-                EasyImagePicker.getInstance()
-                    .passActivityResult(requestCode, resultCode, data, object :
-                        EasyImagePicker.easyPickerCallback {
-                        override fun onFailed(error: String?) {
-                            Toast.makeText(
-                                applicationContext,
-                                "Failed to pick image",
-                                Toast.LENGTH_LONG
-                            )
-                        }
+                }
+                if (TextUtils.isEmpty(txtMessage.text.toString().trim())) {
+                    toast(applicationContext, "Message is required")
+                    return
+                }
+                if (filePath.isEmpty()) {
+                    toast(applicationContext, "story media is missing")
+                    return
+                }
 
-                        override fun onMediaFilePicked(result: String?) {
-
-                            val uri: Uri? = data?.data
-                            val file: File = File(PathUtil.getPath(this@HomeMapActivity, uri))
-                            filePath = JavaHelper.CompressPic(file, this@HomeMapActivity)
-
-                            // filePath = result!!
-                            imgStory.visibility = View.VISIBLE
-                            imgStory.setImageURI(Uri.fromFile(File(result)))
-                        }
-
-
-                    })
-            }
-        }
-
-        open fun getPath(uri: Uri?): String? {
-            val projection =
-                arrayOf(MediaStore.Images.Media.DATA)
-            val cursor: Cursor? = managedQuery(uri, projection, null, null, null)
-            return if (cursor != null) {
-                val column_index: Int = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)
-                cursor.moveToFirst()
-                cursor.getString(column_index)
-            } else null
-        }
-
-        lateinit var mediaType: MediaType
-        override fun onClick(view: View?) {
-            when (view!!.id) {
-
-                R.id.btnSend -> {
-
-                    if (chipText == null) {
-                        toast(applicationContext, "Please select category")
-                        return
-                    }
-                    if (TextUtils.isEmpty(txtMessage.text.toString().trim())) {
-                        toast(applicationContext, "Message is required")
-                        return
-                    }
-                    if (filePath.isEmpty()) {
-                        toast(applicationContext, "story media is missing")
-                        return
-                    }
-
-                    btnSend.startAnimation(
-                        AnimationUtils.loadAnimation(
-                            applicationContext,
-                            R.anim.scale_anim
-                        )
+                btnSend.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        applicationContext,
+                        R.anim.scale_anim
                     )
+                )
 
-                    loadingProgress.visibility = View.VISIBLE
+                loadingProgress.visibility = View.VISIBLE
 
 
-                    when (mediaType) {
-                        MediaType.AUDIO -> {
+                when (mediaType) {
+                    MediaType.AUDIO -> {
 
-                            if (mRecorder != null) {
-                                prepareStop()
-                                stopRecording()
-                            }
+                        if (mRecorder != null) {
+                            prepareStop()
+                            stopRecording()
                         }
-                        MediaType.VIDEO -> {
-                            JavaHelper.compress(filePath, this, this)
-                        }
-                        else -> {
-                            val filename: String = filePath.substring(filePath.lastIndexOf("/") + 1)
-                            val ftpHelper: FTPHelper = FTPHelper()
-                            ftpHelper.init(this)
-                            ftpHelper.AsyncTaskExample().execute(filePath, filename)
-                        }
-
                     }
+                    MediaType.VIDEO -> {
+                        JavaHelper.compress(filePath, this, this)
+                    }
+                    else -> {
+                        val filename: String = filePath.substring(filePath.lastIndexOf("/") + 1)
+                        val ftpHelper: FTPHelper = FTPHelper()
+                        ftpHelper.init(this)
+                        ftpHelper.AsyncTaskExample().execute(filePath, filename)
+                    }
+
+
+//                    val model: UserStory = UserStory(
+//                        txtMessage.text.toString(),
+//                        KotlinHelper.getUsersData().SocialId,
+//                        currentLocation.latitude.toString(),
+//                        currentLocation.longitude.toString(),
+//                        "",
+//                        ""
+//                    );
+//                    // showProgressDialog()
+//                    homeMapViewModel.uploadStoryData(model)
+
 
                 }
                 R.id.btnCamera -> {
