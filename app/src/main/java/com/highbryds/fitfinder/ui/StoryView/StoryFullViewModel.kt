@@ -22,18 +22,19 @@ import java.io.File
 import javax.inject.Inject
 
 
-class StoryFullViewModel @Inject constructor(private val apiInterface: ApiInterface) : ViewModel() {
+class StoryFullViewModel @Inject constructor(private val apiInterface: ApiInterface):ViewModel(){
 
     lateinit var apiErrorsCallBack: ApiResponseCallBack
 
     val clapsData = MutableLiveData<Int>()
+    val viewsdata = MutableLiveData<Int>()
 
-    fun insetStoryClap(socialId: String, storyId: String) {
+    fun insetStoryClap(socialId:String,storyId:String)
+    {
         viewModelScope.launch {
-            insertClap(socialId, storyId)
+            insertClap(socialId,storyId)
         }
     }
-
 
     fun spamStoryById(spam: StorySpam){
         viewModelScope.launch {
@@ -41,16 +42,26 @@ class StoryFullViewModel @Inject constructor(private val apiInterface: ApiInterf
         }
     }
 
-    suspend fun insertClap(socialId: String, storyId: String) {
+    fun updateViews(socialId:String,storyId:String)
+    {
+        viewModelScope.launch {
+            updateStoryViews(socialId,storyId)
+        }
+    }
+
+     suspend fun insertClap(socialId:String,storyId:String)
+    {
 
 
-        val response = apiInterface.insertStoryClap(
-            socialId, storyId
-        )
-        if (response.code() == 200 && response.body()?.status.equals("1")) {
-            clapsData.value = 1
-        } else {
-            clapsData.value = 0
+                val response = apiInterface.insertStoryClap(
+              socialId,storyId
+                )
+                if (response.code()==200&&response.body()?.status.equals("1"))
+                {
+                   clapsData.value=1
+                }
+                else{
+                   clapsData.value=0
 
 
         }
@@ -75,4 +86,26 @@ class StoryFullViewModel @Inject constructor(private val apiInterface: ApiInterf
 
     }
 
+
+    suspend fun updateStoryViews(socialId:String,storyId:String)
+    {
+        try {
+            val response = apiInterface.updateViews(socialId,storyId)
+
+            if (response.code()==200&&response.body()?.status.equals("1"))
+            {
+                viewsdata.value=response.body()?.data?.size
+
+            }
+            else{
+                apiErrorsCallBack.getError("Failed to add comment")
+            }
+        }
+        catch (e:Exception)
+        {
+            apiErrorsCallBack.getError(e.toString())
+        }
+
+
+    }
 }

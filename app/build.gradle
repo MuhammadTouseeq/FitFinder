@@ -157,9 +157,16 @@ dependencies {
 
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 
+    implementation 'com.github.stfalcon:multiimageview:0.1'
+
+    implementation 'com.github.petersamokhin:floating-hearts-view:0.0.3'
+
+    implementation 'org.rajawali3d:rajawali:1.1.970@aar'
+
     //sinch
     //implementation 'com.sinch:sdk-sms:1.0.3'
     implementation files('libs/sinch-android-rtc-3.15.0.aar')
+
 
 }
 

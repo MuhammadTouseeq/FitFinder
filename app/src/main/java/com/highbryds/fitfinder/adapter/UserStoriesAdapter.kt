@@ -18,6 +18,7 @@ import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.callbacks.StoryCallback
 import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.model.NearbyStory
+import com.highbryds.fitfinder.model.StoryComment
 import com.highbryds.fitfinder.model.UserStoriesModel
 import com.highbryds.fitfinder.ui.Profile.UserStories
 import com.highbryds.fitfinder.ui.StoryView.StoryFullViewActivity

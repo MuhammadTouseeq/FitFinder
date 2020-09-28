@@ -6,9 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
+import com.highbryds.fitfinder.commonHelper.getErrors
 import com.highbryds.fitfinder.model.NearbyStory
 import com.highbryds.fitfinder.model.UserStory
+import com.highbryds.fitfinder.model.UsersData
 import com.highbryds.fitfinder.retrofit.ApiInterface
+import com.log4k.v
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -22,6 +25,7 @@ class HomeMapViewModel @Inject constructor(private val apiInterface: ApiInterfac
 
     lateinit var apiErrorsCallBack: ApiResponseCallBack
     val storiesData = MutableLiveData<List<NearbyStory>>()
+    val trendingStoriesData = MutableLiveData<List<NearbyStory>>()
     val categoriesData = MutableLiveData<List<String>>()
     val userLocation = MutableLiveData<LatLng>()
 
@@ -49,25 +53,27 @@ class HomeMapViewModel @Inject constructor(private val apiInterface: ApiInterfac
 
         viewModelScope.launch {
             val allNearByStories = apiInterface.getAllNearByStories(lat, lng)
+
             if (allNearByStories.code() == 200 && allNearByStories.body()?.status.equals("1")) {
                 storiesData.value = allNearByStories.body()?.data
                 categoriesData.value = allNearByStories.body()?.categories
-
-                apiErrorsCallBack.getError(allNearByStories.message())
-            } else {
                 apiErrorsCallBack.getSuccess(allNearByStories.message())
+            } else {
+                apiErrorsCallBack.getError(allNearByStories.message())
+            }
+            val trendingStories = apiInterface.getTrendingStories()
+
+            if (trendingStories.code() == 200 && trendingStories.body()?.status.equals("1")) {
+                trendingStoriesData.value=trendingStories.body()?.data
             }
 
         }
 
     }
 
-
-    suspend fun postStoryData(userStory: UserStory) {
-
-        try {
-            with(userStory)
-            {
+    suspend fun postStoryData(userStory: UserStory) = try {
+        with(userStory)
+        {
 //                val uploadStory = apiInterface.uploadStory(
 //                    toMultipartBody(storyMediaPath),
 //                    toRequestBody(storyName),
@@ -86,18 +92,21 @@ class HomeMapViewModel @Inject constructor(private val apiInterface: ApiInterfac
                     address
                 )
 
-                if (uploadStory.code() == 200) {
-                    apiErrorsCallBack.getSuccess("Successfully uploaded story")
-                } else {
-                    apiErrorsCallBack.getError(uploadStory.message())
-                }
+            if (uploadStory.code() == 200) {
 
+                val arruser = ArrayList<UsersData>()
+                arruser.add(KotlinHelper.getUsersData())
+                val nearbyStory: NearbyStory = uploadStory.body()!!.data
+                nearbyStory.userData = arruser
+                storiesData.value = listOf(nearbyStory)
+                apiErrorsCallBack.getSuccess("Successfully uploaded story")
+            } else {
+                apiErrorsCallBack.getError(uploadStory.message())
             }
-        } catch (e: Exception) {
-            apiErrorsCallBack.getError(e.toString())
+
         }
-
-
+    } catch (e: Exception) {
+        apiErrorsCallBack.getError(e.toString())
     }
 
     private fun toMultipartBody(path: String): MultipartBody.Part {

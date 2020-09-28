@@ -29,6 +29,7 @@ class MyInfoWindowAdapter(context: Activity) : GoogleMap.InfoWindowAdapter {
             var imgProfile = myContentsView.findViewById(R.id.imgProfile) as ImageView
             var imgMediaType = myContentsView.findViewById(R.id.imgMediaType) as ImageView
             var txtItemName = myContentsView.findViewById(R.id.txtItemName) as TextView
+            var viewsCount = myContentsView.findViewById(R.id.viewsCount) as TextView
 
             txtItemName.text = marker.title
 
@@ -38,22 +39,23 @@ class MyInfoWindowAdapter(context: Activity) : GoogleMap.InfoWindowAdapter {
                 with(storyData)
                 {
 
-                    txtDateTime.setText(Utils.getDateTimeFromServer(createdAt,"EEE, d MMM yyyy h:mm a"))
+                    txtDateTime.setText(
+                        Utils.getDateTimeFromServer(
+                            createdAt,
+                            "EEE, d MMM yyyy h:mm a"
+                        )
+                    )
 
-                    if(mediaUrl.contains(".mp3"))
-                    {
+                    if (mediaUrl.contains(".mp3")) {
                         imgMediaType.setImageDrawable(context.resources.getDrawable(R.drawable.icon_audio))
-                    }
-                    else if(mediaUrl.contains(".mp4"))
-                    {
+                    } else if (mediaUrl.contains(".mp4")) {
                         imgMediaType.setImageDrawable(context.resources.getDrawable(R.drawable.icon_video))
-                    }
-                    else{
+                    } else {
                         imgMediaType.setImageDrawable(context.resources.getDrawable(R.drawable.icon_image))
                     }
 
                     txtDescription.text = storyName
-                    if (userData?.size!! > 0) let {
+                    if (userData != null && userData?.size!! > 0) let {
                         Glide
                             .with(context)
                             .load(userData?.get(0)?.imageUrl)
@@ -64,14 +66,19 @@ class MyInfoWindowAdapter(context: Activity) : GoogleMap.InfoWindowAdapter {
                     } else {
                         imgProfile.setImageDrawable(context.resources.getDrawable(R.drawable.man_cartoon))
                     }
-                    if (storyClapData?.size!! > 0) let {
+                    if (storyClapData != null && storyClapData?.size!! > 0) let {
                         clapCount.text = storyClapData?.size.toString()
-                    } else {clapCount.text = ""}
+                    } else {
+                        clapCount.text = ""
+                    }
+                    if (storyViewsData != null && storyViewsData?.size!! > 0) let {
+                        viewsCount.text = storyViewsData?.size.toString()
+                    } else {
+                        viewsCount.text=""
+                    }
 
                 }
-
             }
-
             return myContentsView
     }
 

@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.highbryds.fitfinder.R
+import com.highbryds.fitfinder.callbacks.StoryCallback
+import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.model.StoryComment
 import com.highbryds.fitfinder.utils.Utils
 import kotlinx.android.synthetic.main.recycler_item_story_trending.view.txtUserName
@@ -16,6 +18,9 @@ import kotlinx.android.synthetic.main.rv_item_story_comment.view.*
 class StoryCommentsAdapter(val mcontext: Context,
     private val arrData: ArrayList<StoryComment>
 ) : RecyclerView.Adapter<StoryCommentsAdapter.DataViewHolder>() {
+
+
+    lateinit var storyCallback: StoryCallback
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -28,9 +33,25 @@ class StoryCommentsAdapter(val mcontext: Context,
 
     override fun getItemCount(): Int = arrData.size
 
-    override fun onBindViewHolder(holder: DataViewHolder, position: Int) =
-        holder.bind(arrData[position],mcontext)
+    override fun onBindViewHolder(holder: DataViewHolder, position: Int)
 
+    {
+        holder.bind(arrData[position],mcontext)
+        holder.delete_icon.setOnClickListener {
+
+            storyCallback?.storyItemPosition(position)
+
+        }
+    }
+
+     fun deleteComment(position:Int) {
+         arrData?.removeAt(position)
+         notifyDataSetChanged()
+    }
+    fun getitem(position:Int): StoryComment {
+        return arrData?.get(position)
+
+    }
     fun addData(list: List<StoryComment>) {
         arrData.addAll(list)
     }
@@ -46,12 +67,12 @@ class StoryCommentsAdapter(val mcontext: Context,
         val txtComment=itemView.txtComment
         val imgProfile=itemView.imgProfile
         val txtDateTime=itemView.txtDateTime
+        val delete_icon=itemView.delete_icon
 
         fun bind(
             model: StoryComment,
             mcontext: Context
         ) {
-
             with(model)
             {
                 txtDateTime.setText(Utils.getDateTimeFromServer(createdAt,"EEE, d MMM yyyy h:mm a"))
@@ -66,6 +87,15 @@ class StoryCommentsAdapter(val mcontext: Context,
                         .into(imgProfile);
 
                 }
+
+                if(SocialId.equals(KotlinHelper.getSocialID())) delete_icon.visibility=View.VISIBLE else delete_icon.visibility=View.INVISIBLE
+
+
+                delete_icon.setOnClickListener {
+
+
+                }
+
             }
 
         }

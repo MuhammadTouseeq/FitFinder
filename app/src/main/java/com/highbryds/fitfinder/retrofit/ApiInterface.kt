@@ -127,4 +127,21 @@ interface ApiInterface {
     @POST("users/submitSpam")
     suspend fun submitSpam(@Body body: StorySpam) : Response<GeneralResponse>
 
+
+    @POST("users/deletecomment/{commentId}/{storyid}")
+    suspend fun deletecomment(
+        @Path("commentId") commentId: String,
+        @Path("storyid") storyid: String
+    ): Response<GeneralResponse>
+
+    @POST("users/updateviews/{SocialId}/{StoryId}")
+    suspend fun updateViews(
+        @Path("SocialId") SocialId: String,
+        @Path("StoryId") StoryId: String
+    ): Response<WrapperStoryViews>
+
+
+
+    @POST("users/gettrendingStories")
+    suspend fun getTrendingStories(): Response<WrapperStory>
 }

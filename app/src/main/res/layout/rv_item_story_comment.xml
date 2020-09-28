@@ -1,92 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/view_foreground"
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/view_foreground"
+    android:layout_width="match_parent"
+    android:background="@android:color/white"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    ​
+
+    <ImageView
+        android:id="@+id/imgProfile"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:padding="2dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/circle_white_bg"
+        android:layout_alignParentStart="true"
+        android:layout_centerInParent="true"
+ />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:orientation="horizontal">
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="3dp"
+        android:layout_toRightOf="@+id/imgProfile"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txtUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            tools:hint="Ali Ahmed"
+            android:textColor="#000"
+            android:textSize="16sp" />
         ​
 
-        <ImageView
-            android:id="@+id/imgProfile"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_alignParentStart="true"
-            android:layout_centerInParent="true"
-            android:layout_margin="5dp"
-            android:background="@drawable/circle_white_bg"
-            android:padding="2dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/txtComment"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+
+            android:fontFamily="sans-serif"
+            android:paddingEnd="16dp"
+            android:text="Short Description"
+            android:textColor="#BDBDBD"
+            android:textSize="13sp"
+            android:visibility="visible" />
+        <TextView
+            android:id="@+id/txtDateTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+android:layout_gravity="end"
+            android:padding="@dimen/_5sdp"
+            tools:hint="Ali Ahmed"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12sp" />
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:visibility="gone"
             android:layout_marginTop="25dp"
-            android:layout_toRightOf="@+id/imgProfile"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:background="@android:color/darker_gray" />
+        ​
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/delete_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:visibility="invisible"
+        android:layout_marginRight="10dp"
+        app:srcCompat="@drawable/ic_baseline_delete_forever_24" />
 
-            <TextView
-                android:id="@+id/txtUserName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:textColor="#000"
-                android:textSize="16sp"
-                tools:hint="Ali Ahmed" />
-            ​
-
-            <TextView
-                android:id="@+id/txtComment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:fontFamily="sans-serif"
-                android:paddingEnd="16dp"
-                android:text="Short Description"
-                android:textColor="#BDBDBD"
-                android:textSize="13sp"
-                android:visibility="visible" />
-
-            <TextView
-                android:id="@+id/txtDateTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:padding="@dimen/_5sdp"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="12sp"
-                tools:hint="Ali Ahmed" />
-
-            <View
-                android:id="@+id/divider"
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginTop="25dp"
-                android:background="@android:color/darker_gray"
-                android:visibility="gone" />
-            ​
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/delete_icon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:visibility="invisible"
-            app:srcCompat="@drawable/ic_baseline_delete_forever_24" />
-
-    </RelativeLayout>
+</RelativeLayout>
 
 </FrameLayout>
