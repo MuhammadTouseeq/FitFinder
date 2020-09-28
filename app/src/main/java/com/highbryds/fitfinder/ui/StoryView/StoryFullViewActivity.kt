@@ -85,8 +85,8 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener {
         with(storyData)
         {
 
-
-
+//show username in comment write section
+            edtComment.setHint("comment on ${userData?.get(0)?.name}'s story")
 
             heartView.applyConfig(HeartsRenderer.Config(5f, 2f, 2f))
 

@@ -110,6 +110,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
     ApiResponseCallBack, videoCompressionCallback, FTPCallback {
 
 
+    private lateinit var mediaType: MediaType
     private val TAG = HomeMapActivity::class.java!!.getSimpleName()
 
     private val UPDATE_INTERVAL: Long = 5000
@@ -151,7 +152,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
     @Inject
     lateinit var logoutViewModel: LogoutViewModel
 
-    lateinit var adapter: TrendingStoriesAdapter
+   // lateinit var adapter: TrendingStoriesAdapter
 
     var isTrendingStoryView:Boolean=false
 
@@ -203,6 +204,16 @@ multiStoryView.setOnClickListener {
 
     }
 }
+
+        /**
+         * bind image to bottom sheet
+         */
+        Glide
+            .with(applicationContext)
+            .load(KotlinHelper.getUsersData()?.imageUrl)
+            .circleCrop()
+            .placeholder(R.drawable.man_cartoon)
+            .into(imgProfile);
 
         homeMapViewModel.categoriesData.observe(this, androidx.lifecycle.Observer {
 
@@ -283,29 +294,32 @@ it?.let {
       class getBitmapImage(image:MultiImageView) :
         AsyncTask<String?, Void?, Bitmap?>() {
           var multiImage: MultiImageView
-         init {
-             multiImage=image
-         }
-        override fun doInBackground(vararg urls: String?): Bitmap? {
-            return try {
-                val url = URL(urls[0])
-                val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
-                connection.setDoInput(true)
-                connection.connect()
-                val input: InputStream = connection.getInputStream()
-                BitmapFactory.decodeStream(input)
-            } catch (e: IOException) {
-                e.printStackTrace()
-                null
-            }
-        }
 
-        override fun onPostExecute(bitmap: Bitmap?) {
-            bitmap?.let {
-                multiImage.addImage(bitmap)
+          init {
+              multiImage = image
+          }
 
-            }
-        }
+          override fun doInBackground(vararg urls: String?): Bitmap? {
+              return try {
+                  val url = URL(urls[0])
+                  val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
+                  connection.setDoInput(true)
+                  connection.connect()
+                  val input: InputStream = connection.getInputStream()
+                  BitmapFactory.decodeStream(input)
+              } catch (e: IOException) {
+                  e.printStackTrace()
+                  null
+              }
+          }
+
+          override fun onPostExecute(bitmap: Bitmap?) {
+              bitmap?.let {
+                  multiImage.addImage(bitmap)
+
+              }
+          }
+      }
           fun showStoryImage(storyview:CircleImageView,url:String)
           {
               Glide
@@ -626,7 +640,7 @@ it?.let {
         recycler_view.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
-        adapter = TrendingStoriesAdapter(arrayListOf())
+        adapter = TrendingStoriesAdapter(arrayListOf(),applicationContext)
 //        recycler_view.addItemDecoration(
 //            DividerItemDecoration(
 //                recycler_view.context,
@@ -635,11 +649,7 @@ it?.let {
 //        )
         recycler_view.adapter = adapter
 
-
-        var items = ArrayList<TrendingStory>()
-        for (i in 1..7) {
-            items.add(TrendingStory())
-        }
+    }
 
     //request permission for location
     private fun requestLocationPermissions() {
@@ -974,6 +984,7 @@ it?.let {
 
 
                 }
+            }
                 R.id.btnCamera -> {
 
                     mediaType = MediaType.CAMERA
@@ -1438,7 +1449,7 @@ it?.let {
             // showProgressDialog()
             homeMapViewModel.uploadStoryData(model)
         }
+    }
 
 
 
-}
