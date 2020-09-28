@@ -7,255 +7,261 @@
     android:layout_height="match_parent"
     android:background="@android:color/transparent">
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:background="@android:color/black"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-
-
-    <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_centerInParent="true"
-    android:id="@+id/containerAudioPlayer"
-    android:orientation="vertical"
-    android:layout_height="wrap_content">
-
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/audioAnimation"
-        android:layout_width="@dimen/_200sdp"
-        android:layout_height="@dimen/_200sdp"
-        android:layout_centerHorizontal="true"
-        app:lottie_autoPlay="true"
-        android:layout_gravity="center"
-        app:lottie_rawRes="@raw/voice"
-        android:visibility="invisible"
-        app:lottie_loop="true"
-        app:lottie_speed="0.9"
-        android:layout_marginTop="@dimen/_30sdp"/>
-
-    <LinearLayout
-
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-android:orientation="horizontal"
-android:gravity="center"
-        android:paddingEnd="10dp"
-        android:paddingStart="10dp"
-        android:visibility="visible">
+        android:layout_height="match_parent"
+        android:background="@android:color/black">
 
-        <ImageView
-            android:id="@+id/imgViewPlay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/ic_play_circle" />
+
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:layout_marginTop="10dp"
-            android:orientation="vertical"
-            android:layout_height="wrap_content">
-            <SeekBar
-                android:id="@+id/seekBar"
+            android:id="@+id/containerAudioPlayer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/audioAnimation"
+                android:layout_width="@dimen/_200sdp"
+                android:layout_height="@dimen/_200sdp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:visibility="invisible"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/voice"
+                app:lottie_speed="0.9" />
+
+            <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                />
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:visibility="visible">
 
-            <Chronometer
-                android:id="@+id/chronometerAudio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginRight="10dp"
-                android:textColor="@android:color/white"
-                android:textSize="20sp" />
+                <ImageView
+                    android:id="@+id/imgViewPlay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:src="@drawable/ic_play_circle" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <SeekBar
+                        android:id="@+id/seekBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical" />
+
+                    <Chronometer
+                        android:id="@+id/chronometerAudio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginRight="10dp"
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</LinearLayout>
-    <com.highbryds.fitfinder.utils.CustomImageVIew
-        android:layout_width="match_parent"
-        android:id="@+id/imgStory"
-        android:scaleType="matrix"
-        android:adjustViewBounds="true"
-        android:layout_centerInParent="true"
-        android:src="@drawable/placeholder"
-        android:visibility="gone"
-        android:layout_height="match_parent"/>
-    <VideoView
-        android:id="@+id/view_video"
-        android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="match_parent"
-        />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:background="#8A000000"
-        android:layout_height="wrap_content">
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/userImage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="10dp"
 
-            android:src="@drawable/marker_thinking_boy"
-            app:civ_border_width="2dp"
-            app:civ_border_color="@android:color/white"/>
+        <com.highbryds.fitfinder.utils.CustomImageVIew
+            android:id="@+id/imgStory"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:adjustViewBounds="true"
+            android:scaleType="matrix"
+            android:src="@drawable/placeholder"
+            android:visibility="gone" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:ellipsize="end"
-            android:id="@+id/userName"
-            android:singleLine="true"
-            android:textSize="@dimen/_16sdp"
-            android:text="Muhammd Touseeq"
-            android:textColor="@android:color/white"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content"/>
+        <VideoView
+            android:id="@+id/view_video"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-         android:layout_gravity="center"
-            android:orientation="horizontal"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#8A000000"
+            android:orientation="horizontal">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/userImage"
                 android:layout_width="50dp"
-                android:padding="@dimen/_8sdp"
-                android:id="@+id/imgAction"
-                app:srcCompat="@drawable/ic_baseline_more_vert_24"
-                android:layout_height="50dp"/>
+                android:layout_height="50dp"
+                android:layout_margin="10dp"
 
-            <ImageView
-                android:layout_width="50dp"
-                android:id="@+id/imgCancel"
-android:padding="@dimen/_8sdp"
-                app:srcCompat="@drawable/ic_baseline_close_24"
-                android:layout_height="50dp"/>
+                android:src="@drawable/marker_thinking_boy"
+                app:civ_border_color="@android:color/white"
+                app:civ_border_width="2dp" />
+
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="Muhammd Touseeq"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/_16sdp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imgAction"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="@dimen/_8sdp"
+                    app:srcCompat="@drawable/ic_baseline_more_vert_24"
+                    android:onClick="showPopup"/>
+
+                <ImageView
+                    android:id="@+id/imgCancel"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="@dimen/_8sdp"
+                    app:srcCompat="@drawable/ic_baseline_close_24" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-
-    <ImageView
-        android:layout_width="100dp"
-        android:id="@+id/imgThumbnail"
-        android:layout_alignParentBottom="true"
-        android:layout_height="100dp"/>
-
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:background="#8A000000"
-    android:layout_alignParentBottom="true"
-    android:layout_height="wrap_content">
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
-        android:textSize="@dimen/_16sdp"
-        android:gravity="center"
-        android:textStyle="italic"
-        android:padding="@dimen/_10sdp"
-        android:id="@+id/txtStoryMessage"
-        android:text="Wow enjoying weather"
-        android:background="@android:color/transparent"
-        android:textColor="@android:color/white"
-        android:layout_gravity="center"
-        android:layout_height="wrap_content"/>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:padding="@dimen/_5sdp"
-    android:visibility="gone"
-    android:layout_height="wrap_content">
-
-    <com.amrdeveloper.reactbutton.ReactButton
-        android:layout_width="wrap_content"
-        android:id="@+id/reactButton"
-        android:textColor="@android:color/white"
-        android:padding="8dp"
-        android:visibility="gone"
-        android:layout_gravity="center"
-        android:background="@android:color/transparent"
-        android:layout_alignParentBottom="true"
-        android:layout_height="wrap_content"/>
-
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_gravity="end"
-        android:padding="8dp"
-        android:layout_height="wrap_content">
 
         <ImageView
-            android:layout_width="45dp"
-            android:padding="8dp"
-            android:id="@+id/imgClap"
-            android:src="@drawable/clap_icon"
-            android:layout_height="45dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:text="20"
-            android:textSize="18sp"
-            android:id="@+id/clapCount"
-            android:textColor="@android:color/white"
-            android:gravity="center"
-            android:layout_height="wrap_content"/>
-
-    </LinearLayout>
-    <EditText
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:padding="10dp"
-        android:maxLines="4"
-        android:layout_gravity="center"
-        android:gravity="start"
-        android:textColor="@android:color/white"
-        android:hint="What's in your mind"
-        android:id="@+id/txtMessage"
-        android:textColorHint="@android:color/white"
-        android:background="@drawable/shape_rounded_corner_outline"
-        android:layout_height="wrap_content"/>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:src="@drawable/send_white_24dp"
-        android:padding="10dp"
-        android:layout_gravity="center"
-        android:id="@+id/btnSend"
-        android:layout_marginLeft="@dimen/_10sdp"
-        android:layout_alignParentRight="true"
-        android:layout_height="50dp"/>
-
-</LinearLayout>
-</LinearLayout>
+            android:id="@+id/imgThumbnail"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentBottom="true" />
 
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/videoAnimation"
-        android:layout_width="@dimen/_200sdp"
-        android:layout_height="@dimen/_200sdp"
-        android:layout_centerHorizontal="true"
-        app:lottie_autoPlay="true"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"
-        app:lottie_rawRes="@raw/loading"
-        android:visibility="invisible"
-        app:lottie_loop="true"
-        app:lottie_speed="0.9"
-        />
-</RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#8A000000"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/txtStoryMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:padding="@dimen/_10sdp"
+                android:text="Wow enjoying weather"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/_16sdp"
+                android:textStyle="italic" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_5sdp"
+                android:visibility="gone">
+
+                <com.amrdeveloper.reactbutton.ReactButton
+                    android:id="@+id/reactButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    android:padding="8dp"
+                    android:textColor="@android:color/white"
+                    android:visibility="gone" />
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/imgClap"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:padding="8dp"
+                        android:src="@drawable/clap_icon" />
+
+                    <TextView
+                        android:id="@+id/clapCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="20"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/txtMessage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_rounded_corner_outline"
+                    android:gravity="start"
+                    android:hint="What's in your mind"
+                    android:maxLines="4"
+                    android:padding="10dp"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@android:color/white" />
+
+                <ImageView
+                    android:id="@+id/btnSend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:padding="10dp"
+                    android:src="@drawable/send_white_24dp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/videoAnimation"
+            android:layout_width="@dimen/_200sdp"
+            android:layout_height="@dimen/_200sdp"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:visibility="invisible"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/loading"
+            app:lottie_speed="0.9" />
+    </RelativeLayout>
 
     <include layout="@layout/view_bottom_sheet_comments" />
 

@@ -1,0 +1,99 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp">
+
+        <ImageView
+            android:id="@+id/btnCall"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="right"
+            android:padding="10dp"
+            android:src="@android:drawable/ic_menu_call" />
+
+        <ImageView
+            android:id="@+id/btnVideo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="right"
+            android:padding="10dp"
+            android:src="@android:drawable/presence_video_online" />
+
+        <ImageView
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_gravity="left"
+            android:padding="10dp"
+            android:src="@drawable/rounde_shape" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            android:id="@+id/TV_recipentName"/>
+    </androidx.appcompat.widget.Toolbar>
+
+    <ListView
+        android:id="@+id/lstMessages"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/relSendMessage"
+        android:layout_below="@+id/toolbar"
+        android:divider="@null"
+
+        android:dividerHeight="0dp"
+        android:padding="0dip"
+        android:stackFromBottom="true"
+        android:transcriptMode="alwaysScroll"
+        tools:listitem="@layout/message_left" />
+
+
+    <LinearLayout
+        android:id="@+id/relSendMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+
+        <EditText
+
+            android:id="@+id/txtTextBody"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_rounded_white"
+            android:hint="Type message here"
+            android:maxLines="4"
+            android:padding="10dp"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/btnSend"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/shape_circle_primary"
+            android:padding="10dp"
+            android:scaleType="center"
+            android:src="@drawable/ic_send" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
-import com.highbryds.fitfinder.commonHelper.getErrors
 import com.highbryds.fitfinder.model.NearbyStory
 import com.highbryds.fitfinder.model.UserStory
 import com.highbryds.fitfinder.retrofit.ApiInterface
@@ -14,6 +13,7 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.json.JSONObject
 import java.io.File
 import javax.inject.Inject
 
@@ -24,6 +24,7 @@ class HomeMapViewModel @Inject constructor(private val apiInterface: ApiInterfac
     val storiesData = MutableLiveData<List<NearbyStory>>()
     val categoriesData = MutableLiveData<List<String>>()
     val userLocation = MutableLiveData<LatLng>()
+
 
 
     fun uploadStoryData(userStory: UserStory) {
@@ -42,6 +43,8 @@ class HomeMapViewModel @Inject constructor(private val apiInterface: ApiInterfac
         return storiesData;
     }
 
+
+
     suspend fun getNearByStories(lat: String, lng: String) {
 
         viewModelScope.launch {
@@ -58,6 +61,7 @@ class HomeMapViewModel @Inject constructor(private val apiInterface: ApiInterfac
         }
 
     }
+
 
     suspend fun postStoryData(userStory: UserStory) {
 
@@ -78,7 +82,8 @@ class HomeMapViewModel @Inject constructor(private val apiInterface: ApiInterfac
                     latitude,
                     longitude,
                     mediaUrl,
-                    chipText
+                    chipText,
+                    address
                 )
 
                 if (uploadStory.code() == 200) {

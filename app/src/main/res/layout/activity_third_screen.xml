@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.OnBoarding.FirstScreen"
+    android:background="#F6F6F6">
+
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/imageView"
+        android:layout_width="@dimen/_200sdp"
+        android:layout_height="@dimen/_200sdp"
+        android:layout_centerHorizontal="true"
+        app:lottie_autoPlay="true"
+        app:lottie_rawRes="@raw/travel"
+        app:lottie_loop="true"
+        app:lottie_speed="0.9"
+        android:layout_marginTop="@dimen/_80sdp"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Safe Traveling"
+        android:textSize="@dimen/_15sdp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        android:layout_below="@id/imageView"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:id="@+id/heading"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="To make the country safer place to yourself. Make the community strong"
+        android:textSize="@dimen/_12sdp"
+        android:layout_below="@id/heading"
+        android:gravity="left"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:justificationMode="inter_word"
+        android:id="@+id/para"
+        />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/_20sdp"
+        android:layout_weight="2"
+        android:gravity="left"
+        android:orientation="horizontal"
+        android:layout_above="@id/card"
+        android:layout_marginBottom="@dimen/_20sdp">
+
+        <ImageView
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:src="@drawable/circle_empty"
+            app:tint="@color/com_facebook_blue" />
+
+
+
+        <ImageView
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:src="@drawable/circle_empty"
+            app:tint="@color/com_facebook_blue" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/com_facebook_blue"
+            android:elevation="@dimen/_5sdp"
+            app:cardCornerRadius="@dimen/_2sdp"
+            android:layout_marginLeft="@dimen/_10sdp">
+
+            <View
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_6sdp"
+                android:background="@color/com_facebook_blue" />
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/_5sdp"
+        app:cardCornerRadius="@dimen/_5sdp"
+        android:layout_alignParentBottom="true"
+        app:cardUseCompatPadding="true"
+        android:id="@+id/card">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            android:weightSum="3"
+            android:gravity="center"
+            android:padding="@dimen/_15sdp"
+            android:background="@color/colorPrimary">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingRight="@dimen/_20sdp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Get Started"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/_15sdp"
+                    android:textColor="@color/colorWhite"
+                    android:id="@+id/next"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+</RelativeLayout>

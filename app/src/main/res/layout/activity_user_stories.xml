@@ -20,7 +20,8 @@
             android:layout_width="@dimen/_15sdp"
             android:layout_height="@dimen/_15sdp"
             android:src="@drawable/back"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:id="@+id/IV_back"/>
 
         <TextView
             android:layout_width="wrap_content"

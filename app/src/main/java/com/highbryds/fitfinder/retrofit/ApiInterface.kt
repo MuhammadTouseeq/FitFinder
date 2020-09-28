@@ -10,6 +10,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import com.highbryds.fitfinder.model.WrapperStory
+import org.json.JSONObject
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -94,7 +95,8 @@ interface ApiInterface {
         @Field("latitude") latitude: String,
         @Field("longitude") longitude: String,
         @Field("mediaUrl") mediaUrl: String,
-        @Field("Category") Category: String
+        @Field("Category") Category: String,
+        @Field("Address") Address: String
     ): Response<UserStory>
 
 
@@ -115,4 +117,14 @@ interface ApiInterface {
     suspend fun getStorycomments(
         @Path("storyid") storyid: String
     ): Response<List<StoryComment>>
+
+    @POST("users/getuserProfile/{SocialID}")
+    suspend fun getUserProfile(@Path("SocialID") SocialID: String) : Response<UserProfile>
+
+    @POST("users/getstory")
+    suspend fun getStoryByID(@Body body: SingleStoryModel) : Response<dataTemp>
+
+    @POST("users/submitSpam")
+    suspend fun submitSpam(@Body body: StorySpam) : Response<GeneralResponse>
+
 }

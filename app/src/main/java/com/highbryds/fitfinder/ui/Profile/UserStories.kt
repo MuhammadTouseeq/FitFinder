@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.view.size
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +14,7 @@ import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.adapter.UserStoriesAdapter
 import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
 import com.highbryds.fitfinder.callbacks.StoryCallback
+import com.highbryds.fitfinder.callbacks.onConfirmListner
 import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.commonHelper.toast
 import com.highbryds.fitfinder.model.NearbyStory
@@ -39,14 +41,9 @@ class UserStories : AppCompatActivity(), ApiResponseCallBack , StoryCallback{
         userStoriesViewModel.apiResponseCallBack = this
         RV_Stories.layoutManager = GridLayoutManager(this, 2)
 
-        userStoriesViewModel.getUserStories(KotlinHelper.getUsersData().SocialId)
-        userStoriesViewModel.storiesModel?.observe(this@UserStories, Observer {
-            userStoriesModel.addAll(it)
-            loadingProgress.visibility = View.GONE
-            adapter = UserStoriesAdapter(userStoriesModel, this , this)
-            RV_Stories.adapter = adapter
-        });
-
+        IV_back.setOnClickListener {
+            finish()
+        }
 
 
     }
@@ -58,15 +55,35 @@ class UserStories : AppCompatActivity(), ApiResponseCallBack , StoryCallback{
 
     override fun getSuccess(success: String) {
         this.toast(this, success)
-        if (success.equals("Story Deactivate Successfully" , true)){
+        if (success.contains("Story Deactivate Successfully" , true)){
             userStoriesModel.removeAt(itemPosition)
             adapter.notifyDataSetChanged()
         }
     }
 
     override fun storyItemPosition(position: Int) {
-        this.toast(this , "delete ${position}")
-        itemPosition = position
-        userStoriesViewModel.deactivate(userStoriesModel.get(position)._id)
+        KotlinHelper.alertDialog("Alert" , "Are you sure you want to delete stroy" , this , object : onConfirmListner{
+            override fun onClick() {
+                itemPosition = position
+                userStoriesViewModel.deactivate(userStoriesModel.get(position)._id)
+            }
+        })
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (userStoriesModel.size > 0){
+            userStoriesModel.clear()
+        }
+        userStoriesViewModel.getUserStories(KotlinHelper.getUsersData().SocialId)
+        userStoriesViewModel.storiesModel?.observe(this@UserStories, Observer {
+            userStoriesModel.addAll(it)
+            loadingProgress.visibility = View.GONE
+            adapter = UserStoriesAdapter(userStoriesModel, this , this)
+            RV_Stories.adapter = adapter
+        });
+
+
     }
 }

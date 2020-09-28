@@ -53,7 +53,7 @@ class MyInfoWindowAdapter(context: Activity) : GoogleMap.InfoWindowAdapter {
                     }
 
                     txtDescription.text = storyName
-                    if (userData?.size > 0) let {
+                    if (userData?.size!! > 0) let {
                         Glide
                             .with(context)
                             .load(userData?.get(0)?.imageUrl)
@@ -64,7 +64,7 @@ class MyInfoWindowAdapter(context: Activity) : GoogleMap.InfoWindowAdapter {
                     } else {
                         imgProfile.setImageDrawable(context.resources.getDrawable(R.drawable.man_cartoon))
                     }
-                    if (storyClapData?.size > 0) let {
+                    if (storyClapData?.size!! > 0) let {
                         clapCount.text = storyClapData?.size.toString()
                     } else {clapCount.text = ""}
 

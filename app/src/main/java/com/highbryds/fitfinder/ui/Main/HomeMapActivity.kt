@@ -1,7 +1,6 @@
 package com.highbryds.fitfinder.ui.Main
 
 import android.app.Activity
-import android.app.Instrumentation
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
@@ -25,7 +24,6 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.*
 import androidx.core.content.FileProvider
-import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.gms.common.api.ResolvableApiException
@@ -48,11 +46,8 @@ import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.adapters.MyInfoWindowAdapter
 import com.highbryds.fitfinder.adapters.TrendingStoriesAdapter
 import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
-import com.highbryds.fitfinder.commonHelper.AppUtils
-import com.highbryds.fitfinder.commonHelper.KotlinHelper
-import com.highbryds.fitfinder.commonHelper.MapStyling
-import com.highbryds.fitfinder.commonHelper.toast
 import com.highbryds.fitfinder.callbacks.FTPCallback
+import com.highbryds.fitfinder.callbacks.onConfirmListner
 import com.highbryds.fitfinder.callbacks.videoCompressionCallback
 import com.highbryds.fitfinder.commonHelper.*
 import com.highbryds.fitfinder.model.NearbyStory
@@ -60,11 +55,12 @@ import com.highbryds.fitfinder.model.TrendingStory
 import com.highbryds.fitfinder.model.UserStory
 import com.highbryds.fitfinder.ui.Auth.LoginActivity
 import com.highbryds.fitfinder.ui.BaseActivity
-import com.highbryds.fitfinder.ui.StoryView.StoryFullViewActivity
 import com.highbryds.fitfinder.ui.Profile.UserProfileMain
 import com.highbryds.fitfinder.ui.Profile.UserProfileSetting
 import com.highbryds.fitfinder.ui.Profile.UserStories
+import com.highbryds.fitfinder.ui.StoryView.StoryFullViewActivity
 import com.highbryds.fitfinder.vm.AuthViewModels.LogoutViewModel
+import com.highbryds.fitfinder.vm.Main.StoryViewModel
 import com.highbryds.snapryde.rider_app.recievers.GpsLocationReceiver
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -95,7 +91,6 @@ import kotlinx.android.synthetic.main.record_audio_activity.seekBar
 import kotlinx.android.synthetic.main.view_audio_recorder.*
 import kotlinx.android.synthetic.main.view_bottom_sheet.*
 import kotlinx.android.synthetic.main.view_category_selection.*
-import kotlinx.android.synthetic.main.view_chip.*
 import kotlinx.android.synthetic.main.view_turn_location_on.*
 import kotlinx.android.synthetic.main.view_video_recorder.*
 import java.io.File
@@ -150,6 +145,9 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
     lateinit var homeMapViewModel: HomeMapViewModel
 
     @Inject
+    lateinit var storyViewModel: StoryViewModel
+
+    @Inject
     lateinit var logoutViewModel: LogoutViewModel
 
 
@@ -161,6 +159,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
         homeMapViewModel.apiErrorsCallBack = this
         logoutViewModel.apiResponseCallBack = this
+        storyViewModel.apiErrorsCallBack = this
 
         bnidBottomSheet()
 
@@ -208,7 +207,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
             val chip: Chip = chipGroup.findViewById(checkedId)
             //toast(applicationContext, chip.text.toString())
-            chipText =  chip.text.toString()
+            chipText = chip.text.toString()
         }
 
 
@@ -235,6 +234,8 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         drawerSetup()
         IV_Slider.setOnClickListener {
             slider.drawerLayout?.openDrawer(slider)
+            //val toClear: Int = slider.selectedItemPosition
+            slider.setSelectionAtPosition(1)
         }
 
     }
@@ -258,8 +259,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
 
         headerView.setBackgroundColor(resources.getColor(R.color.colorAccent))
-        headerView.selectionListEnabledForSingleProfile= false
-
+        headerView.selectionListEnabledForSingleProfile = false
 
 
         val imageView = headerView.currentProfileView
@@ -271,7 +271,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
         //if you want to update the items at a later time it is recommended to keep it in a variable
         val home = PrimaryDrawerItem().withIdentifier(1).withName("Home")
-        val story = PrimaryDrawerItem().withIdentifier(2).withName("My Story")
+        val story = PrimaryDrawerItem().withIdentifier(2).withName("My Stories")
         val profile = PrimaryDrawerItem().withIdentifier(3).withName("Profile")
         val settings = PrimaryDrawerItem().withIdentifier(5).withName("Settings")
         val logout = PrimaryDrawerItem().withIdentifier(4).withName("Logout")
@@ -292,7 +292,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         slider.onDrawerItemClickListener = { v, drawerItem, position ->
             when (position) {
                 1 -> {
-                    this.toast(this, "Home")
+                    //this.toast(this, "Home")
                 }
                 2 -> {
                     val intent = Intent(this, UserProfileMain::class.java)
@@ -308,12 +308,19 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                 }
                 6 -> {
 
-                    logoutViewModel.logoutUser(KotlinHelper.getUsersData().SocialId)
-                    PrefsHelper.putBoolean(Constants.Pref_IsLogin, false)
+                    KotlinHelper.alertDialog("Alert", "Are you sure you want to logout", this,
+                        object : onConfirmListner {
+                            override fun onClick() {
+                                logoutViewModel.logoutUser(KotlinHelper.getUsersData().SocialId)
+                                PrefsHelper.putBoolean(Constants.Pref_IsLogin, false)
+                            }
+                        })
+
                 }
             }
             false
         }
+
 
     }
 
@@ -346,7 +353,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
         val pinMarker: Marker = mGoogleMap.addMarker(
             MarkerOptions()
-                .title(story.Category?:"Unknown")
+                .title(story.Category ?: "Unknown")
                 .snippet(Gson().toJson(story))
                 //.snippet(story.storyName + "")
                 .visible(true)
@@ -517,7 +524,6 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
             val intent = Intent(this, StoryFullViewActivity::class.java)
             intent.putExtra("storyData", it.snippet)
-
             startActivityForResult(intent, 777)
 
         }
@@ -616,11 +622,40 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
     override fun onResume() {
         super.onResume()
         registerLocationBroadcast()
+        val bundle = intent.extras
+        if (!PrefsHelper.getString(Constants.Pref_ToOpenStoryAuto, "").equals("")) {
+            storyViewModel.getStoryById(PrefsHelper.getString(Constants.Pref_ToOpenStoryAuto, ""))
+            storyViewModel.singleStory.observe(this, androidx.lifecycle.Observer {
+                it?.let {
+                    val intent = Intent(this, StoryFullViewActivity::class.java)
+                    val gson = Gson()
+                    val json = gson.toJson(it.data.get(0))
+                    intent.putExtra("storyData", json)
+                    startActivityForResult(intent, 777)
+                }
+            })
+        } else if (bundle != null) {
+            storyViewModel.getStoryById(PrefsHelper.getString(Constants.Pref_ToOpenStoryAuto, ""))
+            Log.d(
+                "bundle",
+                bundle.getString("title") + bundle.getString("body") + bundle.getString("type")
+            )
+            storyViewModel.singleStory.observe(this, androidx.lifecycle.Observer {
+                it?.let {
+                    val intent = Intent(this, StoryFullViewActivity::class.java)
+                    val gson = Gson()
+                    val json = gson.toJson(it.data.get(0))
+                    intent.putExtra("storyData", json)
+                    startActivityForResult(intent, 777)
+                }
+            })
+
+        }
     }
 
     override fun onPause() {
         super.onPause()
-//Remove location updates
+        //Remove location updates
         if (fusedLocationProviderClient != null) {
             fusedLocationProviderClient.removeLocationUpdates(locationCallback!!)
         }
@@ -1329,20 +1364,22 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             currentLocation.longitude.toString(),
             "",
             "http://highbryds.com/fitfinder/stories/" + fileName,
-            chipText
+            chipText,
+            JavaHelper.getAddress(this, currentLocation.latitude, currentLocation.longitude)
         );
 
-        Log.d(
-            "HOMEMAPACTIVITY_", JavaHelper.getAddress(
-                this,
-                currentLocation.latitude,
-                currentLocation.longitude
-            )
-        )
+//        Log.d(
+//            "HOMEMAPACTIVITY_", JavaHelper.getAddress(
+//                this,
+//                currentLocation.latitude,
+//                currentLocation.longitude
+//            )
+//        )
 
         // showProgressDialog()
         homeMapViewModel.uploadStoryData(model)
     }
 
-
+    override fun onBackPressed() {
+    }
 }

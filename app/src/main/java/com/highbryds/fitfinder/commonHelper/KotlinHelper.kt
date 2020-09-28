@@ -1,7 +1,13 @@
 package com.highbryds.fitfinder.commonHelper
 
+import android.app.AlertDialog
+import android.content.Context
 import android.os.Build
+import com.facebook.login.LoginManager
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.gson.Gson
+import com.highbryds.fitfinder.callbacks.onConfirmListner
 import com.highbryds.fitfinder.model.UsersData
 import org.json.JSONObject
 import java.io.File
@@ -62,6 +68,45 @@ class KotlinHelper {
 
         }
 
+        fun alertDialog(title: String, msg: String, context: Context, confirmListner: onConfirmListner){
+            val builder = AlertDialog.Builder(context)
+            //set title for alert dialog
+            builder.setTitle(title)
+            //set message for alert dialog
+            builder.setMessage(msg)
+            builder.setIcon(android.R.drawable.ic_dialog_alert)
 
+            // Create the AlertDialog
+            var alertDialog: AlertDialog? = null
+
+            //performing positive action
+            builder.setPositiveButton("Yes"){dialogInterface, which ->
+                logoutSocialAccount(context)
+                confirmListner.onClick()
+            }
+
+            builder.setNegativeButton("No"){dialogInterface, which ->
+                alertDialog?.cancel()
+            }
+
+            alertDialog = builder.create()
+
+            // Set other dialog properties
+            alertDialog.setCancelable(false)
+            alertDialog.show()
+        }
+
+
+        fun logoutSocialAccount(context: Context){
+            if(getUsersData().SocialType.equals("FB" , false)){
+                LoginManager.getInstance().logOut()
+            }else{
+                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
+                val googleSignInClient = GoogleSignIn.getClient(context, gso)
+                googleSignInClient.signOut()
+            }
+        }
     }
+
+
 }

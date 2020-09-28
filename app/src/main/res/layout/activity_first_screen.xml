@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.OnBoarding.FirstScreen"
+    android:background="#F6F6F6">
+
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/imageView"
+        android:layout_width="@dimen/_200sdp"
+        android:layout_height="@dimen/_200sdp"
+        android:layout_centerHorizontal="true"
+        app:lottie_autoPlay="true"
+        app:lottie_rawRes="@raw/weather"
+        app:lottie_loop="true"
+        app:lottie_speed="0.9"
+        android:layout_marginTop="@dimen/_80sdp"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Social Connecting"
+        android:textSize="@dimen/_15sdp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        android:layout_below="@id/imageView"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:id="@+id/heading"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Before you go out check the Weather/Traffic condition. Trust the people not the news."
+        android:textSize="@dimen/_12sdp"
+        android:layout_below="@id/heading"
+        android:gravity="left"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:justificationMode="inter_word"
+        />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:weightSum="3"
+        android:gravity="center">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:orientation="horizontal"
+            android:gravity="left"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/_20sdp">
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="@dimen/_2sdp"
+                android:elevation="@dimen/_5sdp"
+                android:background="@color/com_facebook_blue">
+
+                <View
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_6sdp"
+                    android:background="@color/com_facebook_blue"/>
+
+            </androidx.cardview.widget.CardView>
+
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:src="@drawable/circle_empty"
+                android:layout_marginLeft="@dimen/_10sdp"
+                app:tint="@color/com_facebook_blue" />
+
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:src="@drawable/circle_empty"
+                android:layout_marginLeft="@dimen/_10sdp"
+                app:tint="@color/com_facebook_blue" />
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:paddingRight="@dimen/_20sdp">
+
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="Next"
+              android:textStyle="bold"
+              android:textSize="@dimen/_15sdp"
+              android:textColor="@color/com_facebook_blue"
+              android:id="@+id/next"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

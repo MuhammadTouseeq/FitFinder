@@ -48,7 +48,7 @@
                 app:tint="@color/colorLinkedin" />
 
             <TextView
-                android:id="@+id/txtUserName"
+                android:id="@+id/TV_viewStory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"

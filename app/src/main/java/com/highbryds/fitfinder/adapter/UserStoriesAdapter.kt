@@ -30,7 +30,7 @@ class UserStoriesAdapter(var userStories: ArrayList<NearbyStory>,
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val img = itemView.findViewById(R.id.IV_Story) as ImageView
         val storyType = itemView.findViewById(R.id.storyType) as ImageView
-       // val title = itemView.findViewById(R.id.TV_title) as TextView
+        val TV_viewStory = itemView.findViewById(R.id.TV_viewStory) as TextView
        // val TV_date = itemView.findViewById(R.id.TV_date) as TextView
         val CV_Story = itemView.findViewById(R.id.CV_Story) as ImageView
         val RL_ViewStory = itemView.findViewById(R.id.RL_ViewStory) as RelativeLayout
@@ -69,6 +69,8 @@ class UserStoriesAdapter(var userStories: ArrayList<NearbyStory>,
                     .placeholder(R.drawable.ic_launcher_foreground)
                     .into(storyType);
             }
+
+            TV_viewStory.text = userStories.storyViewsData?.size.toString()
         }
     }
 

@@ -60,9 +60,9 @@ class LoginActivity : AppCompatActivity(), ApiResponseCallBack {
 
 
 
-        btnFB.setOnClickListener {
-            //btnFB.setReadPermissions(listOf(EMAIL))
-            //btnFB.setReadPermissions(listOf("user_status"))
+        login_button.setOnClickListener{
+            login_button.setReadPermissions(listOf(EMAIL))
+           /// login_button.setReadPermissions(listOf("user_status"))
             callbackManager = CallbackManager.Factory.create()
             LoginManager.getInstance().registerCallback(
                 callbackManager,
@@ -74,7 +74,7 @@ class LoginActivity : AppCompatActivity(), ApiResponseCallBack {
                                     if (obj.has("id")) {
                                         //Log.d("FBDATA" , obj.getString("name"))
                                         //Log.d("FBDATA" , obj.getString("email"))
-                                        val usersData = UsersData(
+                                        val usersData = UsersData("" , "",
                                             KotlinHelper.isJsonObjNull(
                                                 obj,
                                                 "name"
@@ -120,7 +120,10 @@ class LoginActivity : AppCompatActivity(), ApiResponseCallBack {
 
 
                 })
+        }
 
+        btnFB.setOnClickListener {
+            login_button.performClick()
         }
 
         btnGoogle.setOnClickListener {
@@ -171,11 +174,7 @@ class LoginActivity : AppCompatActivity(), ApiResponseCallBack {
                     personId!!,
                     "Google",
                     personEmail!!,
-                    personPhoto.toString(),
-                    0,
-                    "null",
-                    "null",
-                    "null"
+                    personPhoto.toString()
                 )
                 userLoginRequest(usersData)
             }

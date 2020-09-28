@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/si2"
     tools:context=".ui.Auth.LoginActivity">
 
     <com.airbnb.lottie.LottieAnimationView
@@ -51,18 +50,40 @@
             android:textSize="@dimen/_12sdp" />
 
 
-        <Button
-            android:id="@+id/btnFB"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/_20sdp"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginRight="@dimen/_20sdp"
-            android:background="@color/colorFB"
-            app:backgroundTint="@null"
-            android:text="Continue with Facebook"
-            android:textColor="@color/colorWhite"
-            android:textSize="@dimen/_14sdp"/>
+
+       <RelativeLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
+
+           <Button
+               android:id="@+id/btnFB"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginLeft="@dimen/_20sdp"
+               android:layout_marginTop="@dimen/_5sdp"
+               android:layout_marginRight="@dimen/_20sdp"
+               android:background="@color/colorFB"
+               app:backgroundTint="@null"
+               android:text="Continue with Facebook"
+               android:textColor="@color/colorWhite"
+               android:textSize="@dimen/_14sdp"
+               android:textAllCaps="false" />
+
+           <com.facebook.login.widget.LoginButton
+               android:id="@+id/login_button"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginLeft="@dimen/_20sdp"
+               android:layout_marginTop="@dimen/_5sdp"
+               android:layout_marginRight="@dimen/_20sdp"
+               android:layout_centerInParent="true"
+
+               />
+
+
+       </RelativeLayout>
+
+
 
 <!--        <com.google.android.gms.common.SignInButton-->
 <!--            android:id="@+id/btnGoogle"-->
@@ -83,7 +104,8 @@
             app:backgroundTint="@null"
             android:text="Continue with google"
             android:textColor="@color/colorWhite"
-            android:textSize="@dimen/_14sdp"/>
+            android:textSize="@dimen/_14sdp"
+            android:textAllCaps="false"/>
 
         <Button
             android:layout_width="match_parent"
@@ -95,7 +117,8 @@
             app:backgroundTint="@null"
             android:text="Continue with Linkedin"
             android:textColor="@color/colorWhite"
-            android:textSize="@dimen/_14sdp"/>
+            android:textSize="@dimen/_14sdp"
+            android:textAllCaps="false"/>
 
 
     </LinearLayout>

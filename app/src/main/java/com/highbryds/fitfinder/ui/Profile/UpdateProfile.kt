@@ -12,10 +12,8 @@ import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
-import com.highbryds.fitfinder.commonHelper.Constants
-import com.highbryds.fitfinder.commonHelper.KotlinHelper
-import com.highbryds.fitfinder.commonHelper.PrefsHelper
-import com.highbryds.fitfinder.commonHelper.toast
+import com.highbryds.fitfinder.callbacks.FTPCallback
+import com.highbryds.fitfinder.commonHelper.*
 import com.highbryds.fitfinder.model.UsersData
 import com.highbryds.fitfinder.utils.PathUtil
 import com.highbryds.fitfinder.vm.Profile.UpdateProfileViewModel
@@ -37,14 +35,16 @@ import javax.inject.Inject
 private val REQUEST_SELECT_IMAGE_IN_ALBUM = 1
 
 @AndroidEntryPoint
-class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissionsListener {
+class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissionsListener,
+    FTPCallback {
 
     @Inject
     lateinit var updateProfileViewModel: UpdateProfileViewModel
     var filePart: MultipartBody.Part? = null
     lateinit var model: RequestBody
     val items = listOf("Male", "Female")
-
+    lateinit var filePath: String
+    lateinit var usersData: UsersData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,12 +65,18 @@ class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissi
         }
 
         updateProfile.setOnClickListener {
-            if(name.text.toString().isEmpty() || email.text.toString().isEmpty() || age.text.toString().isEmpty() || gender.editText!!.text.isEmpty() || city.text.toString().isEmpty() || country.text.toString().isEmpty()){
+            if(name.text.toString().isEmpty() || email.text.toString().isEmpty() || age.text.toString().isEmpty() ||
+                gender.editText!!.text.isEmpty() || city.text.toString().isEmpty() || country.text.toString().isEmpty() ||
+                    heading.text.toString().isEmpty() || description.text.toString().isEmpty()){
                     this.toast(this , "Please provide complete data")
             }else{
-                val usersData = UsersData(name.text.toString() , PrefsHelper.getString(Constants.Pref_DeviceToken , "") , KotlinHelper.getUsersData().SocialId , KotlinHelper.getUsersData().SocialType, email.text.toString()  , KotlinHelper.getUsersData().imageUrl,Integer.parseInt(age.text.toString()), gender.editText!!.text.toString() , city.text.toString() , country.text.toString())
+                usersData = UsersData(heading.text.toString().trim() , description.text.toString().trim() , name.text.toString().trim() , PrefsHelper.getString(Constants.Pref_DeviceToken , "").trim() , KotlinHelper.getUsersData().SocialId.trim() , KotlinHelper.getUsersData().SocialType.trim(), email.text.toString().trim()  , KotlinHelper.getUsersData().imageUrl.trim(),Integer.parseInt(age.text.toString().trim()), gender.editText!!.text.toString().trim() , city.text.toString().trim() , country.text.toString().trim())
                 if(filePart != null){
-                    updateProfileViewModel.uploadProfile(filePart!!, model , usersData)
+                   // updateProfileViewModel.uploadProfile(filePart!!, model , usersData)
+                    val filename: String = filePath.substring(filePath.lastIndexOf("/") + 1)
+                    val ftpHelper: FTPHelper = FTPHelper()
+                    ftpHelper.init(this)
+                    ftpHelper.AsyncTaskExample().execute(filePath, filename)
                 }else{
                     updateProfileViewModel.uploadUsersData(usersData)
                 }
@@ -101,6 +107,7 @@ class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissi
                 .into(IV_bio);
             val uri = data?.data
             val file = File(PathUtil.getPath(this, uri))
+            filePath = file.absolutePath
             val requestBody = RequestBody.create("image/jpeg".toMediaTypeOrNull(), file)
             filePart = MultipartBody.Part.createFormData("ProfilePic", file.name, requestBody)
             model = RequestBody.create("text/plain".toMediaTypeOrNull(), KotlinHelper.getUsersData().SocialId)
@@ -130,6 +137,8 @@ class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissi
         AC_Gender.setText(ud.Gender , false)
         city.setText(ud.City)
         country.setText(ud.Country)
+        heading.setText(ud.headline)
+        description.setText(ud.About)
 
         Glide
             .with(this)
@@ -147,6 +156,11 @@ class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissi
         p1: PermissionToken?
     ) {
         this.toast(this , "Permission is required to load images")
+    }
+
+    override fun isFTPUpload(isUploaded: Boolean, fileName: String) {
+        usersData.imageUrl = "http://highbryds.com/fitfinder/stories/" + fileName
+        updateProfileViewModel.uploadUsersData(usersData)
     }
 
 }
