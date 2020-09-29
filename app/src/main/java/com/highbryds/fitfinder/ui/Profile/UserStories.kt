@@ -62,7 +62,7 @@ class UserStories : AppCompatActivity(), ApiResponseCallBack , StoryCallback{
     }
 
     override fun storyItemPosition(position: Int) {
-        KotlinHelper.alertDialog("Alert" , "Are you sure you want to delete stroy" , this , object : onConfirmListner{
+        KotlinHelper.alertDialog("Alert" , "Are you sure you want to delete story" , this , object : onConfirmListner{
             override fun onClick() {
                 itemPosition = position
                 userStoriesViewModel.deactivate(userStoriesModel.get(position)._id)
@@ -73,11 +73,9 @@ class UserStories : AppCompatActivity(), ApiResponseCallBack , StoryCallback{
 
     override fun onResume() {
         super.onResume()
-        if (userStoriesModel.size > 0){
-            userStoriesModel.clear()
-        }
         userStoriesViewModel.getUserStories(KotlinHelper.getUsersData().SocialId)
         userStoriesViewModel.storiesModel?.observe(this@UserStories, Observer {
+            userStoriesModel.clear()
             userStoriesModel.addAll(it)
             loadingProgress.visibility = View.GONE
             adapter = UserStoriesAdapter(userStoriesModel, this , this)

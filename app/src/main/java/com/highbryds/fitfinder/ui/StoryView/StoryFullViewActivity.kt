@@ -15,10 +15,7 @@ import android.os.SystemClock
 import android.os.*
 import android.text.TextUtils
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -34,7 +31,6 @@ import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.adapters.StoryCommentsAdapter
 import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
 import com.highbryds.fitfinder.callbacks.StoryCallback
-import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
 import com.highbryds.fitfinder.commonHelper.Constants
 import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.commonHelper.SwipeToDeleteCallback
@@ -79,17 +75,18 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener, ApiResp
         heartView = HeartsView(applicationContext)
         bindBottomSheet()
 
+        userStoriesViewModel.apiResponseCallBack = this
         val v: View =
             LayoutInflater.from(applicationContext).inflate(R.layout.view_popupwindow, null, false)
         val pw = PopupWindow(v, 500, 500, true)
-        imgAction.setOnClickListener {
-            pw.showAtLocation(
-                imgAction,
-                Gravity.CENTER,
-                0,
-                0
-            )
-        }
+//        imgAction.setOnClickListener {
+//            pw.showAtLocation(
+//                imgAction,
+//                Gravity.CENTER,
+//                0,
+//                0
+//            )
+//        }
 
 
         //  })

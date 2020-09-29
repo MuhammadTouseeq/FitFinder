@@ -54,13 +54,13 @@ class LoginViewModel @Inject constructor(private val provideApiInterface: ApiInt
     private suspend fun createUser(usersData: UsersData) : UsersData?{
         try {
             Log.d("userData" ,usersData.toString())
-            val errBody = provideApiInterface.createUsers(usersData).errorBody()?.string()
-            return if (errBody != null) {
-                Log.d("ERRORVIEWMODEL", getErrors(errBody))
-                apiResponseCallBack.getError(getErrors(errBody))
+            val response = provideApiInterface.createUsers(usersData)
+            return if (response.errorBody() != null) {
+                Log.d("ERRORVIEWMODEL", getErrors(response.errorBody().toString()))
+                apiResponseCallBack.getError(getErrors(response.errorBody().toString()))
                 null
             } else {
-                provideApiInterface.createUsers(usersData).body()
+                response.body()
             }
         }catch (e: Exception){
             apiResponseCallBack.getError(e.toString())

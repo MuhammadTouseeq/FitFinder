@@ -157,9 +157,9 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
     @Inject
     lateinit var logoutViewModel: LogoutViewModel
 
-   // lateinit var adapter: TrendingStoriesAdapter
+    // lateinit var adapter: TrendingStoriesAdapter
 
-    var isTrendingStoryView:Boolean=false
+    var isTrendingStoryView: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -196,20 +196,18 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         imgBtStop.setOnClickListener(this)
         imgViewPlay.setOnClickListener(this)
 
-multiStoryView.setOnClickListener {
+        multiStoryView.setOnClickListener {
 
-    if (isTrendingStoryView)
-    {
-        isTrendingStoryView=false
-        recycler_view.visibility=View.GONE
-    }
-    else{
+            if (isTrendingStoryView) {
+                isTrendingStoryView = false
+                recycler_view.visibility = View.GONE
+            } else {
 
-        isTrendingStoryView=true
-        recycler_view.visibility=View.VISIBLE
+                isTrendingStoryView = true
+                recycler_view.visibility = View.VISIBLE
 
-    }
-}
+            }
+        }
 
         /**
          * bind image to bottom sheet
@@ -243,24 +241,24 @@ multiStoryView.setOnClickListener {
             chipText = chip.text.toString()
         }
 
-homeMapViewModel.trendingStoriesData.observe(this, androidx.lifecycle.Observer {
+        homeMapViewModel.trendingStoriesData.observe(this, androidx.lifecycle.Observer {
 
-it?.let {
-    adapter.addData(it)
-    adapter.notifyDataSetChanged()
-  //  for ((index, model) in it.withIndex()) {
-
-
-  //  }
-
-    multiStoryView.visibility=View.VISIBLE
-    showStoryImage(storyImg1,it.get(Random().nextInt(9))?.mediaUrl)
-    showStoryImage(storyImg2,it.get(Random().nextInt(9))?.mediaUrl)
-    showStoryImage(storyImg3,it.get(Random().nextInt(9))?.mediaUrl)
-}
+            it?.let {
+                adapter.addData(it)
+                adapter.notifyDataSetChanged()
+                //  for ((index, model) in it.withIndex()) {
 
 
-})
+                //  }
+
+                multiStoryView.visibility = View.VISIBLE
+                showStoryImage(storyImg1, it.get(Random().nextInt(9))?.mediaUrl)
+                showStoryImage(storyImg2, it.get(Random().nextInt(9))?.mediaUrl)
+                showStoryImage(storyImg3, it.get(Random().nextInt(9))?.mediaUrl)
+            }
+
+
+        })
 
         homeMapViewModel.observeAllNearByStories().observe(this, androidx.lifecycle.Observer {
 
@@ -282,11 +280,10 @@ it?.let {
 
 
 
-            if(it?.size==1)
-            {
+            if (it?.size == 1) {
                 //for new story added by user and append in map
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
-                moveGoogleMap(LatLng(it.get(0).latitude,it.get(0).longitude))
+                moveGoogleMap(LatLng(it.get(0).latitude, it.get(0).longitude))
             }
         })
 
@@ -300,43 +297,44 @@ it?.let {
 
     }
 
-      class getBitmapImage(image:MultiImageView) :
+    class getBitmapImage(image: MultiImageView) :
         AsyncTask<String?, Void?, Bitmap?>() {
-          var multiImage: MultiImageView
+        var multiImage: MultiImageView
 
-          init {
-              multiImage = image
-          }
+        init {
+            multiImage = image
+        }
 
-          override fun doInBackground(vararg urls: String?): Bitmap? {
-              return try {
-                  val url = URL(urls[0])
-                  val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
-                  connection.setDoInput(true)
-                  connection.connect()
-                  val input: InputStream = connection.getInputStream()
-                  BitmapFactory.decodeStream(input)
-              } catch (e: IOException) {
-                  e.printStackTrace()
-                  null
-              }
-          }
+        override fun doInBackground(vararg urls: String?): Bitmap? {
+            return try {
+                val url = URL(urls[0])
+                val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
+                connection.setDoInput(true)
+                connection.connect()
+                val input: InputStream = connection.getInputStream()
+                BitmapFactory.decodeStream(input)
+            } catch (e: IOException) {
+                e.printStackTrace()
+                null
+            }
+        }
 
-          override fun onPostExecute(bitmap: Bitmap?) {
-              bitmap?.let {
-                  multiImage.addImage(bitmap)
+        override fun onPostExecute(bitmap: Bitmap?) {
+            bitmap?.let {
+                multiImage.addImage(bitmap)
 
-              }
-          }
-      }
-          fun showStoryImage(storyview:CircleImageView,url:String)
-          {
-              Glide
-                  .with(applicationContext)
-                  .load(url)
-                  .placeholder(R.drawable.placeholder)
-                  .into(storyview);
-          }
+            }
+        }
+    }
+
+    fun showStoryImage(storyview: CircleImageView, url: String) {
+        Glide
+            .with(applicationContext)
+            .load(url)
+            .placeholder(R.drawable.placeholder)
+            .into(storyview);
+    }
+
     fun drawerSetup() {
 
         // Create the AccountHeader
@@ -355,8 +353,7 @@ it?.let {
 
 
         headerView.setBackgroundColor(resources.getColor(R.color.colorAccent))
-        headerView.selectionListEnabledForSingleProfile= false
-
+        headerView.selectionListEnabledForSingleProfile = false
 
 
         val imageView = headerView.currentProfileView
@@ -655,7 +652,7 @@ it?.let {
         recycler_view.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
-        adapter = TrendingStoriesAdapter(arrayListOf(),applicationContext)
+        adapter = TrendingStoriesAdapter(arrayListOf(), applicationContext)
 //        recycler_view.addItemDecoration(
 //            DividerItemDecoration(
 //                recycler_view.context,
@@ -1029,316 +1026,316 @@ it?.let {
 
                 }
             }
-                R.id.btnCamera -> {
+            R.id.btnCamera -> {
 
-                    mediaType = MediaType.CAMERA
-                    resetAll()
-                    EasyImagePicker.getInstance().withContext(this, BuildConfig.APPLICATION_ID)
-                        .openCamera()
-                }
-                R.id.btnGallery -> {
+                mediaType = MediaType.CAMERA
+                resetAll()
+                EasyImagePicker.getInstance().withContext(this, BuildConfig.APPLICATION_ID)
+                    .openCamera()
+            }
+            R.id.btnGallery -> {
 
-                    mediaType = MediaType.GALERY
-                    resetAll()
-                    EasyImagePicker.getInstance().withContext(this, BuildConfig.APPLICATION_ID)
-                        .openGallery()
-                }
-                R.id.btnVideo -> {
+                mediaType = MediaType.GALERY
+                resetAll()
+                EasyImagePicker.getInstance().withContext(this, BuildConfig.APPLICATION_ID)
+                    .openGallery()
+            }
+            R.id.btnVideo -> {
 
-                    mediaType = MediaType.VIDEO
-                    resetAll()
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        requestVideoPermissions()
-                    } else {
-                        openVideoRecorder()
-                    }
+                mediaType = MediaType.VIDEO
+                resetAll()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestVideoPermissions()
+                } else {
+                    openVideoRecorder()
                 }
-                R.id.btnAudioRecorder -> {
+            }
+            R.id.btnAudioRecorder -> {
 
-                    mediaType = MediaType.AUDIO
-                    resetAll()
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        requestRecordAudioPermissions()
-                    } else {
-                        mediaTypeAudio.visibility = View.VISIBLE
-                        mediaTypeVideo.visibility = View.GONE
-                        chronometer.visibility = View.VISIBLE
-                        imgBtRecord.visibility = View.VISIBLE
-                        prepareRecording()
-                        startRecording()
-                    }
-                }
-                //---------Audio Recorder----------//
-                R.id.imgBtRecord -> {
+                mediaType = MediaType.AUDIO
+                resetAll()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestRecordAudioPermissions()
+                } else {
+                    mediaTypeAudio.visibility = View.VISIBLE
+                    mediaTypeVideo.visibility = View.GONE
+                    chronometer.visibility = View.VISIBLE
+                    imgBtRecord.visibility = View.VISIBLE
                     prepareRecording()
                     startRecording()
                 }
+            }
+            //---------Audio Recorder----------//
+            R.id.imgBtRecord -> {
+                prepareRecording()
+                startRecording()
+            }
 
-                R.id.imgBtStop -> {
-                    prepareStop()
-                    stopRecording()
-                }
+            R.id.imgBtStop -> {
+                prepareStop()
+                stopRecording()
+            }
 
-                R.id.imgViewPlay -> {
-                    if (!isPlaying && fileName != null) {
-                        isPlaying = true
-                        startPlaying()
-                    } else {
-                        isPlaying = false
-                        stopPlaying()
-                    }
+            R.id.imgViewPlay -> {
+                if (!isPlaying && fileName != null) {
+                    isPlaying = true
+                    startPlaying()
+                } else {
+                    isPlaying = false
+                    stopPlaying()
                 }
             }
         }
+    }
 
-        //==============Audio Recorder Functions============//
-        private fun prepareStop() {
-            TransitionManager.beginDelayedTransition(llRecorder)
-            //  imgBtRecord.visibility = View.VISIBLE
-            imgBtStop.visibility = View.GONE
-            llPlay.visibility = View.VISIBLE
+    //==============Audio Recorder Functions============//
+    private fun prepareStop() {
+        TransitionManager.beginDelayedTransition(llRecorder)
+        //  imgBtRecord.visibility = View.VISIBLE
+        imgBtStop.visibility = View.GONE
+        llPlay.visibility = View.VISIBLE
 
 
-            chronometer.visibility = View.GONE
-            imgBtRecord.visibility = View.GONE
+        chronometer.visibility = View.GONE
+        imgBtRecord.visibility = View.GONE
+    }
+
+
+    private fun prepareRecording() {
+        TransitionManager.beginDelayedTransition(llRecorder)
+        imgBtRecord.visibility = View.GONE
+        imgBtStop.visibility = View.VISIBLE
+        llPlay.visibility = View.GONE
+    }
+
+    private fun stopPlaying() {
+        try {
+            mPlayer!!.release()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
 
+        mPlayer = null
+        //showing the play button
+        imgViewPlay.setImageResource(R.drawable.ic_play_circle)
+        chronometerAudio.stop()
+    }
 
-        private fun prepareRecording() {
-            TransitionManager.beginDelayedTransition(llRecorder)
-            imgBtRecord.visibility = View.GONE
-            imgBtStop.visibility = View.VISIBLE
-            llPlay.visibility = View.GONE
+    private fun startRecording() {
+        mRecorder = MediaRecorder()
+        mRecorder!!.setMaxDuration(60000)
+        mRecorder!!.setAudioSource(MediaRecorder.AudioSource.MIC)
+        mRecorder!!.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+        val root = android.os.Environment.getExternalStorageDirectory()
+        val file = File(root.absolutePath + "/FitFinder/Audios")
+        if (!file.exists()) {
+            file.mkdirs()
         }
 
-        private fun stopPlaying() {
-            try {
-                mPlayer!!.release()
-            } catch (e: Exception) {
-                e.printStackTrace()
+        fileName = root.absolutePath + "/FitFinder/Audios/" + (System.currentTimeMillis()
+            .toString() + ".mp3")
+        filePath = fileName!!
+        // Log.d("filename", fileName)
+        mRecorder!!.setOutputFile(fileName)
+        mRecorder!!.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+
+        try {
+            mRecorder!!.prepare()
+            mRecorder!!.start()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        lastProgress = 0
+        seekBar.progress = 0
+        stopPlaying()
+        // making the imageView a stop button starting the chronometer
+        chronometer.base = SystemClock.elapsedRealtime()
+        chronometer.start()
+        chronometer.setOnChronometerTickListener {
+            if (it.text.toString().equals("00:31") && mRecorder != null) {
+
+                prepareStop()
+                stopRecording()
             }
+        }
+    }
 
-            mPlayer = null
-            //showing the play button
+
+    private fun stopRecording() {
+        try {
+            mRecorder!!.stop()
+            mRecorder!!.release()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        mRecorder = null
+        //starting the chronometer
+        chronometer.stop()
+        chronometer.base = SystemClock.elapsedRealtime()
+        //showing the play button
+        Toast.makeText(this, "Recording saved successfully.", Toast.LENGTH_SHORT).show()
+    }
+
+
+    private fun startPlaying() {
+        mPlayer = MediaPlayer()
+        try {
+            mPlayer!!.setDataSource(fileName)
+            mPlayer!!.prepare()
+            mPlayer!!.start()
+        } catch (e: IOException) {
+            Log.e("LOG_TAG", "prepare() failed")
+        }
+
+        //making the imageView pause button
+        imgViewPlay.setImageResource(R.drawable.ic_pause_circle)
+
+        seekBar.progress = lastProgress
+        mPlayer!!.seekTo(lastProgress)
+        seekBar.max = mPlayer!!.duration
+        seekBarUpdate()
+
+        chronometerAudio.start()
+        chronometer.visibility = View.GONE
+        imgBtRecord.visibility = View.GONE
+        mPlayer!!.setOnCompletionListener(MediaPlayer.OnCompletionListener {
             imgViewPlay.setImageResource(R.drawable.ic_play_circle)
+            isPlaying = false
             chronometerAudio.stop()
-        }
+            chronometerAudio.base = SystemClock.elapsedRealtime()
+            mPlayer!!.seekTo(0)
+        })
 
-        private fun startRecording() {
-            mRecorder = MediaRecorder()
-            mRecorder!!.setMaxDuration(60000)
-            mRecorder!!.setAudioSource(MediaRecorder.AudioSource.MIC)
-            mRecorder!!.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-            val root = android.os.Environment.getExternalStorageDirectory()
-            val file = File(root.absolutePath + "/FitFinder/Audios")
-            if (!file.exists()) {
-                file.mkdirs()
-            }
-
-            fileName = root.absolutePath + "/FitFinder/Audios/" + (System.currentTimeMillis()
-                .toString() + ".mp3")
-            filePath = fileName!!
-            // Log.d("filename", fileName)
-            mRecorder!!.setOutputFile(fileName)
-            mRecorder!!.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
-
-            try {
-                mRecorder!!.prepare()
-                mRecorder!!.start()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-
-            lastProgress = 0
-            seekBar.progress = 0
-            stopPlaying()
-            // making the imageView a stop button starting the chronometer
-            chronometer.base = SystemClock.elapsedRealtime()
-            chronometer.start()
-            chronometer.setOnChronometerTickListener {
-                if (it.text.toString().equals("00:31") && mRecorder != null) {
-
-                    prepareStop()
-                    stopRecording()
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                if (mPlayer != null && fromUser) {
+                    mPlayer!!.seekTo(progress)
+                    chronometerAudio.base =
+                        SystemClock.elapsedRealtime() - mPlayer!!.currentPosition
+                    lastProgress = progress
                 }
             }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+        })
+    }
+
+    private var runnable: Runnable = Runnable { seekBarUpdate() }
+
+    private fun seekBarUpdate() {
+        if (mPlayer != null) {
+            val mCurrentPosition = mPlayer!!.currentPosition
+            seekBar.progress = mCurrentPosition
+            lastProgress = mCurrentPosition
         }
+        mHandler.postDelayed(runnable, 100)
+    }
 
 
-        private fun stopRecording() {
-            try {
-                mRecorder!!.stop()
-                mRecorder!!.release()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            mRecorder = null
-            //starting the chronometer
-            chronometer.stop()
-            chronometer.base = SystemClock.elapsedRealtime()
-            //showing the play button
-            Toast.makeText(this, "Recording saved successfully.", Toast.LENGTH_SHORT).show()
-        }
+    //request permission for record audio
+    private fun requestRecordAudioPermissions() {
 
+        Dexter.withActivity(this)
+            .withPermissions(
+                android.Manifest.permission.RECORD_AUDIO,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ).withListener(object : MultiplePermissionsListener {
+                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                    report?.let {
 
-        private fun startPlaying() {
-            mPlayer = MediaPlayer()
-            try {
-                mPlayer!!.setDataSource(fileName)
-                mPlayer!!.prepare()
-                mPlayer!!.start()
-            } catch (e: IOException) {
-                Log.e("LOG_TAG", "prepare() failed")
-            }
+                        if (report.areAllPermissionsGranted()) {
 
-            //making the imageView pause button
-            imgViewPlay.setImageResource(R.drawable.ic_pause_circle)
-
-            seekBar.progress = lastProgress
-            mPlayer!!.seekTo(lastProgress)
-            seekBar.max = mPlayer!!.duration
-            seekBarUpdate()
-
-            chronometerAudio.start()
-            chronometer.visibility = View.GONE
-            imgBtRecord.visibility = View.GONE
-            mPlayer!!.setOnCompletionListener(MediaPlayer.OnCompletionListener {
-                imgViewPlay.setImageResource(R.drawable.ic_play_circle)
-                isPlaying = false
-                chronometerAudio.stop()
-                chronometerAudio.base = SystemClock.elapsedRealtime()
-                mPlayer!!.seekTo(0)
-            })
-
-            seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                    if (mPlayer != null && fromUser) {
-                        mPlayer!!.seekTo(progress)
-                        chronometerAudio.base =
-                            SystemClock.elapsedRealtime() - mPlayer!!.currentPosition
-                        lastProgress = progress
+                            mediaTypeAudio.visibility = View.VISIBLE
+                            mediaTypeVideo.visibility = View.GONE
+                            chronometer.visibility = View.VISIBLE
+                            imgBtRecord.visibility = View.VISIBLE
+                            prepareRecording()
+                            startRecording()
+                        }
                     }
                 }
 
-                override fun onStartTrackingTouch(seekBar: SeekBar) {}
+                override fun onPermissionRationaleShouldBeShown(
+                    permissions: MutableList<com.karumi.dexter.listener.PermissionRequest>?,
+                    token: PermissionToken?
+                ) {
+                    token?.continuePermissionRequest()
+                }
 
-                override fun onStopTrackingTouch(seekBar: SeekBar) {}
-            })
-        }
+            }).check()
+    }
 
-        private var runnable: Runnable = Runnable { seekBarUpdate() }
+    private fun requestVideoPermissions() {
 
-        private fun seekBarUpdate() {
-            if (mPlayer != null) {
-                val mCurrentPosition = mPlayer!!.currentPosition
-                seekBar.progress = mCurrentPosition
-                lastProgress = mCurrentPosition
-            }
-            mHandler.postDelayed(runnable, 100)
-        }
+        Dexter.withActivity(this)
+            .withPermissions(
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.CAMERA,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ).withListener(object : MultiplePermissionsListener {
+                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                    report?.let {
 
+                        if (report.areAllPermissionsGranted()) {
 
-        //request permission for record audio
-        private fun requestRecordAudioPermissions() {
-
-            Dexter.withActivity(this)
-                .withPermissions(
-                    android.Manifest.permission.RECORD_AUDIO,
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ).withListener(object : MultiplePermissionsListener {
-                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                        report?.let {
-
-                            if (report.areAllPermissionsGranted()) {
-
-                                mediaTypeAudio.visibility = View.VISIBLE
-                                mediaTypeVideo.visibility = View.GONE
-                                chronometer.visibility = View.VISIBLE
-                                imgBtRecord.visibility = View.VISIBLE
-                                prepareRecording()
-                                startRecording()
-                            }
+                            openVideoRecorder()
                         }
                     }
+                }
 
-                    override fun onPermissionRationaleShouldBeShown(
-                        permissions: MutableList<com.karumi.dexter.listener.PermissionRequest>?,
-                        token: PermissionToken?
-                    ) {
-                        token?.continuePermissionRequest()
-                    }
+                override fun onPermissionRationaleShouldBeShown(
+                    permissions: MutableList<com.karumi.dexter.listener.PermissionRequest>?,
+                    token: PermissionToken?
+                ) {
+                    token?.continuePermissionRequest()
+                }
 
-                }).check()
-        }
+            }).check()
+    }
 
-        private fun requestVideoPermissions() {
+    private fun openVideoRecorder() {
+        val takeVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+        takeVideoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 30)
+        // create a file to save the video
+        //  var fileUri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO);
 
-            Dexter.withActivity(this)
-                .withPermissions(
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                    android.Manifest.permission.CAMERA,
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ).withListener(object : MultiplePermissionsListener {
-                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                        report?.let {
-
-                            if (report.areAllPermissionsGranted()) {
-
-                                openVideoRecorder()
-                            }
-                        }
-                    }
-
-                    override fun onPermissionRationaleShouldBeShown(
-                        permissions: MutableList<com.karumi.dexter.listener.PermissionRequest>?,
-                        token: PermissionToken?
-                    ) {
-                        token?.continuePermissionRequest()
-                    }
-
-                }).check()
-        }
-
-        private fun openVideoRecorder() {
-            val takeVideoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
-            takeVideoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 30)
-            // create a file to save the video
-            //  var fileUri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO);
-
-            // set the image file name
-            //takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+        // set the image file name
+        //takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
 
 
-            var provider = FileProvider.getUriForFile(
-                this@HomeMapActivity,
-                BuildConfig.APPLICATION_ID + ".provider",
-                getOutputMediaFile(2)!!
+        var provider = FileProvider.getUriForFile(
+            this@HomeMapActivity,
+            BuildConfig.APPLICATION_ID + ".provider",
+            getOutputMediaFile(2)!!
+        )
+        val mimeType = applicationContext.contentResolver.getType(provider)
+        //  takeVideoIntent.setDataAndType(provider,mimeType)
+        takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, provider);
+        takeVideoIntent.flags =
+            Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        startActivityForResult(takeVideoIntent, ACTION_TAKE_VIDEO)
+    }
+
+    /**
+     * Video Player
+     */
+
+    fun prepareVideoPlayer(uri: Uri?, videoview: VideoView) {
+        mediaTypeAudio.visibility = View.GONE
+        mediaTypeVideo.visibility = View.VISIBLE
+        try {
+            // Start the MediaController
+            val mediacontroller = MediaController(
+                this@HomeMapActivity
             )
-            val mimeType = applicationContext.contentResolver.getType(provider)
-            //  takeVideoIntent.setDataAndType(provider,mimeType)
-            takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, provider);
-            takeVideoIntent.flags =
-                Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-            startActivityForResult(takeVideoIntent, ACTION_TAKE_VIDEO)
-        }
-
-        /**
-         * Video Player
-         */
-
-        fun prepareVideoPlayer(uri: Uri?, videoview: VideoView) {
-            mediaTypeAudio.visibility = View.GONE
-            mediaTypeVideo.visibility = View.VISIBLE
-            try {
-                // Start the MediaController
-                val mediacontroller = MediaController(
-                    this@HomeMapActivity
-                )
-                mediacontroller.setAnchorView(videoview)
-                // Get the URL from String VideoURL
-                // val video = Uri.fromFile(File(path))
-                videoview.setMediaController(mediacontroller)
+            mediacontroller.setAnchorView(videoview)
+            // Get the URL from String VideoURL
+            // val video = Uri.fromFile(File(path))
+            videoview.setMediaController(mediacontroller)
 
 //            videoview.setVideoURI(Uri.parse(Environment.getExternalStorageDirectory().path
 //                .toString() + "videocapture_example.mp4"))
@@ -1347,7 +1344,7 @@ it?.let {
 //            var provider= FileProvider.getUriForFile(this@HomeMapActivity, BuildConfig.APPLICATION_ID+".provider", File(getPath(uri)))
 
 
-                videoview.setVideoURI(uri)
+            videoview.setVideoURI(uri)
 
 //            val video: Uri = FileProvider.getUriForFile(
 //                applicationContext,
@@ -1355,133 +1352,133 @@ it?.let {
 //                File(getPath(uri))
 //            )
 //            videoview.setVideoURI(video)
-            } catch (e: java.lang.Exception) {
-                Log.e("Error", e.message!!)
-                e.printStackTrace()
+        } catch (e: java.lang.Exception) {
+            Log.e("Error", e.message!!)
+            e.printStackTrace()
+        }
+
+        videoview.requestFocus()
+        videoview.start()
+        videoview.setOnPreparedListener(object : MediaPlayer.OnPreparedListener {
+            override fun onPrepared(p0: MediaPlayer?) {
+                videoview.start()
             }
 
-            videoview.requestFocus()
-            videoview.start()
-            videoview.setOnPreparedListener(object : MediaPlayer.OnPreparedListener {
-                override fun onPrepared(p0: MediaPlayer?) {
-                    videoview.start()
-                }
+        })
+    }
 
-            })
+
+    /** Create a file Uri for saving an image or video  */
+    fun getOutputMediaFileUri(type: Int): Uri? {
+        return Uri.fromFile(getOutputMediaFile(type))
+    }
+
+    /** Create a File for saving an image or video  */
+    fun getOutputMediaFile(type: Int): File? {
+
+        // Check that the SDCard is mounted
+        val mediaStorageDir = File(
+            Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES
+            ), "FitFinderVideo"
+        )
+
+
+        // Create the storage directory(MyCameraVideo) if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                // output.setText("Failed to create directory MyCameraVideo.")
+                Toast.makeText(
+                    applicationContext, "Failed to create directory MyCameraVideo.",
+                    Toast.LENGTH_LONG
+                ).show()
+                Log.d("MyCameraVideo", "Failed to create directory MyCameraVideo.")
+                return null
+            }
         }
 
 
-        /** Create a file Uri for saving an image or video  */
-        fun getOutputMediaFileUri(type: Int): Uri? {
-            return Uri.fromFile(getOutputMediaFile(type))
-        }
+        // Create a media file name
 
-        /** Create a File for saving an image or video  */
-        fun getOutputMediaFile(type: Int): File? {
+        // For unique file name appending current timeStamp with file name
+        val date = Date()
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss")
+            .format(date.time)
+        val mediaFile: File
+        mediaFile = if (type == 2) {
 
-            // Check that the SDCard is mounted
-            val mediaStorageDir = File(
-                Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES
-                ), "FitFinderVideo"
-            )
-
-
-            // Create the storage directory(MyCameraVideo) if it does not exist
-            if (!mediaStorageDir.exists()) {
-                if (!mediaStorageDir.mkdirs()) {
-                    // output.setText("Failed to create directory MyCameraVideo.")
-                    Toast.makeText(
-                        applicationContext, "Failed to create directory MyCameraVideo.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    Log.d("MyCameraVideo", "Failed to create directory MyCameraVideo.")
-                    return null
-                }
-            }
-
-
-            // Create a media file name
-
-            // For unique file name appending current timeStamp with file name
-            val date = Date()
-            val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss")
-                .format(date.time)
-            val mediaFile: File
-            mediaFile = if (type == 2) {
-
-                // For unique video file name appending current timeStamp with file name
+            // For unique video file name appending current timeStamp with file name
 //            File(
 //                mediaStorageDir.path + File.separator +
 //                        "VID_" + timeStamp + ".mp4"
 //            )
 
-                File(
-                    Environment.getExternalStorageDirectory().absolutePath + "/FitFinder/Audios/VID_" + (System.currentTimeMillis()
-                        .toString() + ".mp4")
-                )
-            } else {
-                return null
-            }
-            filePath = mediaFile.path
-            return mediaFile
+            File(
+                Environment.getExternalStorageDirectory().absolutePath + "/FitFinder/Audios/VID_" + (System.currentTimeMillis()
+                    .toString() + ".mp4")
+            )
+        } else {
+            return null
         }
+        filePath = mediaFile.path
+        return mediaFile
+    }
 
-        override fun getError(error: String) {
-            loadingProgress.visibility = View.GONE
-            spin_kit.visibility = View.GONE
+    override fun getError(error: String) {
+        loadingProgress.visibility = View.GONE
+        spin_kit.visibility = View.GONE
+    }
+
+    override fun getSuccess(success: String) {
+        loadingProgress.visibility = View.GONE
+        if (success.equals("User Logout Successfully", true)) {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            PrefsHelper.putString(Constants.Pref_UserData, "")
+            this.finish()
         }
+        resetAll()
+        spin_kit.visibility = View.GONE
+    }
 
-        override fun getSuccess(success: String) {
-            loadingProgress.visibility = View.GONE
-            if (success.equals("User Logout Successfully", true)) {
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
-                PrefsHelper.putString(Constants.Pref_UserData, "")
-                this.finish()
-            }
-            resetAll()
-            spin_kit.visibility = View.GONE
-        }
+    fun resetAll() {
+        mediaTypeAudio.visibility = View.GONE
+        mediaTypeVideo.visibility = View.GONE
+        imgStory.visibility = View.GONE
+        filePath = ""
 
-        fun resetAll() {
-            mediaTypeAudio.visibility = View.GONE
-            mediaTypeVideo.visibility = View.GONE
-            imgStory.visibility = View.GONE
-            filePath = ""
-
-        }
+    }
 
 
-        fun showProgressDialog() {
-            progressDialog = ProgressDialog(applicationContext)
-            progressDialog.setMessage("Please wait...")
-            progressDialog.window!!.requestFeature(Window.FEATURE_NO_TITLE)
-            progressDialog.show()
-        }
+    fun showProgressDialog() {
+        progressDialog = ProgressDialog(applicationContext)
+        progressDialog.setMessage("Please wait...")
+        progressDialog.window!!.requestFeature(Window.FEATURE_NO_TITLE)
+        progressDialog.show()
+    }
 
-        override fun isCompress(success: Boolean, filePath: String) {
+    override fun isCompress(success: Boolean, filePath: String) {
 
-            val filename: String = filePath.substring(filePath.lastIndexOf("/") + 1)
-            val ftpHelper: FTPHelper = FTPHelper()
-            ftpHelper.init(this)
-            ftpHelper.AsyncTaskExample().execute(filePath, filename)
-        }
+        val filename: String = filePath.substring(filePath.lastIndexOf("/") + 1)
+        val ftpHelper: FTPHelper = FTPHelper()
+        ftpHelper.init(this)
+        ftpHelper.AsyncTaskExample().execute(filePath, filename)
+    }
 
-        override fun isFTPUpload(isUploaded: Boolean, fileName: String) {
-            Log.d("HOMEMAPACTIVITY_", isUploaded.toString())
-            Log.d("HOMEMAPACTIVITY_", fileName)
+    override fun isFTPUpload(isUploaded: Boolean, fileName: String) {
+        Log.d("HOMEMAPACTIVITY_", isUploaded.toString())
+        Log.d("HOMEMAPACTIVITY_", fileName)
 
-            val model: UserStory = UserStory(
-                JavaHelper.badWordReplace(txtMessage.text.toString()),
-                KotlinHelper.getUsersData().SocialId,
-                currentLocation.latitude.toString(),
-                currentLocation.longitude.toString(),
-                "",
-                "http://highbryds.com/fitfinder/stories/" + fileName,
-                chipText,
-                JavaHelper.getAddress(this, currentLocation.latitude, currentLocation.longitude)
-            );
+        val model: UserStory = UserStory(
+            JavaHelper.badWordReplace(txtMessage.text.toString()),
+            KotlinHelper.getUsersData().SocialId,
+            currentLocation.latitude.toString(),
+            currentLocation.longitude.toString(),
+            "",
+            "http://highbryds.com/fitfinder/stories/" + fileName,
+            chipText,
+            JavaHelper.getAddress(this, currentLocation.latitude, currentLocation.longitude)
+        );
 
 //        Log.d(
 //            "HOMEMAPACTIVITY_", JavaHelper.getAddress(
@@ -1491,11 +1488,14 @@ it?.let {
 //            )
 //        )
 
-            // showProgressDialog()
-            homeMapViewModel.uploadStoryData(model)
-        }
+        // showProgressDialog()
+        homeMapViewModel.uploadStoryData(model)
     }
+
 
     override fun onBackPressed() {
     }
 }
+
+
+

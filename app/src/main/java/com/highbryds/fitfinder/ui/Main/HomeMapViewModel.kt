@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
+import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.commonHelper.getErrors
 import com.highbryds.fitfinder.model.NearbyStory
 import com.highbryds.fitfinder.model.UserStory
@@ -94,11 +95,11 @@ class HomeMapViewModel @Inject constructor(private val apiInterface: ApiInterfac
 
             if (uploadStory.code() == 200) {
 
-                val arruser = ArrayList<UsersData>()
-                arruser.add(KotlinHelper.getUsersData())
-                val nearbyStory: NearbyStory = uploadStory.body()!!.data
-                nearbyStory.userData = arruser
-                storiesData.value = listOf(nearbyStory)
+//                val arruser = ArrayList<UsersData>()
+//                arruser.add(KotlinHelper.getUsersData())
+//                val nearbyStory: NearbyStory = uploadStory.body()!!.data
+//                nearbyStory.userData = arruser
+//                storiesData.value = listOf(nearbyStory)
                 apiErrorsCallBack.getSuccess("Successfully uploaded story")
             } else {
                 apiErrorsCallBack.getError(uploadStory.message())
