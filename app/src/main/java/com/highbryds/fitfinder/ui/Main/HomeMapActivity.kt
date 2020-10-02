@@ -140,7 +140,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
     private val mHandler = Handler()
     private val RECORD_AUDIO_REQUEST_CODE = 101
     private var isPlaying = false
-    private lateinit var chipText: String
+    private var chipText: String? = null
 
     //========End=====//
     private val SELECT_VIDEO = 1
@@ -166,6 +166,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         setContentView(R.layout.activity_home_map)
 
         //    bindNavigationDrawer(toolbar)
+        mediaType = MediaType.TEXT
 
         homeMapViewModel.apiErrorsCallBack = this
         logoutViewModel.apiResponseCallBack = this
@@ -252,9 +253,9 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                 //  }
 
                 multiStoryView.visibility = View.VISIBLE
-                showStoryImage(storyImg1, it.get(Random().nextInt(9))?.mediaUrl)
-                showStoryImage(storyImg2, it.get(Random().nextInt(9))?.mediaUrl)
-                showStoryImage(storyImg3, it.get(Random().nextInt(9))?.mediaUrl)
+                showStoryImage(storyImg1, it.get(Random().nextInt(it.size))?.mediaUrl)
+                showStoryImage(storyImg2, it.get(Random().nextInt(it.size))?.mediaUrl)
+                showStoryImage(storyImg3, it.get(Random().nextInt(it.size))?.mediaUrl)
             }
 
 
@@ -262,6 +263,16 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
         homeMapViewModel.observeAllNearByStories().observe(this, androidx.lifecycle.Observer {
 
+            //here checking newly uplaod story by user
+            if (it.size == 1) {
+                loadingProgress.visibility = View.GONE
+                //for new story added by user and append in map
+                resetAll()
+                txtMessage.setText("")
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
+                moveGoogleMap(LatLng(it.get(0).latitude, it.get(0).longitude))
+            }
+            toast(applicationContext,"Stories fetching...")
             for (item: NearbyStory in it) {
                 Log.d("StoryData", item.mediaUrl)
                 if (item.latitude != 0.0) {
@@ -280,11 +291,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
 
 
-            if (it?.size == 1) {
-                //for new story added by user and append in map
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
-                moveGoogleMap(LatLng(it.get(0).latitude, it.get(0).longitude))
-            }
+
         })
 
 
@@ -402,7 +409,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                 }
                 6 -> {
 
-                    KotlinHelper.alertDialog("Alert", "Are you sure you want to logout", this,
+                    KotlinHelper.alertDialog("Alert", "Are you sure you want to logout ?", this,
                         object : onConfirmListner {
                             override fun onClick() {
                                 logoutViewModel.logoutUser(KotlinHelper.getUsersData().SocialId)
@@ -978,10 +985,12 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                     toast(applicationContext, "Message is required")
                     return
                 }
-                if (filePath.isEmpty()) {
-                    toast(applicationContext, "story media is missing")
-                    return
-                }
+
+               // if (filePath.isEmpty()) {
+                   // toast(applicationContext, "story media is missing")
+                   // return
+                   // filePath=null
+             //   }
 
                 btnSend.startAnimation(
                     AnimationUtils.loadAnimation(
@@ -1004,12 +1013,33 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                     MediaType.VIDEO -> {
                         JavaHelper.compress(filePath, this, this)
                     }
-                    else -> {
-                        val filename: String = filePath.substring(filePath.lastIndexOf("/") + 1)
-                        val ftpHelper: FTPHelper = FTPHelper()
-                        ftpHelper.init(this)
-                        ftpHelper.AsyncTaskExample().execute(filePath, filename)
+
+                    MediaType.TEXT->
+                    {
+                        val model: UserStory = UserStory(
+                            JavaHelper.badWordReplace(txtMessage.text.toString()),
+                            KotlinHelper.getUsersData().SocialId,
+                            currentLocation.latitude.toString(),
+                            currentLocation.longitude.toString(),
+                            "",
+                            "",
+                            chipText!!,
+                            JavaHelper.getAddress(
+                                this,
+                                currentLocation.latitude,
+                                currentLocation.longitude
+                            )
+                        );
+                        homeMapViewModel.uploadStoryData(model)
                     }
+                    else -> {
+
+                            val filename: String = filePath.substring(filePath.lastIndexOf("/") + 1)
+                            val ftpHelper: FTPHelper = FTPHelper()
+                            ftpHelper.init(this)
+                            ftpHelper.AsyncTaskExample().execute(filePath, filename)
+
+                        }
 
 
 //                    val model: UserStory = UserStory(
@@ -1020,9 +1050,8 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 //                        "",
 //                        ""
 //                    );
-//                    // showProgressDialog()
-//                    homeMapViewModel.uploadStoryData(model)
-
+                    // showProgressDialog()
+                 //   homeMapViewModel.uploadStoryData(model)
 
                 }
             }
@@ -1447,6 +1476,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         imgStory.visibility = View.GONE
         filePath = ""
 
+
     }
 
 
@@ -1476,7 +1506,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             currentLocation.longitude.toString(),
             "",
             "http://highbryds.com/fitfinder/stories/" + fileName,
-            chipText,
+            chipText!!,
             JavaHelper.getAddress(this, currentLocation.latitude, currentLocation.longitude)
         );
 

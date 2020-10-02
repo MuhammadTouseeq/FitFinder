@@ -94,10 +94,10 @@ interface ApiInterface {
         @Field("SocialId") socialID: String,
         @Field("latitude") latitude: String,
         @Field("longitude") longitude: String,
-        @Field("mediaUrl") mediaUrl: String,
+        @Field("mediaUrl") mediaUrl: String?,
         @Field("Category") Category: String,
         @Field("Address") Address: String
-    ): Response<UserStory>
+    ): Response<WrapperUploadStory>
 
 
 //    @POST("users/getnearbystories")

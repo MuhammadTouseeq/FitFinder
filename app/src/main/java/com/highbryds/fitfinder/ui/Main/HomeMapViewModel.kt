@@ -95,12 +95,12 @@ class HomeMapViewModel @Inject constructor(private val apiInterface: ApiInterfac
 
             if (uploadStory.code() == 200) {
 
-//                val arruser = ArrayList<UsersData>()
-//                arruser.add(KotlinHelper.getUsersData())
-//                val nearbyStory: NearbyStory = uploadStory.body()!!.data
-//                nearbyStory.userData = arruser
-//                storiesData.value = listOf(nearbyStory)
-                apiErrorsCallBack.getSuccess("Successfully uploaded story")
+                val arruser = ArrayList<UsersData>()
+                arruser.add(KotlinHelper.getUsersData())
+                val nearbyStory: NearbyStory = uploadStory.body()!!.data
+                nearbyStory.userData = arruser
+                storiesData.value = listOf(nearbyStory)
+              //  apiErrorsCallBack.getSuccess("Successfully uploaded story")
             } else {
                 apiErrorsCallBack.getError(uploadStory.message())
             }

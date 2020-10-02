@@ -63,7 +63,7 @@
                 android:textOff="Ghost Mode"
                 android:textOn="Pick Current"
                 android:textSize="18sp"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/audioAnimation"
@@ -180,4 +180,8 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
 </LinearLayout>

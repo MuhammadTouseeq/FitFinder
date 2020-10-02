@@ -518,7 +518,7 @@ showConfirmationDialog()
             R.id.btnSendComment -> {
 
                 if (TextUtils.isEmpty(edtComment.text.toString())) {
-                    toast(applicationContext, "comment is missing")
+                    toast(applicationContext, "Please enter comment")
                     return
                 }
                 btnSendComment.startAnimation(
