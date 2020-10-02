@@ -39,36 +39,37 @@ var uc: UserChat? = null
 lateinit var context: Context
 
 @AndroidEntryPoint
-class MessageActivity : AppCompatActivity() ,MessageClientListener{
+class MessageActivity : AppCompatActivity(), MessageClientListener {
 
-    @Inject lateinit var getDatabaseDao: Dao
+    @Inject
+    lateinit var getDatabaseDao: Dao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_message)
 
 
-        TV_recipentName.text = SinchSdk.RECIPENT_NAME
+        name.text = "Yahan Name Ayega Bhai"
         //SinchSdk.USER_ID = KotlinHelper.getUsersData().SocialId
         context = this
-        instance = SinchSdk.getInstance(applicationContext)
+        instance = SinchSdk.getInstance(this)
         instance!!.callClient.addCallClientListener(SinchCallClientListener())
-        mMessageAdapter = MessageAdapter(this, getDatabaseDao.getallChat(SinchSdk.RECIPENT_ID))
+        mMessageAdapter = MessageAdapter(this,this, getDatabaseDao.getallChat(SinchSdk.RECIPENT_ID, SinchSdk.USER_ID))
         val messagesList = findViewById<View>(R.id.lstMessages) as ListView
         messagesList.adapter = mMessageAdapter
 
-        SinchSdk.getInstance(applicationContext)!!.messageClient.addMessageClientListener(this)
+        SinchSdk.getInstance(this)!!.messageClient.addMessageClientListener(this)
 
         btnSend.setOnClickListener {
             sendMessage()
         }
 
 
-        btnCall.setOnClickListener{
+        btnCall.setOnClickListener {
             requestAudio()
         }
 
-        btnVideo.setOnClickListener{
+        btnVideo.setOnClickListener {
             requestCameraPermission();
         }
 
@@ -92,11 +93,12 @@ class MessageActivity : AppCompatActivity() ,MessageClientListener{
     }
 
     override fun onMessageSent(p0: MessageClient?, p1: Message?, p2: String?) {
+        Log.d("MESSAGEActivity", p1!!.textBody)
         setMessages(p1!!, MessageAdapter.DIRECTION_OUTGOING)
     }
 
     override fun onMessageFailed(p0: MessageClient?, p1: Message?, p2: MessageFailureInfo?) {
-        this.toast(this , "User Not Found")
+        this.toast(this, "User Not Found")
         Log.d("MESSAGEACTIVITY", "FAILED")
     }
 
@@ -116,7 +118,7 @@ class MessageActivity : AppCompatActivity() ,MessageClientListener{
         override fun onIncomingCall(callClient: CallClient, call: Call) {
             var intent: Intent? = null
             if (call.details.isVideoOffered) {
-                 intent = Intent(context, IncomingCallScreenActivity::class.java)
+                intent = Intent(context, IncomingCallScreenActivity::class.java)
             } else {
                 intent = Intent(context, CallScreenActivity::class.java)
             }
@@ -130,8 +132,8 @@ class MessageActivity : AppCompatActivity() ,MessageClientListener{
             uc = UserChat()
             uc!!.messageId = message.messageId
             uc!!.message = message.textBody
-            uc!!.recipientId = SinchSdk.RECIPENT_ID
-            uc!!.senderId = SinchSdk.USER_ID
+            uc!!.recipientId = message.senderId
+            //uc!!.senderId = SinchSdk.USER_ID
             uc!!.type = type
             uc!!.timeStamp = message.timestamp.time
             insertChatMessages(uc)
@@ -145,14 +147,15 @@ class MessageActivity : AppCompatActivity() ,MessageClientListener{
     }
 
     private fun CallUser() {
-        val call = SinchSdk.getInstance(applicationContext).callClient.callUser(SinchSdk.RECIPENT_ID)
+        val call =
+            SinchSdk.getInstance(applicationContext).callClient.callUser(SinchSdk.RECIPENT_ID)
         val callId = call.callId
         val callScreen = Intent(context, CallScreenActivity::class.java)
         callScreen.putExtra(SinchSdk.CALL_ID, callId)
         startActivity(callScreen)
     }
 
-    private fun requestAudio(){
+    private fun requestAudio() {
         Dexter.withContext(context)
             .withPermissions(
                 Manifest.permission.RECORD_AUDIO,
@@ -162,7 +165,7 @@ class MessageActivity : AppCompatActivity() ,MessageClientListener{
                 override fun onPermissionsChecked(report: MultiplePermissionsReport) {
                     // check if all permissions are granted
                     if (report.areAllPermissionsGranted()) {
-                       CallUser()
+                        CallUser()
                     }
                 }
 
@@ -206,7 +209,8 @@ class MessageActivity : AppCompatActivity() ,MessageClientListener{
 
 
     private fun videoCallUser() {
-        val call = SinchSdk.getInstance(applicationContext).callClient.callUserVideo(SinchSdk.RECIPENT_ID)
+        val call =
+            SinchSdk.getInstance(applicationContext).callClient.callUserVideo(SinchSdk.RECIPENT_ID)
         val callId = call.callId
         val callScreen = Intent(context, CallScreenActivity::class.java)
         callScreen.putExtra(SinchSdk.CALL_ID, callId)

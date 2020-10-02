@@ -55,8 +55,11 @@ import com.highbryds.fitfinder.commonHelper.*
 import com.highbryds.fitfinder.model.MediaType
 import com.highbryds.fitfinder.model.NearbyStory
 import com.highbryds.fitfinder.model.UserStory
+import com.highbryds.fitfinder.sinch.SinchSdk
 import com.highbryds.fitfinder.ui.Auth.LoginActivity
 import com.highbryds.fitfinder.ui.BaseActivity
+import com.highbryds.fitfinder.ui.Chatting.MessageActivity
+import com.highbryds.fitfinder.ui.Chatting.MessagesListActivity
 import com.highbryds.fitfinder.ui.Profile.UserProfileMain
 import com.highbryds.fitfinder.ui.Profile.UserProfileSetting
 import com.highbryds.fitfinder.ui.Profile.UserStories
@@ -373,14 +376,15 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         //if you want to update the items at a later time it is recommended to keep it in a variable
         val home = PrimaryDrawerItem().withIdentifier(1).withName("Home")
         val story = PrimaryDrawerItem().withIdentifier(2).withName("My Story")
-        val profile = PrimaryDrawerItem().withIdentifier(3).withName("Profile")
+        val chat = PrimaryDrawerItem().withIdentifier(3).withName("Chat")
+        val profile = PrimaryDrawerItem().withIdentifier(4).withName("Profile")
         val settings = PrimaryDrawerItem().withIdentifier(5).withName("Settings")
-        val logout = PrimaryDrawerItem().withIdentifier(4).withName("Logout")
+        val logout = PrimaryDrawerItem().withIdentifier(6).withName("Logout")
 
 
         // get the reference to the slider and add the items
         slider.itemAdapter.add(
-            home, profile, story,
+            home, profile, chat, story,
             DividerDrawerItem(),
             settings, logout
         )
@@ -400,14 +404,19 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                     startActivity(intent)
                 }
                 3 -> {
+                    SinchSdk.USER_ID = KotlinHelper.getUsersData().SocialId
+                    val intent = Intent(this, MessagesListActivity::class.java)
+                    startActivity(intent)
+                }
+                4 -> {
                     val intent = Intent(this, UserStories::class.java)
                     startActivity(intent)
                 }
-                5 -> {
+                6 -> {
                     val intent = Intent(this, UserProfileSetting::class.java)
                     startActivity(intent)
                 }
-                6 -> {
+                7 -> {
 
                     KotlinHelper.alertDialog("Alert", "Are you sure you want to logout ?", this,
                         object : onConfirmListner {
@@ -717,7 +726,9 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
     override fun onResume() {
         super.onResume()
         registerLocationBroadcast()
-        val bundle = intent.extras
+
+        //val bundle = intent.extras
+
         if (!PrefsHelper.getString(Constants.Pref_ToOpenStoryAuto, "").equals("")) {
             storyViewModel.getStoryById(PrefsHelper.getString(Constants.Pref_ToOpenStoryAuto, ""))
             storyViewModel.singleStory.observe(this, androidx.lifecycle.Observer {
@@ -729,23 +740,25 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                     startActivityForResult(intent, 777)
                 }
             })
-        } else if (bundle != null) {
-            storyViewModel.getStoryById(PrefsHelper.getString(Constants.Pref_ToOpenStoryAuto, ""))
-            Log.d(
-                "bundle",
-                bundle.getString("title") + bundle.getString("body") + bundle.getString("type")
-            )
-            storyViewModel.singleStory.observe(this, androidx.lifecycle.Observer {
-                it?.let {
-                    val intent = Intent(this, StoryFullViewActivity::class.java)
-                    val gson = Gson()
-                    val json = gson.toJson(it.data.get(0))
-                    intent.putExtra("storyData", json)
-                    startActivityForResult(intent, 777)
-                }
-            })
-
         }
+//        else if (bundle != null) {
+//            storyViewModel.getStoryById(bundle.getString("type")!!)
+//            Log.d(
+//                "bundle",
+//                bundle.getString("title") + bundle.getString("body") + bundle.getString("type")
+//            )
+//            storyViewModel.singleStory.observe(this, androidx.lifecycle.Observer {
+//                it?.let {
+//                    val intent = Intent(this, StoryFullViewActivity::class.java)
+//                    val gson = Gson()
+//                    val json = gson.toJson(it.data.get(0))
+//                    intent.putExtra("storyData", json)
+//                    startActivityForResult(intent, 777)
+//                }
+//            })
+//
+//        }
+
     }
 
     override fun onPause() {
@@ -1464,6 +1477,9 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             PrefsHelper.putString(Constants.Pref_UserData, "")
+            PrefsHelper.putBoolean(Constants.Pref_IsLogin, false)
+            PrefsHelper.putString(Constants.Pref_isOTPMobile, "")
+            PrefsHelper.putBoolean(Constants.Pref_isOTPVerifed, false)
             this.finish()
         }
         resetAll()

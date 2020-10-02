@@ -1,105 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/motionLayout"
-    app:layoutDescription="@xml/motion_scene_collapsing_toolbar_with_cover"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/IV_Cover"
         android:layout_width="0dp"
-        android:layout_height="@dimen/_350sdp"
+        android:layout_height="wrap_content"
         android:adjustViewBounds="true"
+        android:alpha="0"
         android:contentDescription="@null"
         android:fitsSystemWindows="true"
         android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <FrameLayout
+        android:id="@+id/toolbarIconContainer"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="#00653d"
+        android:alpha="0"
+        app:layout_constraintBottom_toBottomOf="@id/IV_Cover"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/IV_Cover">
 
-
+        <ImageView
+            android:id="@+id/toolbar_image"
+            android:layout_width="73dp"
+            android:layout_height="73dp"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:background="@drawable/fb"
+            android:contentDescription="@null"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </FrameLayout>
 
     <ImageView
         android:id="@+id/IV_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         android:contentDescription="@null"
+        android:alpha="0"
+        android:paddingBottom="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_10sdp"
         android:paddingStart="@dimen/_10sdp"
         android:paddingTop="@dimen/_10sdp"
-        android:paddingEnd="@dimen/_10sdp"
-        android:paddingBottom="@dimen/_10sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/backsmall"
-        app:tint="#fff" />
+        android:src="@drawable/backsmall"
+       />
 
     <ImageView
         android:id="@+id/IV_back2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:alpha="0"
+        android:layout_marginTop="2dp"
         android:contentDescription="@null"
+        android:paddingBottom="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_10sdp"
         android:paddingStart="@dimen/_10sdp"
         android:paddingTop="@dimen/_10sdp"
-        android:paddingEnd="@dimen/_10sdp"
-        android:paddingBottom="@dimen/_10sdp"
         app:layout_constraintBottom_toTopOf="@id/separator"
-        android:src="@drawable/backsmall"
-        />
-
+        app:srcCompat="@drawable/backsmall"
+       />
 
     <TextView
         android:id="@+id/toolbarTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="1dp"
-        android:alpha="0"
+        android:layout_marginTop="10dp"
         android:gravity="center"
-        android:text="Googleplex"
         android:textColor="@color/colorBlack"
-        android:textSize="19sp"
-        android:visibility="visible"
+        android:textSize="15sp"
         android:textStyle="bold"
+        android:visibility="visible"
+        android:layout_marginBottom="12dp"
         app:layout_constraintBottom_toTopOf="@id/separator"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"/>
+
 
     <TextView
         android:id="@+id/Toolbartitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
+        android:layout_marginBottom="14dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:alpha="0"
         android:gravity="center"
-        android:textColor="@color/colorBlack"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/IV_Cover"
-        android:visibility="gone"/>
+        app:layout_constraintTop_toBottomOf="@id/IV_Cover" />
 
     <View
         android:id="@+id/separator"
         android:layout_width="0dp"
         android:layout_height="1dp"
+        android:alpha="1"
+        android:background="@color/colorGray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/Toolbartitle" />
+        app:layout_constraintTop_toBottomOf="@id/IV_back" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:clipToPadding="true"
+        android:paddingBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbarTitle" />
-
+        app:layout_constraintTop_toBottomOf="@+id/separator" />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

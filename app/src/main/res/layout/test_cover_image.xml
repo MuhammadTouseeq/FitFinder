@@ -10,11 +10,12 @@
     <ImageView
         android:id="@+id/IV_Cover"
         android:layout_width="0dp"
-        android:layout_height="@dimen/_350sdp"
+        android:layout_height="@dimen/_300sdp"
         android:adjustViewBounds="true"
         android:contentDescription="@null"
         android:fitsSystemWindows="true"
         android:scaleType="centerCrop"
+        android:src="@drawable/test"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,14 +27,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@null"
-        android:paddingStart="@dimen/_10sdp"
-        android:paddingTop="@dimen/_10sdp"
-        android:paddingEnd="@dimen/_10sdp"
-        android:paddingBottom="@dimen/_10sdp"
+        android:paddingStart="16dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/backsmall"
-        app:tint="#fff" />
+        app:srcCompat="@drawable/back"
+        app:tint="#ffffff" />
 
     <ImageView
         android:id="@+id/IV_back2"
@@ -41,21 +42,21 @@
         android:layout_height="wrap_content"
         android:alpha="0"
         android:contentDescription="@null"
-        android:paddingStart="@dimen/_10sdp"
-        android:paddingTop="@dimen/_10sdp"
-        android:paddingEnd="@dimen/_10sdp"
-        android:paddingBottom="@dimen/_10sdp"
+        android:paddingStart="16dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp"
         app:layout_constraintBottom_toTopOf="@id/separator"
-        android:src="@drawable/backsmall"
-        />
+        app:srcCompat="@drawable/back"
+        app:tint="@color/colorBlack" />
 
 
     <TextView
         android:id="@+id/toolbarTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="1dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginBottom="10dp"
         android:alpha="0"
         android:gravity="center"
         android:text="Googleplex"
@@ -71,22 +72,23 @@
         android:id="@+id/Toolbartitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="24dp"
         android:gravity="center"
+        android:text="The Googleplex is the corporate headquarters complex of Google and its parent company Alphabet Inc"
         android:textColor="@color/colorBlack"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/IV_Cover"
-        android:visibility="gone"/>
+        app:layout_constraintTop_toBottomOf="@id/IV_Cover" />
 
     <View
         android:id="@+id/separator"
         android:layout_width="0dp"
-        android:layout_height="1dp"
+        android:layout_height="20dp"
+        android:background="@color/colorGray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/Toolbartitle" />
@@ -99,7 +101,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbarTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/separator" />
 
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

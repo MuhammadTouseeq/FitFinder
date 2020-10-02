@@ -4,9 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.highbryds.fitfinder.R
+import com.highbryds.fitfinder.adapter.ProfileMainAdapter
+import com.highbryds.fitfinder.adapter.UserStoriesAdapter
+import com.highbryds.fitfinder.commonHelper.Constants
 import com.highbryds.fitfinder.commonHelper.PrefsHelper
+import com.highbryds.fitfinder.model.NearbyStory
+import com.highbryds.fitfinder.model.ProfileBioModel
 import kotlinx.android.synthetic.main.activity_first_screen.*
+import kotlinx.android.synthetic.main.test_cover_image.*
 
 
 class FirstScreen : AppCompatActivity() {
@@ -15,12 +23,20 @@ class FirstScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_first_screen)
 
-        next.setOnClickListener {
-            val intent = Intent(this, SecondScreen::class.java)
-            startActivity(intent)
+
+        val bundle = intent.extras
+        if(bundle != null){
+            val key = bundle.getString("type")
+            PrefsHelper.putString(Constants.Pref_ToOpenStoryAuto, key)
+            Log.d("bundle"  , key!!)
+            Log.d("bundle"  , PrefsHelper.getString(Constants.Pref_ToOpenStoryAuto))
         }
 
 
+        //        next.setOnClickListener {
+//            val intent = Intent(this, SecondScreen::class.java)
+//            startActivity(intent)
+//        }
 
 
 

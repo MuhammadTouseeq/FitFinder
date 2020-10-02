@@ -5,55 +5,114 @@
     android:layout_height="match_parent"
     android:background="@color/colorWhite">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <LinearLayout
+        android:id="@+id/topLL"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        android:elevation="4dp">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:background="#F6F4F4"
+        android:padding="@dimen/_5sdp">
+
 
         <ImageView
-            android:id="@+id/btnCall"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="right"
-            android:padding="10dp"
-            android:src="@android:drawable/ic_menu_call" />
-
-        <ImageView
-            android:id="@+id/btnVideo"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="right"
-            android:padding="10dp"
-            android:src="@android:drawable/presence_video_online" />
-
-        <ImageView
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:layout_gravity="left"
-            android:padding="10dp"
-            android:src="@drawable/rounde_shape" />
+            android:id="@+id/IV_back"
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_15sdp"
+            android:layout_gravity="center"
+            android:src="@drawable/back" />
 
         <TextView
+            android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:textColor="#ffffff"
-            android:textSize="18sp"
-            android:id="@+id/TV_recipentName"/>
-    </androidx.appcompat.widget.Toolbar>
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:textColor="#4BB481"
+            android:textSize="@dimen/_18sdp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+
+            <ImageView
+                android:id="@+id/btnCall"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_gravity="right"
+                android:padding="10dp"
+                android:src="@android:drawable/sym_action_call"
+                app:tint="@color/colorChat" />
+
+            <ImageView
+                android:id="@+id/btnVideo"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_gravity="right"
+                android:padding="10dp"
+                android:src="@android:drawable/presence_video_online"
+                app:tint="@color/colorChat" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <!--    <androidx.appcompat.widget.Toolbar-->
+    <!--        android:id="@+id/toolbar"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="@dimen/_60sdp"-->
+    <!--        android:background="@color/colorPrimary"-->
+    <!--        android:elevation="4dp"-->
+    <!--        android:layout_below="@+id/topLL">-->
+
+    <!--        <ImageView-->
+    <!--            android:id="@+id/btnCall"-->
+    <!--            android:layout_width="50dp"-->
+    <!--            android:layout_height="50dp"-->
+    <!--            android:layout_gravity="right"-->
+    <!--            android:padding="10dp"-->
+    <!--            android:src="@android:drawable/ic_menu_call" />-->
+
+    <!--        <ImageView-->
+    <!--            android:id="@+id/btnVideo"-->
+    <!--            android:layout_width="50dp"-->
+    <!--            android:layout_height="50dp"-->
+    <!--            android:layout_gravity="right"-->
+    <!--            android:padding="10dp"-->
+    <!--            android:src="@android:drawable/presence_video_online" />-->
+
+    <!--        <ImageView-->
+    <!--            android:layout_width="55dp"-->
+    <!--            android:layout_height="55dp"-->
+    <!--            android:layout_gravity="left"-->
+    <!--            android:padding="10dp"-->
+    <!--            android:src="@drawable/rounde_shape" />-->
+
+    <!--        <TextView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_gravity="left"-->
+    <!--            android:textColor="#ffffff"-->
+    <!--            android:textSize="18sp"-->
+    <!--            android:id="@+id/TV_recipentName"/>-->
+    <!--    </androidx.appcompat.widget.Toolbar>-->
 
     <ListView
         android:id="@+id/lstMessages"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/relSendMessage"
-        android:layout_below="@+id/toolbar"
+        android:layout_below="@+id/topLL"
         android:divider="@null"
-
         android:dividerHeight="0dp"
-        android:padding="0dip"
+        android:padding="5sp"
         android:stackFromBottom="true"
         android:transcriptMode="alwaysScroll"
         tools:listitem="@layout/message_left" />

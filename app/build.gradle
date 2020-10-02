@@ -167,6 +167,12 @@ dependencies {
     //implementation 'com.sinch:sdk-sms:1.0.3'
     implementation files('libs/sinch-android-rtc-3.15.0.aar')
 
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    implementation 'com.google.firebase:firebase-auth:19.4.0'
+
+
+
 
 }
 

@@ -12,17 +12,19 @@ data class UsersData(
     @SerializedName("SocialId")var SocialId: String,
     @SerializedName("SocialType")var SocialType: String,
     @SerializedName("emailAdd")var emailAdd: String,
+    @SerializedName("cellNumber")var cellNumber: String,
     @SerializedName("imageUrl")var imageUrl: String,
     @SerializedName("age") var age: Int?,
     @SerializedName("Gender")var Gender : String?,
     @SerializedName("City")var City : String?,
     @SerializedName("Country") var Country : String?){
 
-//    // for update profile constructor without imageURL
+//    // for update profile constructor
     constructor(name: String,
                 deviceToken: String?,
                 SocialId: String,
                 SocialType: String,
                 emailAdd: String,
-                imageUrl: String) : this(null , null ,name , deviceToken,SocialId ,SocialType ,emailAdd , imageUrl,null,null,null,null)
+                cellNumber: String,
+                imageUrl: String) : this(null , null ,name , deviceToken,SocialId ,SocialType ,emailAdd ,cellNumber, imageUrl,null,null,null,null)
 }

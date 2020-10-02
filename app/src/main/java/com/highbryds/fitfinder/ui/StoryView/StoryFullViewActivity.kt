@@ -31,6 +31,7 @@ import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.adapters.StoryCommentsAdapter
 import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
 import com.highbryds.fitfinder.callbacks.StoryCallback
+import com.highbryds.fitfinder.callbacks.onConfirmListner
 import com.highbryds.fitfinder.commonHelper.Constants
 import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.commonHelper.SwipeToDeleteCallback
@@ -611,12 +612,14 @@ showConfirmationDialog()
                 when (item.itemId) {
                     R.id.delete -> {
                         if (storyData.userData?.get(0)?.SocialId.equals(KotlinHelper.getUsersData().SocialId)) {
-                            userStoriesViewModel.deactivate(storyID)
+                            KotlinHelper.alertDialog("Alert" , "Are you sure you want to delete this story?" , this@StoryFullViewActivity , object :
+                                onConfirmListner {
+                                override fun onClick() {
+                                    userStoriesViewModel.deactivate(storyID)
+                                }
+                            })
                         } else {
-                            this@StoryFullViewActivity.toast(
-                                this@StoryFullViewActivity,
-                                "You can't delete other story"
-                            )
+                            this@StoryFullViewActivity.toast(this@StoryFullViewActivity, "You can't delete other story")
                         }
                         return true
                     }
@@ -658,6 +661,7 @@ showConfirmationDialog()
     override fun getSuccess(success: String) {
         this.finish()
         this.toast(this, success.toString())
+        //PrefsHelper.putBoolean(Constants.Pref_IsStoryDeleted , true)
     }
 
     lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
