@@ -1,6 +1,7 @@
 package com.highbryds.fitfinder.adapters
 
 import android.app.Activity
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,9 +11,10 @@ import android.widget.TextView
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.commonHelper.DateConverter
 import com.highbryds.fitfinder.room.Tables.UserChat
+import com.highbryds.fitfinder.ui.Chatting.context
 import java.util.*
 
-class MessageAdapter constructor(activity: Activity, uc: MutableList<UserChat>?): BaseAdapter() {
+class MessageAdapter constructor(activity: Activity, var context: Context, uc: MutableList<UserChat>?): BaseAdapter() {
 
     companion object{
         val DIRECTION_INCOMING = 0
@@ -78,7 +80,13 @@ class MessageAdapter constructor(activity: Activity, uc: MutableList<UserChat>?)
         val txtMessage = convertView!!.findViewById<TextView>(R.id.txtMessage)
         val txtDate = convertView.findViewById<TextView>(R.id.txtDate)
 
-//        txtSender.setText(name);
+        if (direction == DIRECTION_INCOMING) {
+            txtMessage.setTextColor(context.resources.getColor(R.color.colorBlack))
+            txtDate.setTextColor(context.resources.getColor(R.color.colorBlack))
+        }else{
+            txtMessage.setTextColor(context.resources.getColor(R.color.colorWhite))
+            txtDate.setTextColor(context.resources.getColor(R.color.colorWhite))
+        }
         txtMessage.setText(mMessagesnew!![i].getMessage())
         txtDate.setText(DateConverter.toDate(mMessagesnew!![i].getTimeStamp()).toString())
         return convertView

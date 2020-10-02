@@ -83,6 +83,7 @@ class LoginActivity : AppCompatActivity(), ApiResponseCallBack {
                                             obj.getString("id"),
                                             "FB",
                                             obj.getString("email"),
+                                            "",
                                             obj.getJSONObject(
                                                 "picture"
                                             ).getJSONObject("data").getString("url"),
@@ -137,10 +138,13 @@ class LoginActivity : AppCompatActivity(), ApiResponseCallBack {
             val json = gson.toJson(it)
             PrefsHelper.putString(Constants.Pref_UserData, json)
             PrefsHelper.putBoolean(Constants.Pref_IsLogin, true)
+            PrefsHelper.putBoolean(Constants.Pref_isOTPVerifed, true)
+            PrefsHelper.putString(Constants.Pref_isOTPMobile, it.cellNumber)
             Log.d("USERDATA", it.toString())
 
             val intent = Intent(this, HomeMapActivity::class.java)
             startActivity(intent)
+            this@LoginActivity.finish()
         })
 
     }
@@ -174,6 +178,7 @@ class LoginActivity : AppCompatActivity(), ApiResponseCallBack {
                     personId!!,
                     "Google",
                     personEmail!!,
+                    "",
                     personPhoto.toString()
                 )
                 userLoginRequest(usersData)

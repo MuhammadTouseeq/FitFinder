@@ -7,14 +7,14 @@
             android:pivotY="0%"
             android:toDegrees="0" >
             <shape android:shape="rectangle" >
-                <solid android:color="#DCF8C6" />
+                <solid android:color="#4BB481" />
 
             </shape>
         </rotate>
     </item>
     <item android:right="16dp">
         <shape android:shape="rectangle" >
-            <solid android:color="#DCF8C6" />
+            <solid android:color="@color/colorChat" />
             <corners android:radius="4dp" />
         </shape>
     </item>

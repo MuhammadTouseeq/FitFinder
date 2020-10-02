@@ -22,7 +22,7 @@
             android:layout_height="50dp"
             android:id="@+id/imgProfile"
             android:background="@drawable/shape_circle_primary"
-            android:padding="5dp"
+            android:padding="2dp"
             android:src="@drawable/marker_thinking_boy" />
 
         <TextView

@@ -10,6 +10,12 @@ class Constants {
         val Pref_IsLogin = "ISLOGIN"
         val Pref_ToOpenStoryAuto = "ToOpenStoryAuto"
 
+        // Profile
+        val Pref_IsProfileUpdate = "IsProfileUpdate"
+
+        val Pref_isOTPVerifed = "isOTPVerifed"
+        val Pref_isOTPMobile = "isOTPMobile"
+
         //UserJSON
         val Pref_UserData = "USERDATA"
     }

@@ -15,7 +15,9 @@ import com.highbryds.fitfinder.adapter.UserStoriesAdapter
 import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
 import com.highbryds.fitfinder.callbacks.StoryCallback
 import com.highbryds.fitfinder.callbacks.onConfirmListner
+import com.highbryds.fitfinder.commonHelper.Constants
 import com.highbryds.fitfinder.commonHelper.KotlinHelper
+import com.highbryds.fitfinder.commonHelper.PrefsHelper
 import com.highbryds.fitfinder.commonHelper.toast
 import com.highbryds.fitfinder.model.NearbyStory
 import com.highbryds.fitfinder.model.UserStoriesModel
@@ -58,11 +60,12 @@ class UserStories : AppCompatActivity(), ApiResponseCallBack , StoryCallback{
         if (success.contains("Story Deactivate Successfully" , true)){
             userStoriesModel.removeAt(itemPosition)
             adapter.notifyDataSetChanged()
+           // PrefsHelper.putBoolean(Constants.Pref_IsStoryDeleted , true)
         }
     }
 
     override fun storyItemPosition(position: Int) {
-        KotlinHelper.alertDialog("Alert" , "Are you sure you want to delete story" , this , object : onConfirmListner{
+        KotlinHelper.alertDialog("Alert" , "Are you sure you want to delete this story?" , this , object : onConfirmListner{
             override fun onClick() {
                 itemPosition = position
                 userStoriesViewModel.deactivate(userStoriesModel.get(position)._id)
