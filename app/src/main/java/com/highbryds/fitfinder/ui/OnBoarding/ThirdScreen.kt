@@ -4,7 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.highbryds.fitfinder.R
-import com.highbryds.fitfinder.ui.Splash.SplashActivity
+import com.highbryds.fitfinder.ui.Auth.LoginActivity
 import kotlinx.android.synthetic.main.activity_third_screen.*
 
 class ThirdScreen : AppCompatActivity() {
@@ -13,8 +13,8 @@ class ThirdScreen : AppCompatActivity() {
         setContentView(R.layout.activity_third_screen)
 
 
-        next.setOnClickListener {
-            val intent = Intent(this, SplashActivity::class.java)
+        BTN_next.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
 

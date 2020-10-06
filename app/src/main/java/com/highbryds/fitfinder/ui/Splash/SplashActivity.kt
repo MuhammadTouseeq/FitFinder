@@ -9,6 +9,7 @@ import com.highbryds.fitfinder.commonHelper.Constants
 import com.highbryds.fitfinder.commonHelper.PrefsHelper
 import com.highbryds.fitfinder.ui.Auth.LoginActivity
 import com.highbryds.fitfinder.ui.Main.HomeMapActivity
+import com.highbryds.fitfinder.ui.OnBoarding.FirstScreen
 import com.highbryds.fitfinder.ui.Profile.UserProfileMain
 
 class SplashActivity : AppCompatActivity() {
@@ -29,7 +30,7 @@ class SplashActivity : AppCompatActivity() {
             val intent = Intent(this , HomeMapActivity::class.java)
             startActivity(intent)
         }else{
-            val intent = Intent(this , LoginActivity::class.java)
+            val intent = Intent(this , FirstScreen::class.java)
             startActivity(intent)
         }
     }
