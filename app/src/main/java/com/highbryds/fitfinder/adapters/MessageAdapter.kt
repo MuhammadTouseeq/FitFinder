@@ -87,7 +87,7 @@ class MessageAdapter constructor(activity: Activity, var context: Context, uc: M
             txtMessage.setTextColor(context.resources.getColor(R.color.colorWhite))
             txtDate.setTextColor(context.resources.getColor(R.color.colorWhite))
         }
-        txtMessage.setText(mMessagesnew!![i].getMessage())
+        txtMessage.text = mMessagesnew!![i].getMessage().split("~".toRegex()).toTypedArray()[0]
         txtDate.setText(DateConverter.toDate(mMessagesnew!![i].getTimeStamp()).toString())
         return convertView
     }

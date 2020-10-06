@@ -1,13 +1,12 @@
 package com.highbryds.fitfinder.ui.Chatting
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.ListView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.zxing.common.StringUtils
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.adapter.UserMsgsAdapter
 import com.highbryds.fitfinder.adapters.MessageAdapter
@@ -40,6 +39,9 @@ class MessagesListActivity : AppCompatActivity(), MessageClientListener {
         RV_userMsgsList.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         setList()
 
+        IV_back.setOnClickListener {
+            finish()
+        }
 
         context = this
         instance = SinchSdk.getInstance(this)
@@ -58,31 +60,40 @@ class MessagesListActivity : AppCompatActivity(), MessageClientListener {
     }
 
     override fun onIncomingMessage(p0: MessageClient?, p1: Message?) {
-        Log.d("MESSAGELISt" , p1!!.textBody)
-        val userMsgsList = UserMsgsList(0 , p1.messageId , p1.textBody, p1.senderId , p1.timestamp.time)
-        getDatabaseDao.insertMsgsList(userMsgsList)
-        adapter.addMessage(userMsgsList)
-        adapter.notifyDataSetChanged()
-        if (isCurrentActivity){
-            setMessages(p1 , MessageAdapter.DIRECTION_INCOMING)
+        Log.d("MESSAGELISt", p1!!.textBody)
+        val data = p1.textBody.split("~").toTypedArray()
+        if (data.size > 2){
+            val userMsgsList = UserMsgsList(
+                0,
+                p1.messageId,
+                p1.textBody,
+                p1.senderId,
+                p1.timestamp.time
+            )
+            getDatabaseDao.insertMsgsList(userMsgsList)
+//        adapter.addMessage(getDatabaseDao.getmsgs())
+//        adapter.notifyDataSetChanged()
+            setList()
+            if (isCurrentActivity){
+                setMessages(p1, MessageAdapter.DIRECTION_INCOMING)
+            }
         }
-
     }
 
     override fun onMessageSent(p0: MessageClient?, p1: Message?, p2: String?) {
-        Log.d("MESSAGELISt" , p1!!.textBody)
+        Log.d("MESSAGELISt", p1!!.textBody)
         if (isCurrentActivity){
-            setMessages(p1 , MessageAdapter.DIRECTION_OUTGOING)
+            setMessages(p1, MessageAdapter.DIRECTION_OUTGOING)
         }
 
     }
 
     override fun onMessageFailed(p0: MessageClient?, p1: Message?, p2: MessageFailureInfo?) {
-       this.toast(this , p2.toString())
+       this.toast(this, p2.toString())
     }
 
     override fun onMessageDelivered(p0: MessageClient?, p1: MessageDeliveryInfo?) {
-        this.toast(this , p1.toString())
+        this.toast(this, p1.toString())
     }
 
     override fun onShouldSendPushData(
@@ -108,7 +119,7 @@ class MessagesListActivity : AppCompatActivity(), MessageClientListener {
 
     private fun setList(){
         val list: MutableList<UserMsgsList> = getDatabaseDao.getmsgs()
-        adapter = UserMsgsAdapter(list,this)
+        adapter = UserMsgsAdapter(list, this)
         RV_userMsgsList.adapter = adapter
     }
 

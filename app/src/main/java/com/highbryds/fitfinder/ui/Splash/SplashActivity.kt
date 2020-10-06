@@ -11,21 +11,27 @@ import com.highbryds.fitfinder.ui.Auth.LoginActivity
 import com.highbryds.fitfinder.ui.Main.HomeMapActivity
 import com.highbryds.fitfinder.ui.OnBoarding.FirstScreen
 import com.highbryds.fitfinder.ui.Profile.UserProfileMain
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
 
-        val bundle = intent.extras
-        if(bundle != null){
-            val key = bundle.getString("type")
-            PrefsHelper.putString(Constants.Pref_ToOpenStoryAuto, key)
-            Log.d("bundle"  , key!!)
-            Log.d("bundle"  , PrefsHelper.getString(Constants.Pref_ToOpenStoryAuto))
-        }
+        try {
+            val bundle = intent.extras
+            if(bundle != null){
+                val key = bundle.getString("type")
+                PrefsHelper.putString(Constants.Pref_ToOpenStoryAuto, key)
+                Log.d("bundle"  , key!!)
+                Log.d("bundle"  , PrefsHelper.getString(Constants.Pref_ToOpenStoryAuto))
+            }
+        }catch (e: Exception){}
 
+
+//        113846211053320084112
         if (PrefsHelper.getBoolean(Constants.Pref_IsLogin)){
             val intent = Intent(this , HomeMapActivity::class.java)
             startActivity(intent)

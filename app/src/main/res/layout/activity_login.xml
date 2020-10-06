@@ -45,9 +45,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_2sdp"
-            android:text="Social Connect"
-            android:textColor="@color/colorWhite"
-            android:textSize="@dimen/_12sdp" />
+            android:text="Continue With"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/_13sdp" />
 
 
 
@@ -64,7 +64,7 @@
                android:layout_marginRight="@dimen/_20sdp"
                android:background="@color/colorFB"
                app:backgroundTint="@null"
-               android:text="Continue with Facebook"
+               android:text="Facebook"
                android:textColor="@color/colorWhite"
                android:textSize="@dimen/_14sdp"
                android:textAllCaps="false" />
@@ -102,7 +102,7 @@
             android:layout_marginRight="@dimen/_20sdp"
             android:background="@color/colorGoogle"
             app:backgroundTint="@null"
-            android:text="Continue with google"
+            android:text="Google"
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/_14sdp"
             android:textAllCaps="false"/>
@@ -118,7 +118,8 @@
             android:text="Continue with Linkedin"
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/_14sdp"
-            android:textAllCaps="false"/>
+            android:textAllCaps="false"
+            android:visibility="gone"/>
 
 
     </LinearLayout>

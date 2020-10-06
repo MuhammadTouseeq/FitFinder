@@ -167,7 +167,6 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_map)
-
         //    bindNavigationDrawer(toolbar)
         mediaType = MediaType.TEXT
 
@@ -347,89 +346,92 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
     fun drawerSetup() {
 
-        // Create the AccountHeader
-        val headerView = AccountHeaderView(this).apply {
-            attachToSliderView(slider) // attach to the slider
-            addProfiles(
-                ProfileDrawerItem().withName(KotlinHelper.getUsersData().name).withEmail(
-                    KotlinHelper.getUsersData().emailAdd
+        try {
+            // Create the AccountHeader
+            val headerView = AccountHeaderView(this).apply {
+                attachToSliderView(slider) // attach to the slider
+                addProfiles(
+                    ProfileDrawerItem().withName(KotlinHelper.getUsersData().name).withEmail(
+                        KotlinHelper.getUsersData().emailAdd
+                    )
                 )
+                onAccountHeaderListener = { view, profile, current ->
+                    // react to profile changes
+                    false
+                }
+            }
+
+
+            headerView.setBackgroundColor(resources.getColor(R.color.colorAccent))
+            headerView.selectionListEnabledForSingleProfile = false
+
+
+            val imageView = headerView.currentProfileView
+            Glide
+                .with(this)
+                .load(KotlinHelper.getUsersData().imageUrl)
+                .placeholder(R.drawable.ic_launcher_foreground)
+                .into(imageView);
+
+            //if you want to update the items at a later time it is recommended to keep it in a variable
+            val home = PrimaryDrawerItem().withIdentifier(1).withName("Home")
+            val story = PrimaryDrawerItem().withIdentifier(2).withName("My Contribution")
+            val chat = PrimaryDrawerItem().withIdentifier(3).withName("Chat")
+            val profile = PrimaryDrawerItem().withIdentifier(4).withName("Profile")
+            val settings = PrimaryDrawerItem().withIdentifier(5).withName("Settings")
+            val logout = PrimaryDrawerItem().withIdentifier(6).withName("Logout")
+
+
+            // get the reference to the slider and add the items
+            slider.itemAdapter.add(
+                home, profile, chat, story,
+                DividerDrawerItem(),
+                settings, logout
             )
-            onAccountHeaderListener = { view, profile, current ->
-                // react to profile changes
+
+            slider.headerView = headerView
+            slider.addStickyFooterItem(PrimaryDrawerItem().withName("Powered By HIGHBRYDS | V 1.0"))
+
+
+            // specify a click listener
+            slider.onDrawerItemClickListener = { v, drawerItem, position ->
+                when (position) {
+                    1 -> {
+                        //this.toast(this, "Home")
+                    }
+                    2 -> {
+                        val intent = Intent(this, UserProfileMain::class.java)
+                        startActivity(intent)
+                    }
+                    3 -> {
+                        SinchSdk.USER_ID = KotlinHelper.getUsersData().SocialId
+                        val intent = Intent(this, MessagesListActivity::class.java)
+                        startActivity(intent)
+                    }
+                    4 -> {
+                        val intent = Intent(this, UserStories::class.java)
+                        startActivity(intent)
+                    }
+                    6 -> {
+                        val intent = Intent(this, UserProfileSetting::class.java)
+                        startActivity(intent)
+                    }
+                    7 -> {
+
+                        KotlinHelper.alertDialog("Alert", "Are you sure you want to logout ?", this,
+                            object : onConfirmListner {
+                                override fun onClick() {
+                                    logoutViewModel.logoutUser(KotlinHelper.getUsersData().SocialId)
+                                    PrefsHelper.putBoolean(Constants.Pref_IsLogin, false)
+                                }
+                            })
+
+                    }
+                }
                 false
             }
-        }
 
-
-        headerView.setBackgroundColor(resources.getColor(R.color.colorAccent))
-        headerView.selectionListEnabledForSingleProfile = false
-
-
-        val imageView = headerView.currentProfileView
-        Glide
-            .with(this)
-            .load(KotlinHelper.getUsersData().imageUrl)
-            .placeholder(R.drawable.ic_launcher_foreground)
-            .into(imageView);
-
-        //if you want to update the items at a later time it is recommended to keep it in a variable
-        val home = PrimaryDrawerItem().withIdentifier(1).withName("Home")
-        val story = PrimaryDrawerItem().withIdentifier(2).withName("My Story")
-        val chat = PrimaryDrawerItem().withIdentifier(3).withName("Chat")
-        val profile = PrimaryDrawerItem().withIdentifier(4).withName("Profile")
-        val settings = PrimaryDrawerItem().withIdentifier(5).withName("Settings")
-        val logout = PrimaryDrawerItem().withIdentifier(6).withName("Logout")
-
-
-        // get the reference to the slider and add the items
-        slider.itemAdapter.add(
-            home, profile, chat, story,
-            DividerDrawerItem(),
-            settings, logout
-        )
-
-        slider.headerView = headerView
-        slider.addStickyFooterItem(PrimaryDrawerItem().withName("Powered By HIGHBRYDS | V 1.0"))
-
-
-        // specify a click listener
-        slider.onDrawerItemClickListener = { v, drawerItem, position ->
-            when (position) {
-                1 -> {
-                    //this.toast(this, "Home")
-                }
-                2 -> {
-                    val intent = Intent(this, UserProfileMain::class.java)
-                    startActivity(intent)
-                }
-                3 -> {
-                    SinchSdk.USER_ID = KotlinHelper.getUsersData().SocialId
-                    val intent = Intent(this, MessagesListActivity::class.java)
-                    startActivity(intent)
-                }
-                4 -> {
-                    val intent = Intent(this, UserStories::class.java)
-                    startActivity(intent)
-                }
-                6 -> {
-                    val intent = Intent(this, UserProfileSetting::class.java)
-                    startActivity(intent)
-                }
-                7 -> {
-
-                    KotlinHelper.alertDialog("Alert", "Are you sure you want to logout ?", this,
-                        object : onConfirmListner {
-                            override fun onClick() {
-                                logoutViewModel.logoutUser(KotlinHelper.getUsersData().SocialId)
-                                PrefsHelper.putBoolean(Constants.Pref_IsLogin, false)
-                            }
-                        })
-
-                }
-            }
-            false
-        }
+        }catch (e: Exception){}
 
 
     }
@@ -1480,6 +1482,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             PrefsHelper.putBoolean(Constants.Pref_IsLogin, false)
             PrefsHelper.putString(Constants.Pref_isOTPMobile, "")
             PrefsHelper.putBoolean(Constants.Pref_isOTPVerifed, false)
+            PrefsHelper.clear().commit()
             this.finish()
         }
         resetAll()

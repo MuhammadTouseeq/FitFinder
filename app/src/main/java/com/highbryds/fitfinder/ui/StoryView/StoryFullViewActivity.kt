@@ -329,16 +329,22 @@ lateinit var handler: Handler
         handler = Handler(Looper.getMainLooper())
         runnable =
             Runnable {
-               if(flyingCount!= storyData?.storyClapData?.size!!)
-               {
-                   heartView.emitHeart(HeartsView.Model(Random().nextInt(100), bitmap), HeartsView.MAX_Y_FULL)
-                   flyingCount++
-                   handler.postDelayed(runnable, 1000)
-               }
-                else
-               {
-                   handler.removeCallbacks { runnable }
-               }
+
+              storyData.storyClapData?.let {
+
+                  if(flyingCount!= storyData?.storyClapData?.size!!)
+                  {
+                      heartView.emitHeart(HeartsView.Model(Random().nextInt(100), bitmap), HeartsView.MAX_Y_FULL)
+                      flyingCount++
+                      handler.postDelayed(runnable, 1000)
+                  }
+                  else
+                  {
+                      handler.removeCallbacks { runnable }
+                  }
+
+              }
+
 
 
             }

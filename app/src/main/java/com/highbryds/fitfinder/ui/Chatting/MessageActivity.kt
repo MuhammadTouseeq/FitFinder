@@ -49,7 +49,7 @@ class MessageActivity : AppCompatActivity(), MessageClientListener {
         setContentView(R.layout.activity_message)
 
 
-        name.text = "Yahan Name Ayega Bhai"
+        name.text = SinchSdk.RECIPENT_NAME
         //SinchSdk.USER_ID = KotlinHelper.getUsersData().SocialId
         context = this
         instance = SinchSdk.getInstance(this)
@@ -73,6 +73,10 @@ class MessageActivity : AppCompatActivity(), MessageClientListener {
             requestCameraPermission();
         }
 
+        IV_back.setOnClickListener {
+            finish()
+        }
+
 
     }
 
@@ -83,7 +87,8 @@ class MessageActivity : AppCompatActivity(), MessageClientListener {
             Toast.makeText(applicationContext, "No text message", Toast.LENGTH_SHORT).show()
             return
         }
-        val message = WritableMessage(SinchSdk.RECIPENT_ID, textBody)
+        val message = WritableMessage(SinchSdk.RECIPENT_ID, textBody+"~"+KotlinHelper.getUsersData().imageUrl
+                +"~"+KotlinHelper.getUsersData().name)
         SinchSdk.getInstance(applicationContext)!!.messageClient.send(message)
         txtTextBody.setText("")
     }
