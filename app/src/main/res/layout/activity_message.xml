@@ -21,7 +21,7 @@
             android:layout_width="@dimen/_15sdp"
             android:layout_height="@dimen/_15sdp"
             android:layout_gravity="center"
-            android:src="@drawable/back" />
+            android:src="@drawable/backsmall" />
 
         <TextView
             android:id="@+id/name"
@@ -29,8 +29,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/_10sdp"
             android:fontFamily="sans-serif-condensed-medium"
-            android:textColor="#4BB481"
-            android:textSize="@dimen/_18sdp" />
+            android:textColor="@color/colorChat"
+            android:textSize="@dimen/_15sdp" />
 
 
         <LinearLayout

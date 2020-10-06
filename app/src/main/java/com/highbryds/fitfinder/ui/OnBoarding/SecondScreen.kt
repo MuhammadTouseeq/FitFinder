@@ -12,7 +12,7 @@ class SecondScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_second_screen)
 
-        next.setOnClickListener {
+        BTN_next.setOnClickListener {
             val intent = Intent(this, ThirdScreen::class.java)
             startActivity(intent)
         }

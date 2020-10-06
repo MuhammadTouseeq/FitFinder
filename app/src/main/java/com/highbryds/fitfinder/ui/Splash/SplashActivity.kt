@@ -17,13 +17,16 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
 
-        val bundle = intent.extras
-        if(bundle != null){
-            val key = bundle.getString("type")
-            PrefsHelper.putString(Constants.Pref_ToOpenStoryAuto, key)
-            Log.d("bundle"  , key!!)
-            Log.d("bundle"  , PrefsHelper.getString(Constants.Pref_ToOpenStoryAuto))
-        }
+        try {
+            val bundle = intent.extras
+            if(bundle != null){
+                val key = bundle.getString("type")
+                PrefsHelper.putString(Constants.Pref_ToOpenStoryAuto, key)
+                Log.d("bundle"  , key!!)
+                Log.d("bundle"  , PrefsHelper.getString(Constants.Pref_ToOpenStoryAuto))
+            }
+        }catch (e: Exception){}
+
 
         if (PrefsHelper.getBoolean(Constants.Pref_IsLogin)){
             val intent = Intent(this , HomeMapActivity::class.java)
