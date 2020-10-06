@@ -16,6 +16,7 @@ public class SinchSdk {
 
     public static String RECIPENT_ID = "";
     public static String RECIPENT_NAME = "";
+    public static String RECIPENT_IMG = "";
     public static String USER_ID = "";
 
 

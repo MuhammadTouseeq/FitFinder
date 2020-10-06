@@ -90,14 +90,16 @@ class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissi
                 this.toast(this, "Please provide complete data")
             } else {
 
-                if (PrefsHelper.getBoolean(Constants.Pref_isOTPVerifed) && phone.text.toString().trim().equals(PrefsHelper.getString(Constants.Pref_isOTPMobile))) {
+                val ph = "+92"+phone.text.toString().substring(1);
+
+                if (PrefsHelper.getBoolean(Constants.Pref_isOTPVerifed) && ph.equals(PrefsHelper.getString(Constants.Pref_isOTPMobile))) {
                     // can update profile
                     updateProfile()
-                } else if (PrefsHelper.getBoolean(Constants.Pref_isOTPVerifed) && !phone.text.toString().trim().equals(PrefsHelper.getString(Constants.Pref_isOTPMobile))) {
-                    otpVerifyPopup(phone.text.toString().trim())
+                } else if (PrefsHelper.getBoolean(Constants.Pref_isOTPVerifed) && !ph.equals(PrefsHelper.getString(Constants.Pref_isOTPMobile))) {
+                    otpVerifyPopup(ph)
                     // you have to verify again phone seems to be changes
                 } else if (!PrefsHelper.getBoolean(Constants.Pref_isOTPVerifed)) {
-                    otpVerifyPopup(phone.text.toString().trim())
+                    otpVerifyPopup(ph)
                 }
 
             }
@@ -144,6 +146,10 @@ class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissi
                 resendToken = token
 
             }
+        }
+
+        IV_back.setOnClickListener {
+            finish()
         }
 
         setProfileData()
@@ -203,7 +209,7 @@ class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissi
         country.setText(ud.Country)
         heading.setText(ud.headline)
         description.setText(ud.About)
-        phone.setText(ud.cellNumber)
+        phone.setText(ud.cellNumber.replace("+92" , "0"))
 
         Glide
             .with(this)

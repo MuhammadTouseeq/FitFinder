@@ -23,21 +23,10 @@ class FirstScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_first_screen)
 
-
-        val bundle = intent.extras
-        if(bundle != null){
-            val key = bundle.getString("type")
-            PrefsHelper.putString(Constants.Pref_ToOpenStoryAuto, key)
-            Log.d("bundle"  , key!!)
-            Log.d("bundle"  , PrefsHelper.getString(Constants.Pref_ToOpenStoryAuto))
+        BTN_next.setOnClickListener {
+            val intent = Intent(this, SecondScreen::class.java)
+            startActivity(intent)
         }
-
-
-        //        next.setOnClickListener {
-//            val intent = Intent(this, SecondScreen::class.java)
-//            startActivity(intent)
-//        }
-
 
 
     }

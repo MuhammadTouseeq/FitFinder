@@ -13,7 +13,7 @@ class ThirdScreen : AppCompatActivity() {
         setContentView(R.layout.activity_third_screen)
 
 
-        next.setOnClickListener {
+        BTN_next.setOnClickListener {
             val intent = Intent(this, SplashActivity::class.java)
             startActivity(intent)
         }
