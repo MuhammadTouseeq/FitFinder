@@ -10,7 +10,9 @@ import com.highbryds.fitfinder.commonHelper.PrefsHelper
 import com.highbryds.fitfinder.ui.Auth.LoginActivity
 import com.highbryds.fitfinder.ui.Main.HomeMapActivity
 import com.highbryds.fitfinder.ui.Profile.UserProfileMain
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +27,7 @@ class SplashActivity : AppCompatActivity() {
             Log.d("bundle"  , PrefsHelper.getString(Constants.Pref_ToOpenStoryAuto))
         }
 
+//        113846211053320084112
         if (PrefsHelper.getBoolean(Constants.Pref_IsLogin)){
             val intent = Intent(this , HomeMapActivity::class.java)
             startActivity(intent)

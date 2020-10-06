@@ -167,7 +167,6 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_map)
-
         //    bindNavigationDrawer(toolbar)
         mediaType = MediaType.TEXT
 
