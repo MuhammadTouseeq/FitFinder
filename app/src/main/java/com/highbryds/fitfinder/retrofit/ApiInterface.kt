@@ -10,6 +10,8 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import com.highbryds.fitfinder.model.WrapperStory
+import com.highbryds.fitfinder.model.carpool.CarData
+import com.highbryds.fitfinder.model.carpool.CarMakeModel
 import org.json.JSONObject
 import retrofit2.Response
 import retrofit2.http.*
@@ -144,4 +146,11 @@ interface ApiInterface {
 
     @POST("users/gettrendingStories")
     suspend fun getTrendingStories(): Response<WrapperStory>
+
+
+    /**
+     * Car Pooling Web Services
+     */
+@POST("carpool/getallCars")
+    suspend fun getCarMakeModels(): Response<List<CarData>>
 }
