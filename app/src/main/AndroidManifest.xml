@@ -35,7 +35,7 @@
         </activity>
         <activity android:name=".ui.Profile.UserProfileSetting" />
         <activity android:name=".ui.Profile.UserStories" />
-        <activity android:name=".ui.carpool.fitdriver.AddCarActivity" >
+        <activity android:name=".ui.carpool.fitdriver.RideRequestsActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
