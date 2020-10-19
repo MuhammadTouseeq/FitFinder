@@ -94,7 +94,7 @@
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:adjustViewBounds="true"
-            android:scaleType="matrix"
+            android:scaleType="fitCenter"
             android:src="@drawable/placeholder"
             android:visibility="gone" />
 

@@ -12,13 +12,18 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <include
+            layout="@layout/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/IV_bio"
             android:layout_width="@dimen/_80sdp"
             android:layout_height="@dimen/_80sdp"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:scaleType="centerCrop"
             android:src="@android:drawable/ic_menu_camera"
             app:civ_border_color="@color/colorBlack"
@@ -30,9 +35,9 @@
             android:layout_marginLeft="@dimen/_20sdp"
             android:layout_marginTop="@dimen/_20sdp"
             android:layout_marginRight="@dimen/_20sdp"
+            android:background="@android:color/transparent"
             android:hint="Profile Title"
-            app:boxBackgroundColor="@android:color/transparent"
-            android:background="@android:color/transparent">
+            app:boxBackgroundColor="@android:color/transparent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/heading"
@@ -47,9 +52,9 @@
             android:layout_marginLeft="@dimen/_20sdp"
             android:layout_marginTop="@dimen/_20sdp"
             android:layout_marginRight="@dimen/_20sdp"
+            android:background="@android:color/transparent"
             android:hint="Description"
-            app:boxBackgroundColor="@android:color/transparent"
-            android:background="@android:color/transparent">
+            app:boxBackgroundColor="@android:color/transparent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/description"
@@ -65,9 +70,9 @@
             android:layout_marginLeft="@dimen/_20sdp"
             android:layout_marginTop="@dimen/_20sdp"
             android:layout_marginRight="@dimen/_20sdp"
+            android:background="@android:color/transparent"
             android:hint="Name"
-            app:boxBackgroundColor="@android:color/transparent"
-            android:background="@android:color/transparent">
+            app:boxBackgroundColor="@android:color/transparent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/name"
@@ -82,9 +87,9 @@
             android:layout_marginLeft="@dimen/_20sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginRight="@dimen/_20sdp"
+            android:background="@android:color/transparent"
             android:hint="Email"
-            app:boxBackgroundColor="@android:color/transparent"
-            android:background="@android:color/transparent">
+            app:boxBackgroundColor="@android:color/transparent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email"
@@ -99,14 +104,16 @@
             android:layout_marginLeft="@dimen/_20sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginRight="@dimen/_20sdp"
-            android:hint="Phone"
-            app:boxBackgroundColor="@android:color/transparent"
-            android:background="@android:color/transparent">
+            android:background="@android:color/transparent"
+            android:hint="Phone Ex. 03xx 1234567"
+            app:boxBackgroundColor="@android:color/transparent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/phone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="11" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -116,34 +123,35 @@
             android:layout_marginLeft="@dimen/_20sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginRight="@dimen/_20sdp"
-            android:hint="Age"
-            app:boxBackgroundColor="@android:color/transparent"
-            android:background="@android:color/transparent">
+            android:background="@android:color/transparent"
+            android:hint="Age Ex. 25"
+            app:boxBackgroundColor="@android:color/transparent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/age"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="number" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/gender"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/_20sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginRight="@dimen/_20sdp"
-            android:hint="Gender"
-            app:boxBackgroundColor="@android:color/transparent"
             android:background="@android:color/transparent"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
+            android:hint="Gender"
+            app:boxBackgroundColor="@android:color/transparent">
 
             <AutoCompleteTextView
+                android:id="@+id/AC_Gender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="none"
-                android:id="@+id/AC_Gender"/>
+                android:inputType="none" />
 
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -154,15 +162,14 @@
             android:layout_marginLeft="@dimen/_20sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginRight="@dimen/_20sdp"
-            android:hint="Country"
-            app:boxBackgroundColor="@android:color/transparent"
-            android:background="@android:color/transparent">
+            android:background="@android:color/transparent"
+            android:hint="Country Ex. Pakistan)"
+            app:boxBackgroundColor="@android:color/transparent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/country"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -172,15 +179,14 @@
             android:layout_marginLeft="@dimen/_20sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginRight="@dimen/_20sdp"
-            android:hint="City"
-            app:boxBackgroundColor="@android:color/transparent"
-            android:background="@android:color/transparent">
+            android:background="@android:color/transparent"
+            android:hint="City Ex. Karachi"
+            app:boxBackgroundColor="@android:color/transparent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/city"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

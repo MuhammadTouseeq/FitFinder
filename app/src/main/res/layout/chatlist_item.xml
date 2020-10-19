@@ -1,70 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/LL_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="@dimen/_5sdp"
-        app:cardCornerRadius="@dimen/_5sdp"
-        app:cardUseCompatPadding="true"
-        android:id="@+id/CV_item">
+        android:orientation="horizontal"
+        android:padding="@dimen/_5sdp"
+        android:gravity="center">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/_10sdp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-
-                <TextView
-                    android:layout_width="105dp"
-                    android:layout_height="wrap_content"
-                    android:text="User ID: "
-                    android:textColor="@color/colorChat"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/userID"
-                    android:textColor="@color/colorBlack"/>
-
-            </LinearLayout>
-
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/IV_profilePic"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:src="@drawable/test"
+            app:civ_border_width="1dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-
-            <TextView
-                android:layout_width="105dp"
-                android:layout_height="wrap_content"
-                android:text="User Message: "
-                android:textColor="@color/colorChat"/>
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="@dimen/_10sdp">
 
             <TextView
+                android:id="@+id/userID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:singleLine="true"
+                android:text="Daniyal ahmed Khan"
+                android:textColor="@color/colorBlack" />
+
+
+            <TextView
                 android:id="@+id/userMSG"
-                android:textSize="@dimen/_13sdp"
-                android:layout_marginTop="@dimen/_1sdp"/>
+                android:layout_width="@dimen/_170sdp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_1sdp"
+                android:ellipsize="marquee"
+                android:singleLine="true"
+                android:text="Helloo "
+                android:textSize="@dimen/_13sdp" />
+
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/dateTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_1sdp"
+            android:layout_marginRight="@dimen/_1sdp"
+            android:layout_weight="0.5"
+            android:gravity="right"
+            android:text="08:04 PM"
+            android:textSize="@dimen/_9sdp" />
 
-        </LinearLayout>
 
+    </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginLeft="@dimen/_55sdp"
+        android:background="@color/colorGray" />
 
 </LinearLayout>

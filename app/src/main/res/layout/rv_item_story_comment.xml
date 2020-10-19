@@ -56,7 +56,7 @@
             android:fontFamily="sans-serif"
             android:paddingEnd="16dp"
             android:text="Short Description"
-            android:textColor="#BDBDBD"
+            android:textColor="#B1000000"
             android:textSize="13sp"
             android:visibility="visible" />
         <TextView

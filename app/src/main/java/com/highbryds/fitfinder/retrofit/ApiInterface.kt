@@ -153,4 +153,8 @@ interface ApiInterface {
      */
 @POST("carpool/getallCars")
     suspend fun getCarMakeModels(): Response<List<CarData>>
+
+    @POST("carpool/searchcarpool")
+    suspend fun searchCarPool(@Body frSearchcar: FR_SearchCar): Response<SearchCarApiResponse>
+
 }

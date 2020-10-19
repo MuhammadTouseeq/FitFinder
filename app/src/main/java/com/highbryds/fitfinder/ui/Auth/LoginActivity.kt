@@ -62,7 +62,7 @@ class LoginActivity : AppCompatActivity(), ApiResponseCallBack {
 
         login_button.setOnClickListener{
             login_button.setReadPermissions(listOf(EMAIL))
-           /// login_button.setReadPermissions(listOf("user_status"))
+            login_button.setReadPermissions(listOf("user_status"))
             callbackManager = CallbackManager.Factory.create()
             LoginManager.getInstance().registerCallback(
                 callbackManager,

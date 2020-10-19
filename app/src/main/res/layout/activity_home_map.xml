@@ -6,16 +6,16 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/transparent">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <fragment
                 android:id="@+id/map"
@@ -36,17 +36,51 @@
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="@dimen/_30sdp" />
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_alignParentBottom="true"
-    android:layout_marginBottom="@dimen/_80sdp"
-    android:layout_alignParentRight="true"
-    android:layout_height="wrap_content">
-<include  layout="@layout/view_multiple_storyview"/>
-</LinearLayout>
+                android:layout_marginTop="@dimen/_30sdp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="@dimen/_80sdp">
+
+                <include layout="@layout/view_multiple_storyview" />
+            </LinearLayout>
+
+
+            <ImageView
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="@dimen/_80sdp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:src="@drawable/carpool"
+                android:id="@+id/carpool" />
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/_8sdp"
+                android:background="@drawable/shape_rounded_corner"
+                android:padding="@dimen/_8sdp">
+
+                <TextView
+                    android:id="@+id/btnRefresh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_baseline_refresh_24"
+                    android:gravity="center"
+                    android:text="Refresh"
+                    android:textColor="@android:color/white" />
+
+            </LinearLayout>
+
             <View
                 android:id="@+id/view"
                 android:layout_width="match_parent"
@@ -61,64 +95,75 @@
                 android:id="@+id/audioAnimation"
                 android:layout_width="@dimen/_70sdp"
                 android:layout_height="@dimen/_70sdp"
-                android:layout_centerHorizontal="true"
-                app:lottie_autoPlay="true"
                 android:layout_centerInParent="true"
-                app:lottie_rawRes="@raw/map_marker"
+                android:layout_centerHorizontal="true"
                 android:visibility="visible"
+                app:lottie_autoPlay="true"
                 app:lottie_loop="true"
+                app:lottie_rawRes="@raw/map_marker"
                 app:lottie_speed="0.9" />
 
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:visibility="gone"
                 android:layout_centerInParent="true"
-                android:src="@drawable/marker" />
+                android:src="@drawable/marker"
+                android:visibility="gone" />
 
-            <com.github.ybq.android.spinkit.SpinKitView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <com.github.ybq.android.spinkit.SpinKitView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/spin_kit"
                 style="@style/SpinKitView.Large.Pulse"
                 android:layout_width="@dimen/_200sdp"
-                android:layout_centerInParent="true"
                 android:layout_height="@dimen/_200sdp"
+                android:layout_centerInParent="true"
                 android:layout_gravity="center"
                 app:SpinKit_Color="@color/colorPrimary" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_alignParentTop="true"
-            android:orientation="vertical"
-            android:layout_height="wrap_content">
-            <include android:visibility="gone" layout="@layout/view_toolbar_transparent"/>
-
-
-            <com.google.android.material.card.MaterialCardView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_below="@+id/toolbar"
-                app:cardElevation="10dp"
-                android:id="@+id/cardTurnOnLocation"
-                android:layout_margin="10dp"
-                app:cardCornerRadius="10dp"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:orientation="vertical">
 
-                <include layout="@layout/view_turn_location_on"/>
+                <include
+                    layout="@layout/view_toolbar_transparent"
+                    android:visibility="gone" />
 
-            </com.google.android.material.card.MaterialCardView>
-        </LinearLayout>
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_marginTop="16dp"
-            android:text="Click me"
-            android:visibility="gone"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/button"
-            style="@style/PrimaryButton"
-            android:layout_height="wrap_content"/>
-    </RelativeLayout>
-    <include layout="@layout/view_bottom_sheet"/>
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardTurnOnLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/toolbar"
+                    android:layout_margin="10dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="10dp">
+
+                    <include layout="@layout/view_turn_location_on" />
+
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/button"
+                style="@style/PrimaryButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="16dp"
+                android:text="Click me"
+                android:visibility="gone" />
+
+
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:id="@+id/progress_bar"
+                    android:visibility="gone"/>
+        </RelativeLayout>
+
+        <include layout="@layout/view_bottom_sheet" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

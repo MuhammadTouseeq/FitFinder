@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.callbacks.StoryCallback
+import com.highbryds.fitfinder.commonHelper.DateConverter
 import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.model.NearbyStory
 import com.highbryds.fitfinder.model.StoryComment
@@ -29,27 +30,58 @@ import com.highbryds.fitfinder.ui.StoryView.StoryFullViewActivity
 import kotlinx.android.synthetic.main.activity_user_profile_main.*
 
 
-class UserMsgsAdapter(var userStories: MutableList<UserMsgsList>,
-                       var context: Context): RecyclerView.Adapter<UserMsgsAdapter.ViewHolder>() {
+class UserMsgsAdapter(
+    var userStories: MutableList<UserMsgsList>,
+    var context: Context
+) : RecyclerView.Adapter<UserMsgsAdapter.ViewHolder>() {
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val userID = itemView.findViewById(R.id.userID) as TextView
         val userMSG = itemView.findViewById(R.id.userMSG) as TextView
-        val CV_item = itemView.findViewById(R.id.CV_item) as CardView
+        val LL_item = itemView.findViewById(R.id.LL_item) as LinearLayout
+        val IV_profilePic = itemView.findViewById(R.id.IV_profilePic) as ImageView
+        val dateTime = itemView.findViewById(R.id.dateTime) as TextView
 
-        fun bindViews(userMsgsList: UserMsgsList, context: Context){
+        fun bindViews(userMsgsList: UserMsgsList, context: Context) {
 
-            userID.text = "User ID: ${userMsgsList.recipentID}"
-            userMSG.text = "User MSG: ${userMsgsList.messageTXT}"
+            if (userMsgsList.messageTXT.contains("~")) {
+                val data = userMsgsList.messageTXT.split("~".toRegex()).toTypedArray()
+
+                Glide
+                    .with(context)
+                    .load(data[1])
+                    .placeholder(R.drawable.ic_launcher_foreground)
+                    .into(IV_profilePic);
+
+
+
+                userID.text = data[2]
+                userMSG.text = data[0]
+            } else {
+
+                Glide
+                    .with(context)
+                    .load(R.drawable.test)
+                    .placeholder(R.drawable.ic_launcher_foreground)
+                    .into(IV_profilePic);
+
+                userID.text = userMsgsList.recipentID
+                userMSG.text = userMsgsList.messageTXT
+                dateTime.text =
+                    DateConverter.toDate(userMsgsList.dateTime).toString().split("\\s".toRegex())
+                        .toTypedArray()[0]
+
+            }
+
         }
     }
 
-    fun addMessage(userMsgsList: UserMsgsList) {
-        //    mMessages.add(new Pair(message, direction));
-        userStories.add(userMsgsList)
-        // notifyDataSetChanged();
-    }
+//    fun addMessage(userMsgsList: MutableList<UserMsgsList>) {
+//        //    mMessages.add(new Pair(message, direction));
+//        userStories.add(userMsgsList)
+//        // notifyDataSetChanged();
+//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.chatlist_item, parent, false)
@@ -57,18 +89,20 @@ class UserMsgsAdapter(var userStories: MutableList<UserMsgsList>,
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindViews(userStories[position] , context)
+        holder.bindViews(userStories[position], context)
 
-        holder.CV_item.setOnClickListener {
+        holder.LL_item.setOnClickListener {
             SinchSdk.RECIPENT_ID = userStories[position].recipentID
-            val intent = Intent(context , MessageActivity::class.java)
+            SinchSdk.RECIPENT_NAME = userStories[position].messageTXT.split("~".toRegex()).toTypedArray()[2]
+            SinchSdk.RECIPENT_IMG = userStories[position].messageTXT.split("~".toRegex()).toTypedArray()[1]
+            val intent = Intent(context, MessageActivity::class.java)
             context.startActivity(intent)
         }
 
     }
 
     override fun getItemCount(): Int {
-        return  userStories.size
+        return userStories.size
     }
 
 
