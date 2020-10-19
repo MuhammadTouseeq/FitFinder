@@ -5,40 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.Chatting.MessagesListActivity"
-    android:layout_margin="@dimen/_10sdp">
+    tools:context=".ui.Chatting.MessagesListActivity">
 
 
-    <LinearLayout
+    <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center">
-
-
-        <ImageView
-            android:layout_width="@dimen/_15sdp"
-            android:layout_height="@dimen/_15sdp"
-            android:src="@drawable/backsmall"
-            android:layout_gravity="center"
-            android:id="@+id/IV_back"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Messages"
-            android:textSize="@dimen/_18sdp"
-            android:textColor="@color/colorChat"
-            android:fontFamily="sans-serif-condensed-medium"
-            android:layout_marginLeft="@dimen/_10sdp" />
-
-
-    </LinearLayout>
+        layout="@layout/toolbar"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/RV_userMsgsList"
-        android:layout_marginTop="@dimen/_10sdp"/>
+        android:layout_margin="@dimen/_10sdp"/>
 
 </LinearLayout>

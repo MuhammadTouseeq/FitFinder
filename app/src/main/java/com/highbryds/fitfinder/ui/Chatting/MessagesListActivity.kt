@@ -3,7 +3,9 @@ package com.highbryds.fitfinder.ui.Chatting
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.zxing.common.StringUtils
@@ -36,12 +38,20 @@ class MessagesListActivity : AppCompatActivity(), MessageClientListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_messages_list)
 
+
+
+        val toolbar: Toolbar = findViewById<View>(R.id.toolbar) as Toolbar
+        setSupportActionBar(toolbar)
+        getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar()?.setDisplayShowHomeEnabled(true);
+        supportActionBar?.title = "Messages"
+        toolbar.setNavigationOnClickListener {
+            finish()
+        }
+
         RV_userMsgsList.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         setList()
 
-        IV_back.setOnClickListener {
-            finish()
-        }
 
         context = this
         instance = SinchSdk.getInstance(this)

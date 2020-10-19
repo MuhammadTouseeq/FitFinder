@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.size
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -40,24 +41,33 @@ class UserStories : AppCompatActivity(), ApiResponseCallBack , StoryCallback{
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_stories)
 
-        userStoriesViewModel.apiResponseCallBack = this
-        RV_Stories.layoutManager = GridLayoutManager(this, 2)
 
-        IV_back.setOnClickListener {
+        val toolbar: Toolbar = findViewById<View>(R.id.toolbar) as Toolbar
+        setSupportActionBar(toolbar)
+        getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar()?.setDisplayShowHomeEnabled(true);
+        supportActionBar?.title = "My Stories"
+        toolbar.setNavigationOnClickListener {
             finish()
         }
 
+
+        userStoriesViewModel.apiResponseCallBack = this
+        RV_Stories.layoutManager = GridLayoutManager(this, 2)
 
     }
 
     override fun getError(error: String) {
         this.toast(this, error)
         loadingProgress.visibility = View.GONE
+        if (error.equals("No Data Found", true)){
+            nodata.visibility = View.VISIBLE
+        }
     }
 
     override fun getSuccess(success: String) {
         this.toast(this, success)
-        if (success.contains("Story Deactivate Successfully" , true)){
+        if (success.contains("Story Deactivate Successfully", true)){
             userStoriesModel.removeAt(itemPosition)
             adapter.notifyDataSetChanged()
            // PrefsHelper.putBoolean(Constants.Pref_IsStoryDeleted , true)
@@ -65,23 +75,28 @@ class UserStories : AppCompatActivity(), ApiResponseCallBack , StoryCallback{
     }
 
     override fun storyItemPosition(position: Int) {
-        KotlinHelper.alertDialog("Alert" , "Are you sure you want to delete this story?" , this , object : onConfirmListner{
-            override fun onClick() {
-                itemPosition = position
-                userStoriesViewModel.deactivate(userStoriesModel.get(position)._id)
-            }
-        })
+        KotlinHelper.alertDialog(
+            "Alert",
+            "Are you sure you want to delete this story?",
+            this,
+            object : onConfirmListner {
+                override fun onClick() {
+                    itemPosition = position
+                    userStoriesViewModel.deactivate(userStoriesModel.get(position)._id)
+                }
+            })
 
     }
 
     override fun onResume() {
         super.onResume()
+        nodata.visibility = View.GONE
         userStoriesViewModel.getUserStories(KotlinHelper.getUsersData().SocialId)
         userStoriesViewModel.storiesModel?.observe(this@UserStories, Observer {
             userStoriesModel.clear()
             userStoriesModel.addAll(it)
             loadingProgress.visibility = View.GONE
-            adapter = UserStoriesAdapter(userStoriesModel, this , this)
+            adapter = UserStoriesAdapter(userStoriesModel, this, this)
             RV_Stories.adapter = adapter
         });
 

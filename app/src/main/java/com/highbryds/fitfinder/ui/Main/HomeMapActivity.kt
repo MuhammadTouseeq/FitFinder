@@ -64,6 +64,7 @@ import com.highbryds.fitfinder.ui.Profile.UserProfileMain
 import com.highbryds.fitfinder.ui.Profile.UserProfileSetting
 import com.highbryds.fitfinder.ui.Profile.UserStories
 import com.highbryds.fitfinder.ui.StoryView.StoryFullViewActivity
+import com.highbryds.fitfinder.ui.carpool.fitrider.FR_RequestForm
 import com.highbryds.fitfinder.vm.AuthViewModels.LogoutViewModel
 import com.highbryds.fitfinder.vm.Main.StoryViewModel
 import com.highbryds.snapryde.rider_app.recievers.GpsLocationReceiver
@@ -144,6 +145,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
     private val RECORD_AUDIO_REQUEST_CODE = 101
     private var isPlaying = false
     private var chipText: String? = null
+    var headerView:  AccountHeaderView? = null
 
     //========End=====//
     private val SELECT_VIDEO = 1
@@ -274,7 +276,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
                 moveGoogleMap(LatLng(it.get(0).latitude, it.get(0).longitude))
             }
-            toast(applicationContext,"Stories fetching...")
+            toast(applicationContext, "Stories fetching...")
             for (item: NearbyStory in it) {
                 Log.d("StoryData", item.mediaUrl)
                 if (item.latitude != 0.0) {
@@ -292,8 +294,6 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             }
 
 
-
-
         })
 
 
@@ -301,7 +301,12 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         IV_Slider.setOnClickListener {
             slider.drawerLayout?.openDrawer(slider)
             //val toClear: Int = slider.selectedItemPosition
-            slider.setSelectionAtPosition(1)
+
+        }
+
+        carpool.setOnClickListener {
+            val intent = Intent(this, FR_RequestForm::class.java)
+            startActivity(intent)
         }
 
     }
@@ -348,7 +353,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
         try {
             // Create the AccountHeader
-            val headerView = AccountHeaderView(this).apply {
+            headerView  = AccountHeaderView(this).apply {
                 attachToSliderView(slider) // attach to the slider
                 addProfiles(
                     ProfileDrawerItem().withName(KotlinHelper.getUsersData().name).withEmail(
@@ -362,11 +367,12 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             }
 
 
-            headerView.setBackgroundColor(resources.getColor(R.color.colorAccent))
-            headerView.selectionListEnabledForSingleProfile = false
+
+            headerView!!.setBackgroundColor(resources.getColor(R.color.colorAccent))
+            headerView!!.selectionListEnabledForSingleProfile = false
 
 
-            val imageView = headerView.currentProfileView
+            val imageView = headerView!!.currentProfileView
             Glide
                 .with(this)
                 .load(KotlinHelper.getUsersData().imageUrl)
@@ -375,7 +381,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
             //if you want to update the items at a later time it is recommended to keep it in a variable
             val home = PrimaryDrawerItem().withIdentifier(1).withName("Home")
-            val story = PrimaryDrawerItem().withIdentifier(2).withName("My Contribution")
+            val story = PrimaryDrawerItem().withIdentifier(2).withName("My Contributions")
             val chat = PrimaryDrawerItem().withIdentifier(3).withName("Chat")
             val profile = PrimaryDrawerItem().withIdentifier(4).withName("Profile")
             val settings = PrimaryDrawerItem().withIdentifier(5).withName("Settings")
@@ -421,6 +427,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                         KotlinHelper.alertDialog("Alert", "Are you sure you want to logout ?", this,
                             object : onConfirmListner {
                                 override fun onClick() {
+                                    progress_bar.visibility = View.VISIBLE
                                     logoutViewModel.logoutUser(KotlinHelper.getUsersData().SocialId)
                                     PrefsHelper.putBoolean(Constants.Pref_IsLogin, false)
                                 }
@@ -431,7 +438,8 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                 false
             }
 
-        }catch (e: Exception){}
+        } catch (e: Exception) {
+        }
 
 
     }
@@ -727,10 +735,19 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
     override fun onResume() {
         super.onResume()
+
+        slider.setSelectionAtPosition(1)
+        val imageView = headerView!!.currentProfileView
+        Glide
+            .with(this)
+            .load(KotlinHelper.getUsersData().imageUrl)
+            .placeholder(R.drawable.ic_launcher_foreground)
+            .into(imageView);
+
+      //  headerView.updateProfile()
+
         registerLocationBroadcast()
-
         //val bundle = intent.extras
-
         if (!PrefsHelper.getString(Constants.Pref_ToOpenStoryAuto, "").equals("")) {
             storyViewModel.getStoryById(PrefsHelper.getString(Constants.Pref_ToOpenStoryAuto, ""))
             storyViewModel.singleStory.observe(this, androidx.lifecycle.Observer {
@@ -743,23 +760,6 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                 }
             })
         }
-//        else if (bundle != null) {
-//            storyViewModel.getStoryById(bundle.getString("type")!!)
-//            Log.d(
-//                "bundle",
-//                bundle.getString("title") + bundle.getString("body") + bundle.getString("type")
-//            )
-//            storyViewModel.singleStory.observe(this, androidx.lifecycle.Observer {
-//                it?.let {
-//                    val intent = Intent(this, StoryFullViewActivity::class.java)
-//                    val gson = Gson()
-//                    val json = gson.toJson(it.data.get(0))
-//                    intent.putExtra("storyData", json)
-//                    startActivityForResult(intent, 777)
-//                }
-//            })
-//
-//        }
 
     }
 
@@ -1001,11 +1001,11 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                     return
                 }
 
-               // if (filePath.isEmpty()) {
-                   // toast(applicationContext, "story media is missing")
-                   // return
-                   // filePath=null
-             //   }
+                // if (filePath.isEmpty()) {
+                // toast(applicationContext, "story media is missing")
+                // return
+                // filePath=null
+                //   }
 
                 btnSend.startAnimation(
                     AnimationUtils.loadAnimation(
@@ -1029,8 +1029,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                         JavaHelper.compress(filePath, this, this)
                     }
 
-                    MediaType.TEXT->
-                    {
+                    MediaType.TEXT -> {
                         val model: UserStory = UserStory(
                             JavaHelper.badWordReplace(txtMessage.text.toString()),
                             KotlinHelper.getUsersData().SocialId,
@@ -1049,12 +1048,12 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                     }
                     else -> {
 
-                            val filename: String = filePath.substring(filePath.lastIndexOf("/") + 1)
-                            val ftpHelper: FTPHelper = FTPHelper()
-                            ftpHelper.init(this)
-                            ftpHelper.AsyncTaskExample().execute(filePath, filename)
+                        val filename: String = filePath.substring(filePath.lastIndexOf("/") + 1)
+                        val ftpHelper: FTPHelper = FTPHelper()
+                        ftpHelper.init(this)
+                        ftpHelper.AsyncTaskExample().execute(filePath, filename)
 
-                        }
+                    }
 
 
 //                    val model: UserStory = UserStory(
@@ -1066,7 +1065,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 //                        ""
 //                    );
                     // showProgressDialog()
-                 //   homeMapViewModel.uploadStoryData(model)
+                    //   homeMapViewModel.uploadStoryData(model)
 
                 }
             }
@@ -1470,12 +1469,14 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
     override fun getError(error: String) {
         loadingProgress.visibility = View.GONE
+        progress_bar.visibility = View.GONE
         spin_kit.visibility = View.GONE
     }
 
     override fun getSuccess(success: String) {
         loadingProgress.visibility = View.GONE
         if (success.equals("User Logout Successfully", true)) {
+            progress_bar.visibility = View.GONE
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             PrefsHelper.putString(Constants.Pref_UserData, "")

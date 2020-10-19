@@ -5,11 +5,13 @@ import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.Window
 import android.widget.ArrayAdapter
 import android.widget.Button
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
@@ -65,6 +67,15 @@ class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissi
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_update_profile)
 
+        val toolbar: Toolbar = findViewById<View>(R.id.toolbar) as Toolbar
+        setSupportActionBar(toolbar)
+        getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar()?.setDisplayShowHomeEnabled(true);
+        supportActionBar?.title = "Update Profile"
+        toolbar.setNavigationOnClickListener {
+            finish()
+        }
+
         updateProfileViewModel.apiResponseCallBack = this
 
         val permissions = listOf(
@@ -85,9 +96,9 @@ class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissi
                     .isEmpty() ||
                 gender.editText!!.text.isEmpty() || city.text.toString()
                     .isEmpty() || country.text.toString().isEmpty() ||
-                heading.text.toString().isEmpty() || description.text.toString().isEmpty()
+                heading.text.toString().isEmpty() || description.text.toString().isEmpty() || phone.text.toString().length != 11
             ) {
-                this.toast(this, "Please provide complete data")
+                this.toast(this, "Please provide complete and proper info")
             } else {
 
                 val ph = "+92"+phone.text.toString().substring(1);
@@ -146,10 +157,6 @@ class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissi
                 resendToken = token
 
             }
-        }
-
-        IV_back.setOnClickListener {
-            finish()
         }
 
         setProfileData()
@@ -256,7 +263,7 @@ class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissi
 
         dialogVerify.setOnClickListener {
             if (!dialogotpVerify.text.toString().isEmpty()) {
-                verifyPhoneNumberWithCode(storedVerificationId, dialogotpVerify.text.toString())
+                verifyPhoneNumberWithCode(storedVerificationId, dialogotpVerify.text.toString() , phone)
             } else {
                 this@UpdateProfile.toast(this@UpdateProfile, "Enter OTP Code")
             }
@@ -267,7 +274,7 @@ class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissi
     }
 
 
-    fun verifyPhoneNumberWithCode(verificationId: String?, code: String) {
+    fun verifyPhoneNumberWithCode(verificationId: String?, code: String , phone: String) {
         if (verificationId !== "" || verificationId != null) {
             val credential = PhoneAuthProvider.getCredential(
                 verificationId!!,
@@ -278,7 +285,7 @@ class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissi
                     override fun onComplete(@NonNull task: Task<AuthResult?>) {
                         if (task.isSuccessful()) {
                             this@UpdateProfile.toast(this@UpdateProfile, "Verify")
-                            PrefsHelper.putString(Constants.Pref_isOTPMobile, phone.text.toString().trim())
+                            PrefsHelper.putString(Constants.Pref_isOTPMobile, phone)
                             PrefsHelper.putBoolean(Constants.Pref_isOTPVerifed, true)
                             updateProfile()
                         } else {

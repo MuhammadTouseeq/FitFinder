@@ -144,4 +144,8 @@ interface ApiInterface {
 
     @POST("users/gettrendingStories")
     suspend fun getTrendingStories(): Response<WrapperStory>
+
+    @POST("carpool/searchcarpool")
+    suspend fun searchCarPool(@Body frSearchcar: FR_SearchCar): Response<SearchCarApiResponse>
+
 }

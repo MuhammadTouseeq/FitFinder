@@ -12,7 +12,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:orientation="horizontal"
-        android:background="#F6F4F4"
+        android:background="@color/colorPrimary"
         android:padding="@dimen/_5sdp">
 
 
@@ -21,7 +21,8 @@
             android:layout_width="@dimen/_15sdp"
             android:layout_height="@dimen/_15sdp"
             android:layout_gravity="center"
-            android:src="@drawable/backsmall" />
+            android:src="@drawable/backsmall"
+            app:tint="@color/colorWhite" />
 
         <TextView
             android:id="@+id/name"
@@ -47,7 +48,7 @@
                 android:layout_gravity="right"
                 android:padding="10dp"
                 android:src="@android:drawable/sym_action_call"
-                app:tint="@color/colorChat" />
+                app:tint="@color/colorWhite" />
 
             <ImageView
                 android:id="@+id/btnVideo"
@@ -56,7 +57,7 @@
                 android:layout_gravity="right"
                 android:padding="10dp"
                 android:src="@android:drawable/presence_video_online"
-                app:tint="@color/colorChat" />
+                app:tint="@color/colorWhite" />
 
 
         </LinearLayout>

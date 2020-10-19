@@ -17,40 +17,42 @@
 
     <application
         android:name=".app.MainApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
-        <activity android:name=".ui.Chatting.MessagesListActivity"></activity>
+        android:usesCleartextTraffic="true"
+        tools:replace="android:allowBackup">
+        <activity android:name=".ui.carpool.fitrider.FR_SearchCarList"></activity>
+        <activity android:name=".ui.carpool.fitrider.FR_Adress_Activity" />
+        <activity
+            android:name=".ui.carpool.fitrider.FR_RequestForm"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity android:name=".ui.Chatting.MessagesListActivity" />
         <activity android:name=".ui.Chatting.CallScreenActivity" />
-        <activity android:name=".ui.Chatting.MessageActivity"></activity>
+        <activity android:name=".ui.Chatting.MessageActivity" />
         <activity android:name=".ui.OnBoarding.ThirdScreen" />
         <activity android:name=".ui.OnBoarding.SecondScreen" />
-        <activity android:name=".ui.OnBoarding.FirstScreen">
-
-        </activity>
+        <activity android:name=".ui.OnBoarding.FirstScreen"></activity>
         <activity android:name=".ui.Profile.UserProfileSetting" />
         <activity android:name=".ui.Profile.UserStories" />
-        <activity android:name=".ui.Splash.SplashActivity" >
+        <activity android:name=".ui.Splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <!--                <category android:name="android.intent.category.DEFAULT" />-->
+                <!-- <category android:name="android.intent.category.DEFAULT" /> -->
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".ui.Main.VoiceRecorderActivity" /> <!-- <activity android:name=".ui.StoryView.StoryFullViewActivity"/> -->
-        <activity android:name=".ui.Main.HomeMapActivity"></activity>
+        <activity android:name=".ui.Main.HomeMapActivity" />
         <activity android:name=".ui.Auth.LoginActivity" />
         <activity android:name=".ui.StoryView.StoryFullViewActivity" />
         <activity android:name=".ui.Profile.UpdateProfile" />
-        <activity android:name=".ui.Profile.UserProfileMain" >
-
-        </activity> <!-- <activity -->
+        <activity android:name=".ui.Profile.UserProfileMain"></activity> <!-- <activity -->
         <!-- android:name=".ui.Auth.LoginActivity" -->
         <!-- android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" -->
         <!-- android:label="@string/app_name"/> -->

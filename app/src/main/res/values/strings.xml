@@ -2,5 +2,6 @@
     <string name="app_name">FitFinder</string>
 
     <string name="facebook_app_id">616815075639955</string>
+    <!--    <string name="facebook_app_id">100761898476350</string>-->
     <string name="fb_login_protocol_scheme">fb616815075639955</string>
 </resources>
