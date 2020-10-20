@@ -17,6 +17,7 @@ import com.google.gson.Gson
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.adapter.FR_RegistrationLandmarksChipsAdapter
 import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
+import com.highbryds.fitfinder.callbacks.StoryCallback
 import com.highbryds.fitfinder.commonHelper.JavaHelper
 import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.commonHelper.toast
@@ -37,7 +38,7 @@ var chipModel = ArrayList<FR_RegistrationLandmarksChipsModel>()
 
 
 @AndroidEntryPoint
-class FR_RequestForm : AppCompatActivity(), ApiResponseCallBack {
+class FR_RequestForm : AppCompatActivity(), ApiResponseCallBack , StoryCallback {
 
     private lateinit var startingPoint: String
     private lateinit var startingPointLatLng: String
@@ -117,7 +118,7 @@ class FR_RequestForm : AppCompatActivity(), ApiResponseCallBack {
                 val startingPoint = FR_SearchCarStartingPoint(startingPoint, 0.0 , 0.0)
 
                 val frSearchcar = FR_SearchCar("", "", "FitRide", KotlinHelper.getUsersData().cellNumber,"","","","Car",0,0, Integer.parseInt(prefFare.text.toString()),
-                    0, "2020-10-18"+"T${leavingTime.text.toString()}" , destinationLandmarks , destinationPoint , startingPoint , KotlinHelper.getUsersData().SocialId)
+                    0, "2020-10-18"+"T${leavingTime.text.toString()}" , destinationLandmarks , destinationPoint , startingPoint , KotlinHelper.getUsersData().SocialId , null)
                 frSearchcarvm.SearchCar(frSearchcar)
             }
 
@@ -156,7 +157,7 @@ class FR_RequestForm : AppCompatActivity(), ApiResponseCallBack {
 
     fun setChipAdapter() {
         RV_landmarks.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
-        adapter = FR_RegistrationLandmarksChipsAdapter(chipModel, this)
+        adapter = FR_RegistrationLandmarksChipsAdapter(chipModel, this , this)
         RV_landmarks.adapter = adapter
     }
 
@@ -191,5 +192,12 @@ class FR_RequestForm : AppCompatActivity(), ApiResponseCallBack {
     override fun getSuccess(success: String) {
         RR_progress.visibility = View.GONE
         this.toast(this , success.toString())
+    }
+
+    override fun storyItemPosition(position: Int) {
+        // This is not a story, this is reuse of story callback for landmark chips callback
+        chipModel.removeAt(position)
+        adapter?.notifyDataSetChanged()
+
     }
 }

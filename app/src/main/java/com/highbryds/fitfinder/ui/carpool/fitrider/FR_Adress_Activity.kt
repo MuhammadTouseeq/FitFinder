@@ -10,7 +10,9 @@ import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -129,7 +131,16 @@ class FR_Adress_Activity : AppCompatActivity(), OnMapReadyCallback,
 
     private fun configMap() {
         mGoogleMap.setMapStyle(MapStyling.styleMap())
+        mGoogleMap.isMyLocationEnabled = true
         mGoogleMap.uiSettings.isMyLocationButtonEnabled = true
+
+        val locationButton= (mMapGoogleFragment.view?.findViewById<View>(Integer.parseInt("1"))?.parent as View).findViewById<View>(Integer.parseInt("2"))
+        val rlp=locationButton.layoutParams as (RelativeLayout.LayoutParams)
+        // position on right bottom
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP,0)
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,RelativeLayout.TRUE)
+        rlp.setMargins(0,0,0,200);
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED) {
             mGoogleMap.isMyLocationEnabled = true
