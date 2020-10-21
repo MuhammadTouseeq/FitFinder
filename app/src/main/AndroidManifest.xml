@@ -26,6 +26,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
+
+        <activity android:name=".ui.carpool.CarpoolSelectionActivity"/>
         <activity android:name=".ui.carpool.fitrider.FR_SearchCarList"></activity>
         <activity android:name=".ui.carpool.fitrider.FR_Adress_Activity" />
         <activity

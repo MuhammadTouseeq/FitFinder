@@ -64,6 +64,7 @@ import com.highbryds.fitfinder.ui.Profile.UserProfileMain
 import com.highbryds.fitfinder.ui.Profile.UserProfileSetting
 import com.highbryds.fitfinder.ui.Profile.UserStories
 import com.highbryds.fitfinder.ui.StoryView.StoryFullViewActivity
+import com.highbryds.fitfinder.ui.carpool.CarpoolSelectionActivity
 import com.highbryds.fitfinder.ui.carpool.fitrider.FR_RequestForm
 import com.highbryds.fitfinder.vm.AuthViewModels.LogoutViewModel
 import com.highbryds.fitfinder.vm.Main.StoryViewModel
@@ -305,7 +306,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         }
 
         carpool.setOnClickListener {
-            val intent = Intent(this, FR_RequestForm::class.java)
+            val intent = Intent(this, CarpoolSelectionActivity::class.java)
             startActivity(intent)
         }
 
