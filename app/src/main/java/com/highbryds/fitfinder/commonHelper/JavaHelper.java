@@ -39,7 +39,7 @@ import id.zelory.compressor.Compressor;
 
 public class JavaHelper {
 
-    static  videoCompressionCallback callback;
+    static videoCompressionCallback callback;
 
     public static void printHashKey(Context pContext) {
         try {
@@ -57,13 +57,13 @@ public class JavaHelper {
         }
     }
 
-    public static void compress(String videoPath , Context context , videoCompressionCallback videoCompressionCallback){
+    public static void compress(String videoPath, Context context, videoCompressionCallback videoCompressionCallback) {
         callback = videoCompressionCallback;
-        File f = new File( Environment.getExternalStorageDirectory().getAbsolutePath() + "/FitFinder/");
+        File f = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/FitFinder/");
         new VideoCompress(context).execute(videoPath, f.getPath());
     }
 
-    public static String getAddress(Context context, Double lat , Double lng){
+    public static String getAddress(Context context, Double lat, Double lng) {
         try {
             Geocoder geocoder;
             List<Address> addresses;
@@ -79,7 +79,7 @@ public class JavaHelper {
             String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
 
             return address;
-        }catch (Exception e){
+        } catch (Exception e) {
             return "";
         }
     }
@@ -116,11 +116,11 @@ public class JavaHelper {
         protected void onPostExecute(String compressedFilePath) {
             super.onPostExecute(compressedFilePath);
             File CompressedVideo = new File(compressedFilePath);
-            callback.isCompress(true , CompressedVideo.getPath());
+            callback.isCompress(true, CompressedVideo.getPath());
         }
     }
 
-    public static String CompressPic(File file , Context context) throws IOException {
+    public static String CompressPic(File file, Context context) throws IOException {
 
         File compressedImageFile = new Compressor(context).compressToFile(file);
         return compressedImageFile.getAbsolutePath();
@@ -128,7 +128,7 @@ public class JavaHelper {
     }
 
 
-    public static String badWordReplace(String input){
+    public static String badWordReplace(String input) {
         for (String word : JavaBadWordList.words) {
             Pattern rx = Pattern.compile("\\b" + word + "\\b", Pattern.CASE_INSENSITIVE);
             input = rx.matcher(input).replaceAll(new String(new char[word.length()]).replace('\0', '*'));
@@ -145,10 +145,10 @@ public class JavaHelper {
 
         try {
             address = coder.getFromLocationName(strAddress, 5);
-            if (address != null && address.size() > 0){
+            if (address != null && address.size() > 0) {
                 Address location = address.get(0);
                 p1 = new LatLng(location.getLatitude(), location.getLongitude());
-            }else {
+            } else {
                 return null;
             }
 
@@ -174,5 +174,18 @@ public class JavaHelper {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         return dateFormat.format(date);
+    }
+
+    public static String parseDateToFormat(String f, String dateStart) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            SimpleDateFormat output = new SimpleDateFormat("HH:mm");
+            Date d = sdf.parse(dateStart);
+            String formattedTime = output.format(d);
+            return formattedTime;
+        }catch (Exception e){
+            return null;
+        }
+
     }
 }
