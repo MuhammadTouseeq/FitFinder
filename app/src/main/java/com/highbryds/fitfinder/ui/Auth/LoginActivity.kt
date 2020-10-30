@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.Task
 import com.google.gson.Gson
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
+import com.highbryds.fitfinder.callbacks.onConfirmListner
 import com.highbryds.fitfinder.commonHelper.Constants
 import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.commonHelper.PrefsHelper
@@ -30,7 +31,9 @@ import com.highbryds.fitfinder.model.UserAgent
 import com.highbryds.fitfinder.model.UsersData
 import com.highbryds.fitfinder.ui.Main.HomeMapActivity
 import com.highbryds.fitfinder.ui.Profile.UserProfileMain
+import com.highbryds.fitfinder.ui.Splash.SplashActivity
 import com.highbryds.fitfinder.vm.AuthViewModels.LoginViewModel
+import com.highbryds.fitfinder.vm.AuthViewModels.LogoutViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
@@ -47,6 +50,9 @@ class LoginActivity : AppCompatActivity(), ApiResponseCallBack {
 
     @Inject
     lateinit var loginViewModel: LoginViewModel
+    @Inject
+    lateinit var logoutViewModel: LogoutViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +60,7 @@ class LoginActivity : AppCompatActivity(), ApiResponseCallBack {
 
 
         loginViewModel.apiResponseCallBack = this
+        logoutViewModel.apiResponseCallBack = this
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
@@ -204,13 +211,34 @@ class LoginActivity : AppCompatActivity(), ApiResponseCallBack {
     }
 
     override fun getError(error: String) {
-        googleSignInClient.signOut()
         loadingProgress.visibility = View.GONE
-        this.toast(this, error)
+        // User Login Already.. Show logout popup
+        if (error.contains("already" , true)){
+            googleSignInClient.signOut()
+            LoginManager.getInstance().logOut()
+            KotlinHelper.alertDialog("User Already Login" , "Are you sure you want to logout?" , this ,
+                object: onConfirmListner {
+                    override fun onClick() {
+                        logoutViewModel.logoutUser(PrefsHelper.getString("socialID"))
+                    }
+
+                })
+        }
     }
 
     override fun getSuccess(success: String) {
         loadingProgress.visibility = View.GONE
         this.toast(this, success)
+        if(success.contains("Logout" , true)){
+            val intent = Intent(this , SplashActivity::class.java)
+            startActivity(intent)
+            PrefsHelper.putString(Constants.Pref_UserData, "")
+            PrefsHelper.putBoolean(Constants.Pref_IsLogin, false)
+            PrefsHelper.putString(Constants.Pref_isOTPMobile, "")
+            PrefsHelper.putBoolean(Constants.Pref_isOTPVerifed, false)
+            PrefsHelper.clear().commit()
+            this.finish()
+        }
     }
+
 }

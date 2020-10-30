@@ -21,13 +21,22 @@ import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.commonHelper.Constants
 import com.highbryds.fitfinder.commonHelper.NotificationClass
 import com.highbryds.fitfinder.commonHelper.PrefsHelper
+import com.highbryds.fitfinder.room.Dao
+import com.highbryds.fitfinder.room.Tables.UserChat
+import com.highbryds.fitfinder.ui.Chatting.uc
 import com.highbryds.fitfinder.ui.Main.HomeMapActivity
 import com.highbryds.fitfinder.utils.NotificationData
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Picasso.LoadedFrom
 import com.squareup.picasso.Target
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FirebaseService : FirebaseMessagingService() {
+
+    @Inject
+    lateinit var getDatabaseDao: Dao
 
     @Override
     override fun onNewToken(p0: String) {
@@ -39,45 +48,65 @@ class FirebaseService : FirebaseMessagingService() {
     override fun onMessageReceived(p0: RemoteMessage) {
         super.onMessageReceived(p0)
 
-        Log.d("FCMFCM", p0.toString())
-        val data: Map<String, String> = p0.getData()
+        // chatting notifications
+        val obj: String? = p0.getData().get("type")
+        if (obj != null && obj.equals("chat")) {
 
-        // handle backend
-        if (data.get("type") != null) {
-            PrefsHelper.putString(Constants.Pref_ToOpenStoryAuto, data.get("type"))
-            val title = data.get("title")
-            val des = data.get("body")
-            val img = data.get("img")
+            //val id = Integer.valueOf(obj.toString())
+           // PrefsHelper.putString("FCMFCM" , "TRUE")
+           // PrefsHelper.putString("FCMFCM2" , p0.getData().get("message"))
+            val msg = p0.getData().get("message")+"\n"+p0.getData().get("messageTime")
+            val name = p0.getData().get("messageFromName")
+            sendNotification(msg,  name!!)
 
-            if (img.equals("") || img == null){
-                sendNotification(des!!, title!!)
-            }else{
-                NotificationData.title = title
-                NotificationData.content = des
-                NotificationData.imageUrl = img
-                NotificationData.imageFeedUrl = img
-
-                getImage()
-            }
+            val uc = UserChat()
+            uc.messageId = "0"
+            uc.message = p0.getData().get("message")
+            uc.recipientId = p0.getData().get("messageFromSocialId")
+            uc.type = 0
+            uc.timeStamp = p0.getData().get("messageTime")
+            insertChatMessages(uc)
 
         }else{
-            // To handle firebase console notification with image or without image
-            val msg: String = p0.getNotification()?.getBody()!!
-            val title: String = p0.getNotification()?.getTitle()!!
-            val image = if (p0.getNotification()?.getImageUrl().toString() == "null") "null" else p0.getNotification()?.getImageUrl().toString()
+
+            val data: Map<String, String> = p0.getData()
+            // handle backend
+            if (data.get("type") != null) {
+                PrefsHelper.putString(Constants.Pref_ToOpenStoryAuto, data.get("type"))
+                val title = data.get("title")
+                val des = data.get("body")
+                val img = data.get("img")
+
+                if (img.equals("") || img == null){
+                    sendNotification(des!!, title!!)
+                }else{
+                    NotificationData.title = title
+                    NotificationData.content = des
+                    NotificationData.imageUrl = img
+                    NotificationData.imageFeedUrl = img
+
+                    getImage()
+                }
+
+            }else{
+                // To handle firebase console notification with image or without image
+                val msg: String = p0.getNotification()?.getBody()!!
+                val title: String = p0.getNotification()?.getTitle()!!
+                val image = if (p0.getNotification()?.getImageUrl().toString() == "null") "null" else p0.getNotification()?.getImageUrl().toString()
 
 
-            if (image == "null") {
-                sendNotification(msg, title)
-            } else {
-                NotificationData.title = title
-                NotificationData.content = msg
-                NotificationData.imageUrl = image
-                NotificationData.imageFeedUrl = image
+                if (image == "null") {
+                    sendNotification(msg, title)
+                } else {
+                    NotificationData.title = title
+                    NotificationData.content = msg
+                    NotificationData.imageUrl = image
+                    NotificationData.imageFeedUrl = image
 
-                getImage()
+                    getImage()
+                }
+
             }
-
         }
     }
 
@@ -222,5 +251,9 @@ class FirebaseService : FirebaseMessagingService() {
                 mNotificationManager.notify(notifyID, notification)
             }
         }
+    }
+
+    fun insertChatMessages(uc: UserChat?) {
+        getDatabaseDao.insertItem(uc)
     }
 }

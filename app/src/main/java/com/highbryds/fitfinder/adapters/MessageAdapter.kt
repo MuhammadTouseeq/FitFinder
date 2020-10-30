@@ -8,13 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
+import androidx.lifecycle.LiveData
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.commonHelper.DateConverter
 import com.highbryds.fitfinder.room.Tables.UserChat
 import com.highbryds.fitfinder.ui.Chatting.context
 import java.util.*
 
-class MessageAdapter constructor(activity: Activity, var context: Context, uc: MutableList<UserChat>?): BaseAdapter() {
+class MessageAdapter constructor(activity: Activity, var context: Context, uc: List<UserChat>?): BaseAdapter() {
 
     companion object{
         val DIRECTION_INCOMING = 0
@@ -23,22 +24,13 @@ class MessageAdapter constructor(activity: Activity, var context: Context, uc: M
     }
 
     //private List<Pair<Message, Integer>> mMessages;
-    private var mMessagesnew: MutableList<UserChat>? = uc
+    private var mMessagesnew: List<UserChat>? = uc
 
 
     private var mInflater: LayoutInflater? = activity.getLayoutInflater();
 
-    fun MessageAdapter(activity: Activity, uc: MutableList<UserChat>?) {
-        mMessagesnew = uc
-        mInflater = activity.layoutInflater
-        //  mMessages = new ArrayList<Pair<Message, Integer>>();
-        //   mFormatter = new SimpleDateFormat("HH:mm");
-    }
-
-    fun addMessage(chat_message: UserChat) {
-        //    mMessages.add(new Pair(message, direction));
-        mMessagesnew!!.add(chat_message)
-        // notifyDataSetChanged();
+    fun loadChat(userChat: List<UserChat>){
+        mMessagesnew = userChat
     }
 
     override fun getCount(): Int {
@@ -88,7 +80,7 @@ class MessageAdapter constructor(activity: Activity, var context: Context, uc: M
             txtDate.setTextColor(context.resources.getColor(R.color.colorWhite))
         }
         txtMessage.text = mMessagesnew!![i].getMessage().split("~".toRegex()).toTypedArray()[0]
-        txtDate.setText(DateConverter.toDate(mMessagesnew!![i].getTimeStamp()).toString())
+     //   txtDate.setText(DateConverter.toDate(mMessagesnew!![i].getTimeStamp()).toString())
         return convertView
     }
 }

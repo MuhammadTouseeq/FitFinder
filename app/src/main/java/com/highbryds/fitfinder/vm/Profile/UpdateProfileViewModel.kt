@@ -1,7 +1,5 @@
 package com.highbryds.fitfinder.vm.Profile
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
@@ -14,8 +12,7 @@ import okhttp3.RequestBody
 import java.lang.Exception
 import javax.inject.Inject
 
-class UpdateProfileViewModel @Inject constructor(private val provideApiInterface: ApiInterface) :
-    ViewModel() {
+class UpdateProfileViewModel @Inject constructor(private val provideApiInterface: ApiInterface) : ViewModel() {
 
     lateinit var apiResponseCallBack: ApiResponseCallBack
 

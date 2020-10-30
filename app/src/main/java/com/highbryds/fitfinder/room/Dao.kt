@@ -1,5 +1,6 @@
 package com.highbryds.fitfinder.room
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -23,7 +24,7 @@ interface Dao {
     fun deleteUserMsgsList()
 
     @Query("SELECT * from UserChat where RecipientId = :RecID OR SenderId= :myID AND RecipientId = :myID OR SenderId= :RecID order by id ASC")
-    fun getallChat(RecID: String, myID: String): MutableList<UserChat>?
+    fun getallChat(RecID: String, myID: String): LiveData<List<UserChat>>?
 
     @Query("SELECT count(*) from UserChat where MessageId=:messageid")
     fun getMessageCount(messageid: String?): Int

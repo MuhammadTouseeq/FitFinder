@@ -111,14 +111,14 @@ class FR_RequestForm : AppCompatActivity(), ApiResponseCallBack , StoryCallback 
                 endPointLatLng =endPointLatLng.replace(")" , "")
 
                 startingPointLatLng =  startingPointLatLng.replace("lat/lng: (" , "")
-                startingPointLatLng =startingPointLatLng.replace(")" , "")
+                startingPointLatLng = startingPointLatLng.replace(")" , "")
 
                 val destinationPoint = FR_SearchCarDestinationPoint(endPoint , endPointLatLng.split(",".toRegex())[0].toDoubleOrNull()!! , endPointLatLng.split(",".toRegex())[1].toDoubleOrNull()!!)
                 //val startingPoint = FR_SearchCarStartingPoint(startingPoint, startingPointLatLng.split(",".toRegex())[0].toDoubleOrNull()!! , startingPointLatLng.split(",".toRegex())[1].toDoubleOrNull()!!)
                 val startingPoint = FR_SearchCarStartingPoint(startingPoint, 0.0 , 0.0)
 
                 val frSearchcar = FR_SearchCar("", "", "FitRide", KotlinHelper.getUsersData().cellNumber,"","","","Car",0,0, Integer.parseInt(prefFare.text.toString()),
-                    0, "2020-10-18"+"T${leavingTime.text.toString()}" , destinationLandmarks , destinationPoint , startingPoint , KotlinHelper.getUsersData().SocialId , null)
+                    80, "2020-10-18"+"T${leavingTime.text.toString()}" , destinationLandmarks , destinationPoint , startingPoint , KotlinHelper.getUsersData().SocialId , null)
                 frSearchcarvm.SearchCar(frSearchcar)
             }
 

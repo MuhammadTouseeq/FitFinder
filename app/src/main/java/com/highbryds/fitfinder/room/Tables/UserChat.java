@@ -64,11 +64,11 @@ public class UserChat {
         SenderId = senderId;
     }
 
-    public long getTimeStamp() {
+    public String getTimeStamp() {
         return TimeStamp;
     }
 
-    public void setTimeStamp(long timeStamp) {
+    public void setTimeStamp(String timeStamp) {
         TimeStamp = timeStamp;
     }
 
@@ -77,7 +77,7 @@ public class UserChat {
     public String SenderId;
     @TypeConverters(DateConverter.class)
 
-    public long TimeStamp;
+    public String TimeStamp;
 
     public int getType() {
         return Type;

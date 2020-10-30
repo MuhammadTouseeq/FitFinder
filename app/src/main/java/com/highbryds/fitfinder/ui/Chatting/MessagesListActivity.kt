@@ -142,7 +142,7 @@ class MessagesListActivity : AppCompatActivity(), MessageClientListener {
             uc!!.recipientId = message.recipientIds.get(0)
             uc!!.senderId = message.senderId
             uc!!.type = type
-            uc!!.timeStamp = message.timestamp.time
+            uc!!.timeStamp = message.timestamp.time.toString()
             insertChatMessages(uc)
         }
     }

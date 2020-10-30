@@ -7,6 +7,7 @@ import android.util.Log
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.commonHelper.Constants
 import com.highbryds.fitfinder.commonHelper.PrefsHelper
+import com.highbryds.fitfinder.commonHelper.toast
 import com.highbryds.fitfinder.ui.Auth.LoginActivity
 import com.highbryds.fitfinder.ui.Main.HomeMapActivity
 import com.highbryds.fitfinder.ui.OnBoarding.FirstScreen
@@ -19,6 +20,12 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
+
+       // PrefsHelper.putString("FCMFCM" , "")
+
+        if (PrefsHelper.getString("FCMFCM" , "").equals("TRUE")){
+            this.toast(this , PrefsHelper.getString("FCMFCM2" , "nhi aya"))
+        }
 
         try {
             val bundle = intent.extras
