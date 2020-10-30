@@ -51,6 +51,8 @@ class MessageActivity : AppCompatActivity(), ApiResponseCallBack {
     @Inject
     lateinit var userChattingViewModel: UserChattingViewModel
 
+    lateinit var textBody: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_message)
@@ -62,7 +64,10 @@ class MessageActivity : AppCompatActivity(), ApiResponseCallBack {
         context = this
         instance = SinchSdk.getInstance(this)
        // instance!!.callClient.addCallClientListener(SinchCallClientListener())
+
+        userChattingViewModel.getMSG(SinchSdk.RECIPENT_ID , SinchSdk.USER_ID)
         mMessageAdapter = MessageAdapter(this,this, getDatabaseDao.getallChat(SinchSdk.RECIPENT_ID, SinchSdk.USER_ID)?.value)
+       // mMessageAdapter = MessageAdapter(this,this, getDatabaseDao.getallChat()?.value)
         val messagesList = findViewById<View>(R.id.lstMessages) as ListView
         messagesList.adapter = mMessageAdapter
 
@@ -70,6 +75,21 @@ class MessageActivity : AppCompatActivity(), ApiResponseCallBack {
         userChattingViewModel.userMsgs.observe(this , Observer {
             mMessageAdapter!!.loadChat(it)
             mMessageAdapter!!.notifyDataSetChanged()
+        })
+
+        userChattingViewModel.msgTo.observe(this , Observer {
+            uc = UserChat()
+            uc!!.recipientImage = it[0].imageUrl
+            uc!!.recipientName = it[0].name
+            uc!!.senderName = KotlinHelper.getUsersData().name
+            uc!!.messageId = "0"
+            uc!!.message = textBody
+            uc!!.recipientId = SinchSdk.RECIPENT_ID
+            uc!!.senderId = SinchSdk.USER_ID
+            uc!!.type = 1
+            uc!!.timeStamp = JavaHelper.getDateTimeSeconds()
+            insertChatMessages(uc)
+
         })
 
 
@@ -87,26 +107,17 @@ class MessageActivity : AppCompatActivity(), ApiResponseCallBack {
 
     fun sendMessage() {
 
-        val textBody: String = txtTextBody.getText().toString()
-
+        textBody = txtTextBody.getText().toString()
         val chattingViewModel = Chatting(textBody , SinchSdk.RECIPENT_ID , KotlinHelper.getUsersData().name, KotlinHelper.getUsersData().imageUrl, JavaHelper.getDateTimeSeconds() , KotlinHelper.getUsersData().SocialId)
         userChattingViewModel.sendChat(chattingViewModel)
-
-        uc = UserChat()
-        uc!!.messageId = "0"
-        uc!!.message = textBody
-        //uc!!.recipientId = message.senderId
-        uc!!.senderId = KotlinHelper.getUsersData().SocialId
-        uc!!.type = 1
-        uc!!.timeStamp = JavaHelper.getDateTimeSeconds()
-        insertChatMessages(uc)
-
         txtTextBody.setText("")
+
     }
 
 
     fun insertChatMessages(uc: UserChat?) {
         getDatabaseDao.insertItem(uc)
+        textBody = ""
     }
 
 

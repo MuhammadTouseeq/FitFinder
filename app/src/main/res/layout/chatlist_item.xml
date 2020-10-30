@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="@dimen/_5sdp"
-        android:gravity="center">
+        android:gravity="center"
+        android:id="@+id/LL_card">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/IV_profilePic"

@@ -17,6 +17,7 @@ import com.highbryds.fitfinder.room.Dao
 import com.highbryds.fitfinder.room.Tables.UserChat
 import com.highbryds.fitfinder.room.Tables.UserMsgsList
 import com.highbryds.fitfinder.sinch.SinchSdk
+import com.highbryds.fitfinder.vm.UserChatting.UserChattingViewModel
 import com.sinch.android.rtc.PushPair
 import com.sinch.android.rtc.calling.Call
 import com.sinch.android.rtc.calling.CallClient
@@ -24,22 +25,24 @@ import com.sinch.android.rtc.calling.CallClientListener
 import com.sinch.android.rtc.messaging.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_messages_list.*
+import java.util.Observer
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MessagesListActivity : AppCompatActivity(), MessageClientListener {
+class MessagesListActivity : AppCompatActivity() {
 
     @Inject
     lateinit var getDatabaseDao: Dao
     lateinit var adapter: UserMsgsAdapter
     var isCurrentActivity = false
+    @Inject
+    lateinit var userChattingViewModel: UserChattingViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_messages_list)
 
-
-
+        context = this
         val toolbar: Toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
         getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
@@ -50,13 +53,15 @@ class MessagesListActivity : AppCompatActivity(), MessageClientListener {
         }
 
         RV_userMsgsList.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        setList()
+        userChattingViewModel.getGroupMsgs()
+        adapter = UserMsgsAdapter( getDatabaseDao.getmsgs().value , this)
+        RV_userMsgsList.adapter = adapter
+        userChattingViewModel.userGroupMsgs.observe(this , androidx.lifecycle.Observer {
+            adapter.loadChat(it)
+            adapter.notifyDataSetChanged()
+        })
 
 
-        context = this
-        instance = SinchSdk.getInstance(this)
-        instance!!.callClient.addCallClientListener(SinchCallClientListener())
-        SinchSdk.getInstance(this)!!.messageClient.addMessageClientListener(this)
     }
 
     override fun onResume() {
@@ -68,90 +73,5 @@ class MessagesListActivity : AppCompatActivity(), MessageClientListener {
         super.onPause()
         isCurrentActivity = false
     }
-
-    override fun onIncomingMessage(p0: MessageClient?, p1: Message?) {
-        Log.d("MESSAGELISt", p1!!.textBody)
-        val data = p1.textBody.split("~").toTypedArray()
-        if (data.size > 2){
-            val userMsgsList = UserMsgsList(
-                0,
-                p1.messageId,
-                p1.textBody,
-                p1.senderId,
-                p1.timestamp.time
-            )
-            getDatabaseDao.insertMsgsList(userMsgsList)
-//        adapter.addMessage(getDatabaseDao.getmsgs())
-//        adapter.notifyDataSetChanged()
-            setList()
-            if (isCurrentActivity){
-                setMessages(p1, MessageAdapter.DIRECTION_INCOMING)
-            }
-        }
-    }
-
-    override fun onMessageSent(p0: MessageClient?, p1: Message?, p2: String?) {
-        Log.d("MESSAGELISt", p1!!.textBody)
-        if (isCurrentActivity){
-            setMessages(p1, MessageAdapter.DIRECTION_OUTGOING)
-        }
-
-    }
-
-    override fun onMessageFailed(p0: MessageClient?, p1: Message?, p2: MessageFailureInfo?) {
-       this.toast(this, p2.toString())
-    }
-
-    override fun onMessageDelivered(p0: MessageClient?, p1: MessageDeliveryInfo?) {
-        this.toast(this, p1.toString())
-    }
-
-    override fun onShouldSendPushData(
-        p0: MessageClient?,
-        p1: Message?,
-        p2: MutableList<PushPair>?
-    ) {
-        TODO("Not yet implemented")
-    }
-
-    private class SinchCallClientListener : CallClientListener {
-        override fun onIncomingCall(callClient: CallClient, call: Call) {
-            var intent: Intent? = null
-            if (call.details.isVideoOffered) {
-                intent = Intent(context, IncomingCallScreenActivity::class.java)
-            } else {
-                intent = Intent(context, CallScreenActivity::class.java)
-            }
-            intent!!.putExtra(SinchSdk.CALL_ID, call.callId)
-            context.startActivity(intent)
-        }
-    }
-
-    private fun setList(){
-        val list: MutableList<UserMsgsList> = getDatabaseDao.getmsgs()
-        adapter = UserMsgsAdapter(list, this)
-        RV_userMsgsList.adapter = adapter
-    }
-
-
-    fun setMessages(message: Message, type: Int) {
-        if (getDatabaseDao.getMessageCount(message.messageId) == 0) {
-            uc = UserChat()
-            uc!!.messageId = message.messageId
-            uc!!.message = message.textBody
-            uc!!.recipientId = message.recipientIds.get(0)
-            uc!!.senderId = message.senderId
-            uc!!.type = type
-            uc!!.timeStamp = message.timestamp.time.toString()
-            insertChatMessages(uc)
-        }
-    }
-
-    fun insertChatMessages(uc: UserChat?) {
-        getDatabaseDao.insertItem(uc)
-    }
-
-
-
 
 }

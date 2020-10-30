@@ -19,6 +19,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.commonHelper.Constants
+import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.commonHelper.NotificationClass
 import com.highbryds.fitfinder.commonHelper.PrefsHelper
 import com.highbryds.fitfinder.room.Dao
@@ -61,8 +62,12 @@ class FirebaseService : FirebaseMessagingService() {
 
             val uc = UserChat()
             uc.messageId = "0"
+            uc.recipientImage = p0.getData().get("messageFromProfile")
+            uc.recipientName = KotlinHelper.getUsersData().name
+            uc.senderName = p0.getData().get("messageFromName")
             uc.message = p0.getData().get("message")
-            uc.recipientId = p0.getData().get("messageFromSocialId")
+            uc.recipientId = KotlinHelper.getUsersData().SocialId
+            uc.senderId = p0.getData().get("messageFromSocialId")
             uc.type = 0
             uc.timeStamp = p0.getData().get("messageTime")
             insertChatMessages(uc)
