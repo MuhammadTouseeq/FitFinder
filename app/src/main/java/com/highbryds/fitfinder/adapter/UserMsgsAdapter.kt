@@ -50,6 +50,7 @@ public class UserMsgsAdapter(var userChat: List<UserChat>?, var context: Context
 
                 msg = userMsgsList!!.message
 
+
                 val ob = uc.filter {
                     it.senderId.equals(userMsgsList?.senderId) and it.recipientId.equals(
                         userMsgsList?.recipientId
@@ -62,17 +63,20 @@ public class UserMsgsAdapter(var userChat: List<UserChat>?, var context: Context
                     )
                 }.lastOrNull()
 
+if(ob!=null && ob1 !=null){
+    if (ob!!.id > ob1!!.id) {
+        // ob is greater
 
-                if (ob!!.id > ob1!!.id) {
-                    // ob is greater
+        msg = ob.message
 
-                    msg = ob.message
+    } else {
+        // ob1 is greater
+        msg = ob1.message
 
-                } else {
-                    // ob1 is greater
-                    msg = ob1.message
+    }
 
-                }
+}
+
 
 
                 LL_card.visibility = View.VISIBLE
