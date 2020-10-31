@@ -85,7 +85,7 @@ public class UserMsgsAdapter(var userChat: List<UserChat>?, var context: Context
                     .placeholder(R.drawable.ic_launcher_foreground)
                     .into(IV_profilePic);
 
-           
+
 
 
             }
