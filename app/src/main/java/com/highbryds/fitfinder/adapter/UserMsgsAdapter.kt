@@ -28,7 +28,7 @@ public class UserMsgsAdapter(var userChat: List<UserChat>?, var context: Context
     }
 
     public class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
+        var msg = "";
         val userID = itemView.findViewById(R.id.userID) as TextView
         val userMSG = itemView.findViewById(R.id.userMSG) as TextView
         val LL_item = itemView.findViewById(R.id.LL_item) as LinearLayout
@@ -39,30 +39,56 @@ public class UserMsgsAdapter(var userChat: List<UserChat>?, var context: Context
 
         fun bindViews(userMsgsList: UserChat?, uc: List<UserChat>, pos: Int, context: Context) {
 
-//           var msg = userMsgsList?.message
-//                val ob = uc.filter {
-//                    it.senderId.equals(KotlinHelper.getUsersData().SocialId) and it.recipientId.equals(
-//                        userMsgsList?.RecipientId
-//                    )
-//                }.lastOrNull()
 
             if (userMsgsList?.senderId.equals(KotlinHelper.getUsersData().SocialId)) {
+
+
                 LL_card.visibility = View.GONE
-            }else{
+
+            } else {
+
+
+                msg = userMsgsList!!.message
+
+                val ob = uc.filter {
+                    it.senderId.equals(userMsgsList?.senderId) and it.recipientId.equals(
+                        userMsgsList?.recipientId
+                    )
+                }.lastOrNull()
+
+                val ob1 = uc.filter {
+                    it.recipientId.equals(userMsgsList?.senderId) and it.senderId.equals(
+                        userMsgsList?.recipientId
+                    )
+                }.lastOrNull()
+
+
+                if (ob!!.id > ob1!!.id) {
+                    // ob is greater
+
+                    msg = ob.message
+
+                } else {
+                    // ob1 is greater
+                    msg = ob1.message
+
+                }
+
+
                 LL_card.visibility = View.VISIBLE
                 userID.text = userMsgsList?.senderName
-                userMSG.text = userMsgsList?.Message
+                userMSG.text = msg
                 dateTime.text = userMsgsList?.TimeStamp
                 Glide
                     .with(context)
                     .load(userMsgsList?.recipientImage)
                     .placeholder(R.drawable.ic_launcher_foreground)
                     .into(IV_profilePic);
+
+           
+
+
             }
-
-
-
-
 
 
         }
