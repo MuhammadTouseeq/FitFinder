@@ -252,15 +252,13 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             it?.let {
                 adapter.addData(it)
                 adapter.notifyDataSetChanged()
-                //  for ((index, model) in it.withIndex()) {
+                if (it.isNotEmpty()){
+                    multiStoryView.visibility = View.VISIBLE
+                    showStoryImage(storyImg1, it.get(Random().nextInt(it.size))?.mediaUrl)
+                    showStoryImage(storyImg2, it.get(Random().nextInt(it.size))?.mediaUrl)
+                    showStoryImage(storyImg3, it.get(Random().nextInt(it.size))?.mediaUrl)
+                }
 
-
-                //  }
-
-                multiStoryView.visibility = View.VISIBLE
-                showStoryImage(storyImg1, it.get(Random().nextInt(it.size))?.mediaUrl)
-                showStoryImage(storyImg2, it.get(Random().nextInt(it.size))?.mediaUrl)
-                showStoryImage(storyImg3, it.get(Random().nextInt(it.size))?.mediaUrl)
             }
 
 
@@ -306,7 +304,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         }
 
         carpool.setOnClickListener {
-            val intent = Intent(this, CarpoolSelectionActivity::class.java)
+            val intent = Intent(this, FR_RequestForm::class.java)
             startActivity(intent)
         }
 

@@ -176,6 +176,12 @@ public class JavaHelper {
         return dateFormat.format(date);
     }
 
+    public static String getDateTimeSeconds() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
+
     public static String parseDateToFormat(String f, String dateStart) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -183,7 +189,7 @@ public class JavaHelper {
             Date d = sdf.parse(dateStart);
             String formattedTime = output.format(d);
             return formattedTime;
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
 

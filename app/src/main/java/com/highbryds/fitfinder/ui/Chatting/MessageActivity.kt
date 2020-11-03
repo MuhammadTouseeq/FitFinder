@@ -10,13 +10,18 @@ import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.startActivity
+import androidx.lifecycle.Observer
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.adapters.MessageAdapter
+import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
+import com.highbryds.fitfinder.commonHelper.JavaHelper
 import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.commonHelper.toast
+import com.highbryds.fitfinder.model.Chatting
 import com.highbryds.fitfinder.room.Dao
 import com.highbryds.fitfinder.room.Tables.UserChat
 import com.highbryds.fitfinder.sinch.SinchSdk
+import com.highbryds.fitfinder.vm.UserChatting.UserChattingViewModel
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -39,39 +44,59 @@ var uc: UserChat? = null
 lateinit var context: Context
 
 @AndroidEntryPoint
-class MessageActivity : AppCompatActivity(), MessageClientListener {
+class MessageActivity : AppCompatActivity(), ApiResponseCallBack {
 
     @Inject
     lateinit var getDatabaseDao: Dao
+    @Inject
+    lateinit var userChattingViewModel: UserChattingViewModel
+
+    lateinit var textBody: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_message)
 
 
+        userChattingViewModel.apiResponseCallBack = this
         name.text = SinchSdk.RECIPENT_NAME
         //SinchSdk.USER_ID = KotlinHelper.getUsersData().SocialId
         context = this
         instance = SinchSdk.getInstance(this)
-        instance!!.callClient.addCallClientListener(SinchCallClientListener())
-        mMessageAdapter = MessageAdapter(this,this, getDatabaseDao.getallChat(SinchSdk.RECIPENT_ID, SinchSdk.USER_ID))
+       // instance!!.callClient.addCallClientListener(SinchCallClientListener())
+
+        userChattingViewModel.getMSG(SinchSdk.RECIPENT_ID , SinchSdk.USER_ID)
+        mMessageAdapter = MessageAdapter(this,this, getDatabaseDao.getallChat(SinchSdk.RECIPENT_ID, SinchSdk.USER_ID)?.value)
+       // mMessageAdapter = MessageAdapter(this,this, getDatabaseDao.getallChat()?.value)
         val messagesList = findViewById<View>(R.id.lstMessages) as ListView
         messagesList.adapter = mMessageAdapter
 
-        SinchSdk.getInstance(this)!!.messageClient.addMessageClientListener(this)
+
+        userChattingViewModel.userMsgs.observe(this , Observer {
+            mMessageAdapter!!.loadChat(it)
+            mMessageAdapter!!.notifyDataSetChanged()
+        })
+
+        userChattingViewModel.msgTo.observe(this , Observer {
+            uc = UserChat()
+            uc!!.recipientImage = it[0].imageUrl
+            uc!!.recipientName = it[0].name
+            uc!!.senderName = KotlinHelper.getUsersData().name
+            uc!!.messageId = "0"
+            uc!!.message = textBody
+            uc!!.recipientId = SinchSdk.RECIPENT_ID
+            uc!!.senderId = SinchSdk.USER_ID
+            uc!!.type = 1
+            uc!!.timeStamp = JavaHelper.getDateTimeSeconds()
+            insertChatMessages(uc)
+
+        })
+
 
         btnSend.setOnClickListener {
             sendMessage()
         }
 
-
-        btnCall.setOnClickListener {
-            requestAudio()
-        }
-
-        btnVideo.setOnClickListener {
-            requestCameraPermission();
-        }
 
         IV_back.setOnClickListener {
             finish()
@@ -82,144 +107,29 @@ class MessageActivity : AppCompatActivity(), MessageClientListener {
 
     fun sendMessage() {
 
-        val textBody: String = txtTextBody.getText().toString()
-        if (textBody.isEmpty()) {
-            Toast.makeText(applicationContext, "No text message", Toast.LENGTH_SHORT).show()
-            return
-        }
-        val message = WritableMessage(SinchSdk.RECIPENT_ID, textBody+"~"+KotlinHelper.getUsersData().imageUrl
-                +"~"+KotlinHelper.getUsersData().name)
-        SinchSdk.getInstance(applicationContext)!!.messageClient.send(message)
+        textBody = txtTextBody.getText().toString()
+        val chattingViewModel = Chatting(textBody , SinchSdk.RECIPENT_ID , KotlinHelper.getUsersData().name, KotlinHelper.getUsersData().imageUrl, JavaHelper.getDateTimeSeconds() , KotlinHelper.getUsersData().SocialId)
+        userChattingViewModel.sendChat(chattingViewModel)
         txtTextBody.setText("")
+
     }
 
-    override fun onIncomingMessage(p0: MessageClient?, p1: Message?) {
-        setMessages(p1!!, MessageAdapter.DIRECTION_INCOMING)
-    }
-
-    override fun onMessageSent(p0: MessageClient?, p1: Message?, p2: String?) {
-        Log.d("MESSAGEActivity", p1!!.textBody)
-        setMessages(p1!!, MessageAdapter.DIRECTION_OUTGOING)
-    }
-
-    override fun onMessageFailed(p0: MessageClient?, p1: Message?, p2: MessageFailureInfo?) {
-        this.toast(this, "User Not Found")
-        Log.d("MESSAGEACTIVITY", "FAILED")
-    }
-
-    override fun onMessageDelivered(p0: MessageClient?, p1: MessageDeliveryInfo?) {
-        Log.d("MESSAGEACTIVITY", "DELIVERED")
-    }
-
-    override fun onShouldSendPushData(
-        p0: MessageClient?,
-        p1: Message?,
-        p2: MutableList<PushPair>?
-    ) {
-        TODO("Not yet implemented")
-    }
-
-    private class SinchCallClientListener : CallClientListener {
-        override fun onIncomingCall(callClient: CallClient, call: Call) {
-            var intent: Intent? = null
-            if (call.details.isVideoOffered) {
-                intent = Intent(context, IncomingCallScreenActivity::class.java)
-            } else {
-                intent = Intent(context, CallScreenActivity::class.java)
-            }
-            intent!!.putExtra(SinchSdk.CALL_ID, call.callId)
-            context.startActivity(intent)
-        }
-    }
-
-    fun setMessages(message: Message, type: Int) {
-        if (getDatabaseDao.getMessageCount(message.messageId) == 0) {
-            uc = UserChat()
-            uc!!.messageId = message.messageId
-            uc!!.message = message.textBody
-            uc!!.recipientId = message.senderId
-            //uc!!.senderId = SinchSdk.USER_ID
-            uc!!.type = type
-            uc!!.timeStamp = message.timestamp.time
-            insertChatMessages(uc)
-            mMessageAdapter!!.addMessage(uc!!)
-            mMessageAdapter!!.notifyDataSetChanged()
-        }
-    }
 
     fun insertChatMessages(uc: UserChat?) {
         getDatabaseDao.insertItem(uc)
-    }
-
-    private fun CallUser() {
-        val call =
-            SinchSdk.getInstance(applicationContext).callClient.callUser(SinchSdk.RECIPENT_ID)
-        val callId = call.callId
-        val callScreen = Intent(context, CallScreenActivity::class.java)
-        callScreen.putExtra(SinchSdk.CALL_ID, callId)
-        startActivity(callScreen)
-    }
-
-    private fun requestAudio() {
-        Dexter.withContext(context)
-            .withPermissions(
-                Manifest.permission.RECORD_AUDIO,
-                Manifest.permission.READ_PHONE_STATE
-            )
-            .withListener(object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(report: MultiplePermissionsReport) {
-                    // check if all permissions are granted
-                    if (report.areAllPermissionsGranted()) {
-                        CallUser()
-                    }
-                }
-
-                override fun onPermissionRationaleShouldBeShown(
-                    permissions: List<PermissionRequest>,
-                    token: PermissionToken
-                ) {
-                    token.continuePermissionRequest()
-                }
-            }).onSameThread()
-            .check()
-    }
-
-    private fun requestCameraPermission() {
-        Dexter.withContext(context)
-            .withPermissions(
-                Manifest.permission.RECORD_AUDIO,
-                Manifest.permission.CAMERA,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.VIBRATE,
-                Manifest.permission.READ_PHONE_STATE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            )
-            .withListener(object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(report: MultiplePermissionsReport) {
-                    // check if all permissions are granted
-                    if (report.areAllPermissionsGranted()) {
-                        videoCallUser()
-                    }
-                }
-
-                override fun onPermissionRationaleShouldBeShown(
-                    permissions: List<PermissionRequest>,
-                    token: PermissionToken
-                ) {
-                    token.continuePermissionRequest()
-                }
-            }).onSameThread()
-            .check()
+        textBody = ""
     }
 
 
-    private fun videoCallUser() {
-        val call =
-            SinchSdk.getInstance(applicationContext).callClient.callUserVideo(SinchSdk.RECIPENT_ID)
-        val callId = call.callId
-        val callScreen = Intent(context, CallScreenActivity::class.java)
-        callScreen.putExtra(SinchSdk.CALL_ID, callId)
-        startActivity(callScreen)
+
+    override fun getError(error: String) {
+        this.toast(this , error.toString())
     }
+
+    override fun getSuccess(success: String) {
+        this.toast(this , success.toString())
+    }
+
+
 
 }

@@ -13,7 +13,20 @@ public class UserChat {
     // @PrimaryKey
     //@NonNull
     //@ColumnInfo(name = "MessageId")
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    public int id;
+    public String Message;
     public String MessageId;
+    public String RecipientId;
+    public String SenderId;
+    @TypeConverters(DateConverter.class)
+    public String TimeStamp;
+    public int Type;
+    public String recipientImage;
+    public String recipientName;
+    public String senderName;
 
 
     public String getMessageId() {
@@ -32,13 +45,6 @@ public class UserChat {
         Message = message;
     }
 
-
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-
-    public int id;
-
-
     public int getid() {
         return id;
     }
@@ -46,7 +52,6 @@ public class UserChat {
     public void setid(String id) {
         id = id;
     }
-
 
     public String getRecipientId() {
         return RecipientId;
@@ -64,20 +69,12 @@ public class UserChat {
         SenderId = senderId;
     }
 
-    public long getTimeStamp() {
+    public String getTimeStamp() {
         return TimeStamp;
     }
 
-    public void setTimeStamp(long timeStamp) {
-        TimeStamp = timeStamp;
-    }
-
-    public String Message;
-    public String RecipientId;
-    public String SenderId;
-    @TypeConverters(DateConverter.class)
-
-    public long TimeStamp;
+    public void setTimeStamp(String timeStamp) {
+        TimeStamp = timeStamp; }
 
     public int getType() {
         return Type;
@@ -87,7 +84,27 @@ public class UserChat {
         Type = type;
     }
 
-    public int Type;
+    public String getRecipientImage() {
+        return recipientImage;
+    }
 
+    public void setRecipientImage(String recipientImage) {
+        this.recipientImage = recipientImage;
+    }
 
+    public String getRecipientName() {
+        return recipientName;
+    }
+
+    public void setRecipientName(String recipientName) {
+        this.recipientName = recipientName;
+    }
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
 }
