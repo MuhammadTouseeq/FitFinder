@@ -33,7 +33,8 @@ class FR_SearchCarList : AppCompatActivity() {
             noRecommended.visibility = View.GONE
             val adapter = FR_SearchCarVehiclesAdapter(frSearchcar, this, 0)
             RV_recommended.adapter = adapter
-        } else {
+        }
+        else {
             noRecommended.visibility = View.VISIBLE
         }
 

@@ -1,5 +1,6 @@
 package com.highbryds.fitfinder.ui.carpool.fitdriver
 
+import android.content.Intent
 import android.os.Bundle
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.adapters.RideRequestsAdapter
@@ -26,6 +27,13 @@ class RideRequestsActivity: BaseActivity() {
         val arrData= mutableListOf<RideRequest>()
         for (i in 0..9){ arrData.add(RideRequest()) }
         adapter.addData(arrData)
+
+        btnAddToCarpool.setOnClickListener {
+
+            val intent = Intent(this, FD_RequestForm::class.java)
+            startActivity(intent)
+
+        }
 
     }
 }

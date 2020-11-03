@@ -12,6 +12,7 @@ import okhttp3.ResponseBody
 import com.highbryds.fitfinder.model.WrapperStory
 import com.highbryds.fitfinder.model.carpool.CarData
 import com.highbryds.fitfinder.model.carpool.CarMakeModel
+import com.highbryds.fitfinder.model.carpool.FD_CarPool
 import org.json.JSONObject
 import retrofit2.Response
 import retrofit2.http.*
@@ -157,4 +158,6 @@ interface ApiInterface {
     @POST("carpool/searchcarpool")
     suspend fun searchCarPool(@Body frSearchcar: FR_SearchCar): Response<SearchCarApiResponse>
 
+    @POST("carpool/searchcarpool")
+    suspend fun addToCarPool(@Body model: FD_CarPool): Response<SearchCarApiResponse>
 }

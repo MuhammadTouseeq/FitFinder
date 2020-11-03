@@ -5,12 +5,19 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.CompoundButton
 import androidx.lifecycle.Observer
+import com.google.gson.Gson
 import com.highbryds.fitfinder.R
+import com.highbryds.fitfinder.commonHelper.Constants
+import com.highbryds.fitfinder.commonHelper.KotlinHelper
+import com.highbryds.fitfinder.commonHelper.PrefsHelper
 import com.highbryds.fitfinder.commonHelper.toast
+import com.highbryds.fitfinder.model.FR_SearchCar
 import com.highbryds.fitfinder.model.carpool.CarData
 import com.highbryds.fitfinder.model.carpool.CarDetails
 import com.highbryds.fitfinder.model.carpool.CarMakeModel
+import com.highbryds.fitfinder.model.carpool.FD_CarPool
 import com.highbryds.fitfinder.ui.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_add_car.*
@@ -27,7 +34,9 @@ class AddCarActivity : BaseActivity(),View.OnClickListener {
     lateinit var carViewModel: AddCarViewModel
     val arrCarMake= mutableListOf<CarData>()
     val arrCarModels= mutableListOf<CarDetails>()
-
+lateinit var fdCarpool: FD_CarPool;
+var AC:String="AC";
+var pickedColor:String="";
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_car)
@@ -58,6 +67,22 @@ adapterCarModel.addAll(carData?.carData?.car_details)
             }
 
         }
+
+        switchAC.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener {
+            override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
+
+                if(p1)
+                {
+                    AC="AC"
+                }
+                else
+                {
+
+                    AC="NO AC"
+                }
+            }
+
+        })
         containerColorPicker.setOnClickListener(this)
         btnSubmit.setOnClickListener(this)
 
@@ -71,6 +96,8 @@ adapterCarModel.addAll(carData?.carData?.car_details)
 
         })
 
+
+        bindData()
         }
 
 
@@ -85,6 +112,7 @@ adapterCarModel.addAll(carData?.carData?.car_details)
                     override fun setOnFastChooseColorListener(position: Int, color: Int) {
                         // put code
                         txtPickColor.setBackgroundColor(color)
+                       pickedColor=color.toString()
                     }
 
                     override fun onCancel() {
@@ -97,16 +125,85 @@ adapterCarModel.addAll(carData?.carData?.car_details)
             }
             R.id.btnSubmit->{
 
-               if (checkValidPlate())
+                if(autoCompleteMake.text.trim().isEmpty())
+                {
+                    toast(applicationContext,"Please enter make")
+                    return
+                }
+                if(autoCompleteModel.text.trim().isEmpty())
+                {
+                    toast(applicationContext,"Please enter model")
+                    return
+                }
+                if(edtRegNo.text.trim().isEmpty())
+                {
+                    toast(applicationContext,"Please enter registeration number")
+                    return
+                }
+               if (!checkValidPlate())
                {
-                   toast(applicationContext,"Valid Reg No")
+                   toast(applicationContext,"Please enter valid registeration number")
+             return
                }
-                else
-               {
-                   toast(applicationContext,"not Valid reg no")
-               }
+
+                if(pickedColor.isEmpty())
+                {
+                   toast(applicationContext,"Please pick color of car")
+
+             return
+                }
+
+
+                if(edtCostPerSeat.text.trim().isEmpty())
+                {
+                    toast(applicationContext,"Cost per seat is required")
+
+                    return
+                }
+
+
+                fdCarpool= FD_CarPool(
+                    autoCompleteMake.text.toString(),
+                    autoCompleteModel.text.toString(),
+                    "FitDrive",
+                    KotlinHelper.getUsersData().cellNumber,
+                   pickedColor,
+                    AC,
+                    edtRegNo.text.toString(),
+                    "Car",
+                    number_picker.value,
+                    1,
+                    50,
+                    Integer.parseInt(edtCostPerSeat.text.toString())
+                )
+
+
+                PrefsHelper.putString(Constants.Pref_CarData, Gson().toJson(fdCarpool))
+                finish()
+
+
             }
         }
+    }
+
+    fun bindData()
+    {
+        val json = PrefsHelper.getString(Constants.Pref_CarData)
+        val model=Gson().fromJson<FD_CarPool>(json,FD_CarPool::class.java)
+   model?.let {
+
+       with(model)
+       {
+           autoCompleteMake.setText(carmake)
+           autoCompleteModel.setText(carmodel)
+           edtRegNo.setText(regno)
+           pickedColor=color
+           txtPickColor.setBackgroundColor(Integer.parseInt(color))
+number_picker.value=seatsleft
+           edtCostPerSeat.setText("$preferredcost_max")
+           switchAC.isChecked= if(AC=="AC") true else false
+       }
+   }
     }
 
     fun checkValidPlate():Boolean

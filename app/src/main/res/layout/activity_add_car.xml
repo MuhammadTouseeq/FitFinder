@@ -176,7 +176,7 @@ android:textColor="@android:color/white"
 
         </com.google.android.material.textfield.TextInputLayout>
         <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/switchDeliveryType"
+            android:id="@+id/switchAC"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
@@ -186,8 +186,8 @@ android:textColor="@android:color/white"
             android:drawablePadding="@dimen/_5sdp"
             android:drawableLeft="@drawable/ic_baseline_ac_unit_24"
             android:textColor="@color/colorPrimary"
-            android:textOff="Ghost Mode"
-            android:textOn="Pick Current"
+            android:textOff="YES"
+            android:textOn="No"
             android:textSize="18sp"
             android:visibility="visible" />
 
