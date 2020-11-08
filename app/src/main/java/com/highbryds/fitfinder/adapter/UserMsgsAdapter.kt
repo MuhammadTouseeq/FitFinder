@@ -2,6 +2,7 @@ package com.highbryds.fitfinder.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +36,7 @@ public class UserMsgsAdapter(var userChat: List<UserChat>?, var context: Context
         val IV_profilePic = itemView.findViewById(R.id.IV_profilePic) as ImageView
         val dateTime = itemView.findViewById(R.id.dateTime) as TextView
         val LL_card = itemView.findViewById(R.id.LL_card) as LinearLayout
+        val ViewDivider = itemView.findViewById(R.id.ViewDivider) as View
 
 
         fun bindViews(userMsgsList: UserChat?, uc: List<UserChat>, pos: Int, context: Context) {
@@ -44,6 +46,7 @@ public class UserMsgsAdapter(var userChat: List<UserChat>?, var context: Context
 
 
                 LL_card.visibility = View.GONE
+                ViewDivider.visibility = View.GONE
 
             } else {
 
@@ -63,24 +66,30 @@ public class UserMsgsAdapter(var userChat: List<UserChat>?, var context: Context
                     )
                 }.lastOrNull()
 
-if(ob!=null && ob1 !=null){
-    if (ob!!.id > ob1!!.id) {
-        // ob is greater
+                if (ob != null && ob1 != null) {
+                    if (ob!!.id > ob1!!.id) {
+                        // ob is greater
 
-        msg = ob.message
+                        msg = ob.message
 
-    } else {
-        // ob1 is greater
-        msg = ob1.message
+                    } else {
+                        // ob1 is greater
+                        msg = ob1.message
 
-    }
+                    }
 
-}
+                }
 
 
 
                 LL_card.visibility = View.VISIBLE
+                ViewDivider.visibility = View.VISIBLE
                 userID.text = userMsgsList?.senderName
+                if (userMsgsList.isRead){
+                    userMSG.setTypeface(null, Typeface.NORMAL);
+                }else{
+                    userMSG.setTypeface(null, Typeface.BOLD);
+                }
                 userMSG.text = msg
                 dateTime.text = userMsgsList?.TimeStamp
                 Glide
@@ -88,8 +97,6 @@ if(ob!=null && ob1 !=null){
                     .load(userMsgsList?.recipientImage)
                     .placeholder(R.drawable.ic_launcher_foreground)
                     .into(IV_profilePic);
-
-
 
 
             }

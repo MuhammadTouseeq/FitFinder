@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.Observer
 import com.highbryds.fitfinder.R
@@ -48,6 +49,7 @@ class MessageActivity : AppCompatActivity(), ApiResponseCallBack {
 
     @Inject
     lateinit var getDatabaseDao: Dao
+
     @Inject
     lateinit var userChattingViewModel: UserChattingViewModel
 
@@ -58,26 +60,39 @@ class MessageActivity : AppCompatActivity(), ApiResponseCallBack {
         setContentView(R.layout.activity_message)
 
 
+        val toolbar: Toolbar = findViewById<View>(R.id.toolbar) as Toolbar
+        setSupportActionBar(toolbar)
+        getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar()?.setDisplayShowHomeEnabled(true);
+        supportActionBar?.title = SinchSdk.RECIPENT_NAME
+        toolbar.setNavigationOnClickListener {
+            finish()
+        }
+
         userChattingViewModel.apiResponseCallBack = this
-        name.text = SinchSdk.RECIPENT_NAME
+        //name.text = SinchSdk.RECIPENT_NAME
         //SinchSdk.USER_ID = KotlinHelper.getUsersData().SocialId
         context = this
         instance = SinchSdk.getInstance(this)
-       // instance!!.callClient.addCallClientListener(SinchCallClientListener())
+        // instance!!.callClient.addCallClientListener(SinchCallClientListener())
 
-        userChattingViewModel.getMSG(SinchSdk.RECIPENT_ID , SinchSdk.USER_ID)
-        mMessageAdapter = MessageAdapter(this,this, getDatabaseDao.getallChat(SinchSdk.RECIPENT_ID, SinchSdk.USER_ID)?.value)
-       // mMessageAdapter = MessageAdapter(this,this, getDatabaseDao.getallChat()?.value)
+        userChattingViewModel.getMSG(SinchSdk.RECIPENT_ID, SinchSdk.USER_ID)
+        mMessageAdapter = MessageAdapter(
+            this,
+            this,
+            getDatabaseDao.getallChat(SinchSdk.RECIPENT_ID, SinchSdk.USER_ID)?.value
+        )
+        // mMessageAdapter = MessageAdapter(this,this, getDatabaseDao.getallChat()?.value)
         val messagesList = findViewById<View>(R.id.lstMessages) as ListView
         messagesList.adapter = mMessageAdapter
 
 
-        userChattingViewModel.userMsgs.observe(this , Observer {
+        userChattingViewModel.userMsgs.observe(this, Observer {
             mMessageAdapter!!.loadChat(it)
             mMessageAdapter!!.notifyDataSetChanged()
         })
 
-        userChattingViewModel.msgTo.observe(this , Observer {
+        userChattingViewModel.msgTo.observe(this, Observer {
             uc = UserChat()
             uc!!.recipientImage = it[0].imageUrl
             uc!!.recipientName = it[0].name
@@ -88,6 +103,7 @@ class MessageActivity : AppCompatActivity(), ApiResponseCallBack {
             uc!!.senderId = SinchSdk.USER_ID
             uc!!.type = 1
             uc!!.timeStamp = JavaHelper.getDateTimeSeconds()
+            uc!!.setRead(true)
             insertChatMessages(uc)
 
         })
@@ -98,20 +114,25 @@ class MessageActivity : AppCompatActivity(), ApiResponseCallBack {
         }
 
 
-        IV_back.setOnClickListener {
-            finish()
-        }
-
-
     }
 
     fun sendMessage() {
 
-        textBody = txtTextBody.getText().toString()
-        val chattingViewModel = Chatting(textBody , SinchSdk.RECIPENT_ID , KotlinHelper.getUsersData().name, KotlinHelper.getUsersData().imageUrl, JavaHelper.getDateTimeSeconds() , KotlinHelper.getUsersData().SocialId)
-        userChattingViewModel.sendChat(chattingViewModel)
-        txtTextBody.setText("")
-
+        if (!txtTextBody.text.toString().isEmpty()) {
+            textBody = txtTextBody.getText().toString()
+            val chattingViewModel = Chatting(
+                textBody,
+                SinchSdk.RECIPENT_ID,
+                KotlinHelper.getUsersData().name,
+                KotlinHelper.getUsersData().imageUrl,
+                JavaHelper.getDateTimeSeconds(),
+                KotlinHelper.getUsersData().SocialId
+            )
+            userChattingViewModel.sendChat(chattingViewModel)
+            txtTextBody.setText("")
+        } else {
+            this.toast(this, "Please write something")
+        }
     }
 
 
@@ -121,15 +142,16 @@ class MessageActivity : AppCompatActivity(), ApiResponseCallBack {
     }
 
 
-
     override fun getError(error: String) {
-        this.toast(this , error.toString())
+        this.toast(this, error.toString())
     }
 
     override fun getSuccess(success: String) {
-        this.toast(this , success.toString())
+        this.toast(this, success.toString())
     }
 
-
-
+    override fun onResume() {
+        super.onResume()
+        getDatabaseDao.updateReadStatus(SinchSdk.RECIPENT_ID)
+    }
 }

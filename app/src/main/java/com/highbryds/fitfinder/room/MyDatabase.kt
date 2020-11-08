@@ -6,7 +6,7 @@ import androidx.room.RoomDatabase
 import com.highbryds.fitfinder.room.Tables.UserChat
 import com.highbryds.fitfinder.room.Tables.UserMsgsList
 
-@Database(entities = [UserChat::class , UserMsgsList::class] , version = 5 , exportSchema = false)
+@Database(entities = [UserChat::class , UserMsgsList::class] , version = 6 , exportSchema = false)
 abstract class MyDatabase : RoomDatabase() {
     abstract fun dao(): Dao
 }
