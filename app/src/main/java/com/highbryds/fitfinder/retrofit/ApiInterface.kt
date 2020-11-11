@@ -10,9 +10,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import com.highbryds.fitfinder.model.WrapperStory
-import com.highbryds.fitfinder.model.carpool.CarData
-import com.highbryds.fitfinder.model.carpool.CarMakeModel
-import com.highbryds.fitfinder.model.carpool.FD_CarPool
+import com.highbryds.fitfinder.model.carpool.*
 import org.json.JSONObject
 import retrofit2.Response
 import retrofit2.http.*
@@ -162,4 +160,14 @@ interface ApiInterface {
     suspend fun carpoolSendMessage(@Body sendMsg: Chatting): Response<GeneralResponse>
     @POST("carpool/searchcarpool")
     suspend fun addToCarPool(@Body model: FD_CarPool): Response<SearchCarApiResponse>
+
+ @FormUrlEncoded
+    @POST("carpool/getActiveRideRequests")
+    suspend fun getMyRideRequest(@Field("FitDriverSocialId")  socialId:String) : Response<CarpoolData>
+
+
+    @POST("carpool/ChangerideStatus")
+    suspend fun changeRideStatus(
+        @Body model: RideStatus
+    ): Response<GeneralResponse>
 }
