@@ -54,11 +54,11 @@ class FirebaseService : FirebaseMessagingService() {
         if (obj != null && obj.equals("chat")) {
 
             //val id = Integer.valueOf(obj.toString())
-           // PrefsHelper.putString("FCMFCM" , "TRUE")
-           // PrefsHelper.putString("FCMFCM2" , p0.getData().get("message"))
-            val msg = p0.getData().get("message")+"\n"+p0.getData().get("messageTime")
+            // PrefsHelper.putString("FCMFCM" , "TRUE")
+            // PrefsHelper.putString("FCMFCM2" , p0.getData().get("message"))
+            val msg = p0.getData().get("message") + "\n" + p0.getData().get("messageTime")
             val name = p0.getData().get("messageFromName")
-            sendNotification(msg,  name!!)
+            sendNotification(msg, name!!)
 
             val uc = UserChat()
             uc.messageId = "0"
@@ -70,9 +70,10 @@ class FirebaseService : FirebaseMessagingService() {
             uc.senderId = p0.getData().get("messageFromSocialId")
             uc.type = 0
             uc.timeStamp = p0.getData().get("messageTime")
+            uc.setRead(false)
             insertChatMessages(uc)
 
-        }else{
+        } else {
 
             val data: Map<String, String> = p0.getData()
             // handle backend
@@ -82,9 +83,9 @@ class FirebaseService : FirebaseMessagingService() {
                 val des = data.get("body")
                 val img = data.get("img")
 
-                if (img.equals("") || img == null){
+                if (img.equals("") || img == null) {
                     sendNotification(des!!, title!!)
-                }else{
+                } else {
                     NotificationData.title = title
                     NotificationData.content = des
                     NotificationData.imageUrl = img
@@ -93,11 +94,13 @@ class FirebaseService : FirebaseMessagingService() {
                     getImage()
                 }
 
-            }else{
+            } else {
                 // To handle firebase console notification with image or without image
                 val msg: String = p0.getNotification()?.getBody()!!
                 val title: String = p0.getNotification()?.getTitle()!!
-                val image = if (p0.getNotification()?.getImageUrl().toString() == "null") "null" else p0.getNotification()?.getImageUrl().toString()
+                val image = if (p0.getNotification()?.getImageUrl()
+                        .toString() == "null"
+                ) "null" else p0.getNotification()?.getImageUrl().toString()
 
 
                 if (image == "null") {

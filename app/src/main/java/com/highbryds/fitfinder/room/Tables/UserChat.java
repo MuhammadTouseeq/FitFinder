@@ -27,6 +27,7 @@ public class UserChat {
     public String recipientImage;
     public String recipientName;
     public String senderName;
+    public boolean isRead;
 
 
     public String getMessageId() {
@@ -106,5 +107,13 @@ public class UserChat {
 
     public void setSenderName(String senderName) {
         this.senderName = senderName;
+    }
+
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public void setRead(boolean read) {
+        isRead = read;
     }
 }

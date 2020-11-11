@@ -14,6 +14,10 @@ interface Dao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertItem(items: UserChat?)
 
+    @Query("update UserChat set isRead = 1 where SenderId = :socialID")
+    fun updateReadStatus(socialID: String)
+
+
     @Insert()
     fun insertMsgsList(userMsgsList: UserMsgsList)
 

@@ -381,7 +381,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             //if you want to update the items at a later time it is recommended to keep it in a variable
             val home = PrimaryDrawerItem().withIdentifier(1).withName("Home")
             val story = PrimaryDrawerItem().withIdentifier(2).withName("My Contributions")
-            val chat = PrimaryDrawerItem().withIdentifier(3).withName("Chat")
+            val chat = PrimaryDrawerItem().withIdentifier(3).withName("My Messages")
             val profile = PrimaryDrawerItem().withIdentifier(4).withName("Profile")
             val settings = PrimaryDrawerItem().withIdentifier(5).withName("Settings")
             val logout = PrimaryDrawerItem().withIdentifier(6).withName("Logout")
