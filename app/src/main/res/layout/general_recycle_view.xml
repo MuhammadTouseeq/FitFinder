@@ -32,12 +32,7 @@
         android:layout_weight="1"
         android:padding="8dp"
 />
-    <Button
-        android:layout_width="match_parent"
-        android:text="Add to Carpool"
-        android:layout_margin="@dimen/_15sdp"
-        android:id="@+id/btnAddToCarpool"
-        android:layout_height="wrap_content"/>
+
     </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -53,4 +48,20 @@
             android:layout_marginTop="@dimen/_10sdp"/>
 
     </RelativeLayout>
+
+    <ImageView
+        android:layout_width="@dimen/_150sdp"
+        android:src="@drawable/nodata"
+       android:id="@+id/emptyView"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:layout_height="@dimen/_150sdp"/>
+    <Button
+        android:layout_width="match_parent"
+        android:text="Add Car to pool"
+        android:layout_margin="@dimen/_15sdp"
+       android:layout_alignParentBottom="true"
+        android:id="@+id/btnAddToCarpool"
+        android:layout_height="wrap_content"/>
+
 </RelativeLayout>

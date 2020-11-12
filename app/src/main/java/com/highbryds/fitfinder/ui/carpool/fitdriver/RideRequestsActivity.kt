@@ -84,10 +84,20 @@ class RideRequestsActivity: BaseActivity(),ApiResponseCallBack {
 it?.let {
 
     RR_progress.visibility = View.GONE
+if(it.size==0)
+{
+ emptyView.visibility=View.VISIBLE
+recycler_view.visibility=View.GONE
+}
 
+    else {
+
+    emptyView.visibility=View.GONE
+    recycler_view.visibility=View.VISIBLE
     adapter.clearData()
     adapter.addData(it)
     adapter.notifyDataSetChanged()
+}
 }
 
 
@@ -110,9 +120,14 @@ it?.let {
     override fun getSuccess(success: String) {
 
 
+
+
+
         FD_CarpoolViewModel.getRiderRequest("115362360601650573089")
 
         RR_progress.visibility = View.GONE
         this.toast(this , success.toString())
     }
+
+
 }

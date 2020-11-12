@@ -14,7 +14,7 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
-
+<uses-permission android:name="android.permission.CALL_PHONE"/>
     <application
         android:name=".app.MainApplication"
         android:allowBackup="false"
@@ -27,8 +27,8 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
 
-<!--        <activity android:name=".ui.carpool.CarpoolSelectionActivity"/>-->
-        <activity android:name=".ui.Splash.SplashActivity">
+        <activity android:name=".ui.carpool.CarpoolSelectionActivity">
+<!--        <activity android:name=".ui.Splash.SplashActivity">-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -50,9 +50,9 @@
         <activity android:name=".ui.OnBoarding.FirstScreen"/>
         <activity android:name=".ui.Profile.UserProfileSetting" />
         <activity android:name=".ui.Profile.UserStories" />
-        <activity android:name=".ui.carpool.CarpoolSelectionActivity" >
+<!--        <activity android:name=".ui.carpool.CarpoolSelectionActivity" >-->
 
-        </activity>
+<!--        </activity>-->
         <activity android:name=".ui.Main.VoiceRecorderActivity" /> <!-- <activity android:name=".ui.StoryView.StoryFullViewActivity"/> -->
         <activity android:name=".ui.Main.HomeMapActivity" />
         <activity android:name=".ui.Auth.LoginActivity" />
