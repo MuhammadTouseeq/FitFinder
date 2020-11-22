@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.CompoundButton
+import androidx.core.graphics.toColor
 import androidx.lifecycle.Observer
 import com.google.gson.Gson
 import com.highbryds.fitfinder.R
@@ -28,15 +29,15 @@ import java.util.regex.Pattern
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AddCarActivity : BaseActivity(),View.OnClickListener {
+class AddCarActivity : BaseActivity(), View.OnClickListener {
 
     @Inject
     lateinit var carViewModel: AddCarViewModel
-    val arrCarMake= mutableListOf<CarData>()
-    val arrCarModels= mutableListOf<CarDetails>()
-lateinit var fdCarpool: FD_CarPool;
-var AC:String="AC";
-var pickedColor:String="";
+    val arrCarMake = mutableListOf<CarData>()
+    val arrCarModels = mutableListOf<CarDetails>()
+    lateinit var fdCarpool: FD_CarPool;
+    var AC: String = "AC";
+    var pickedColor: String = "";
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_car)
@@ -48,20 +49,20 @@ var pickedColor:String="";
         autoCompleteMake.setAdapter(adapterCarMake)
         autoCompleteModel.setAdapter(adapterCarModel)
 
-        autoCompleteMake.onItemClickListener=object : AdapterView.OnItemClickListener {
+        autoCompleteMake.onItemClickListener = object : AdapterView.OnItemClickListener {
             override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
 
-                val carData:CarData= p0?.getItemAtPosition(p2) as CarData
+                val carData: CarData = p0?.getItemAtPosition(p2) as CarData
 
                 autoCompleteModel.setText("")
                 adapterCarModel.clear()
-              //  arrCarModels.addAll(carData?.carData?.car_details)
-adapterCarModel.addAll(carData?.carData?.car_details)
-              
+                //  arrCarModels.addAll(carData?.carData?.car_details)
+                adapterCarModel.addAll(carData?.carData?.car_details)
+
             }
 
         }
-        autoCompleteModel.onItemClickListener=object : AdapterView.OnItemClickListener {
+        autoCompleteModel.onItemClickListener = object : AdapterView.OnItemClickListener {
             override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
 
             }
@@ -71,14 +72,11 @@ adapterCarModel.addAll(carData?.carData?.car_details)
         switchAC.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener {
             override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
 
-                if(p1)
-                {
-                    AC="AC"
-                }
-                else
-                {
+                if (p1) {
+                    AC = "YES"
+                } else {
 
-                    AC="NO AC"
+                    AC = "NO"
                 }
             }
 
@@ -98,21 +96,20 @@ adapterCarModel.addAll(carData?.carData?.car_details)
 
 
         bindData()
-        }
+    }
 
 
     override fun onClick(p0: View?) {
 
-        when(p0?.id)
-        {
-            R.id.containerColorPicker->{
+        when (p0?.id) {
+            R.id.containerColorPicker -> {
                 val colorPicker = ColorPicker(this@AddCarActivity)
 
                 colorPicker.setOnFastChooseColorListener(object : OnFastChooseColorListener {
                     override fun setOnFastChooseColorListener(position: Int, color: Int) {
                         // put code
                         txtPickColor.setBackgroundColor(color)
-                       pickedColor=color.toString()
+                        pickedColor = colorPicker.toString()
                     }
 
                     override fun onCancel() {
@@ -123,51 +120,45 @@ adapterCarModel.addAll(carData?.carData?.car_details)
                     .setColumns(5)
                     .show()
             }
-            R.id.btnSubmit->{
+            R.id.btnSubmit -> {
 
-                if(autoCompleteMake.text.trim().isEmpty())
-                {
-                    toast(applicationContext,"Please enter make")
+                if (autoCompleteMake.text.trim().isEmpty()) {
+                    toast(applicationContext, "Please enter make")
                     return
                 }
-                if(autoCompleteModel.text.trim().isEmpty())
-                {
-                    toast(applicationContext,"Please enter model")
+                if (autoCompleteModel.text.trim().isEmpty()) {
+                    toast(applicationContext, "Please enter model")
                     return
                 }
-                if(edtRegNo.text.trim().isEmpty())
-                {
-                    toast(applicationContext,"Please enter registeration number")
+                if (edtRegNo.text.trim().isEmpty()) {
+                    toast(applicationContext, "Please enter registeration number")
                     return
                 }
-               if (!checkValidPlate())
-               {
-                   toast(applicationContext,"Please enter valid registeration number")
-             return
-               }
-
-                if(pickedColor.isEmpty())
-                {
-                   toast(applicationContext,"Please pick color of car")
-
-             return
+                if (!checkValidPlate()) {
+                    toast(applicationContext, "Please enter valid registeration number")
+                    return
                 }
 
-
-                if(edtCostPerSeat.text.trim().isEmpty())
-                {
-                    toast(applicationContext,"Cost per seat is required")
+                if (pickedColor.isEmpty()) {
+                    toast(applicationContext, "Please pick color of car")
 
                     return
                 }
 
 
-                fdCarpool= FD_CarPool(
+                if (edtCostPerSeat.text.trim().isEmpty()) {
+                    toast(applicationContext, "Cost per seat is required")
+
+                    return
+                }
+
+
+                fdCarpool = FD_CarPool(
                     autoCompleteMake.text.toString(),
                     autoCompleteModel.text.toString(),
                     "FitDrive",
                     KotlinHelper.getUsersData().cellNumber,
-                   pickedColor,
+                    pickedColor,
                     AC,
                     edtRegNo.text.toString(),
                     "Car",
@@ -186,29 +177,27 @@ adapterCarModel.addAll(carData?.carData?.car_details)
         }
     }
 
-    fun bindData()
-    {
+    fun bindData() {
         val json = PrefsHelper.getString(Constants.Pref_CarData)
-        val model=Gson().fromJson<FD_CarPool>(json,FD_CarPool::class.java)
-   model?.let {
+        val model = Gson().fromJson<FD_CarPool>(json, FD_CarPool::class.java)
+        model?.let {
 
-       with(model)
-       {
-           autoCompleteMake.setText(carmake)
-           autoCompleteModel.setText(carmodel)
-           edtRegNo.setText(regno)
-           pickedColor=color
-           txtPickColor.setBackgroundColor(Integer.parseInt(color))
-number_picker.value=seatsleft
-           edtCostPerSeat.setText("$preferredcost_max")
-           switchAC.isChecked= if(AC=="AC") true else false
-       }
-   }
+            with(model)
+            {
+                autoCompleteMake.setText(carmake)
+                autoCompleteModel.setText(carmodel)
+                edtRegNo.setText(regno)
+                pickedColor = color
+                txtPickColor.setBackgroundColor(Integer.parseInt(color))
+                number_picker.value = seatsleft
+                edtCostPerSeat.setText("$preferredcost_max")
+                switchAC.isChecked = if (AC == "YES") true else false
+            }
+        }
     }
 
-    fun checkValidPlate():Boolean
-    {
-        var text:String=""
+    fun checkValidPlate(): Boolean {
+        var text: String = ""
         //validation setting
 
         //validation setting
@@ -224,24 +213,24 @@ number_picker.value=seatsleft
         //fixing
 
         //fixing
-      //  var m: Matcher = Pattern.compile("[-][0-9]{2}[-]|[-]|[\n]").matcher(text)
-      //  text = m.replaceAll(" ")
-      //  m =
-       //     Pattern.compile("ICT|Islamabad|Sindh|Punjab|PK|Govt of Sindh|Ict-Islamabad|ICT-Islamabad")
+        //  var m: Matcher = Pattern.compile("[-][0-9]{2}[-]|[-]|[\n]").matcher(text)
+        //  text = m.replaceAll(" ")
+        //  m =
+        //     Pattern.compile("ICT|Islamabad|Sindh|Punjab|PK|Govt of Sindh|Ict-Islamabad|ICT-Islamabad")
         //        .matcher(text)
-       // text = m.replaceAll("")
+        // text = m.replaceAll("")
 
         //final touch
 
         //final touch
         //text = Pattern.compile("\\s[0-9]{2}\\s").matcher(text).replaceAll(" ")
-       // text = text.replace("( +)", " ").trim()
+        // text = text.replace("( +)", " ").trim()
 
         //number detection
 
         //number detection
         number = Pattern.compile(REGEX)
-        matcher= number.matcher(text)
+        matcher = number.matcher(text)
 
         return matcher.matches()
     }

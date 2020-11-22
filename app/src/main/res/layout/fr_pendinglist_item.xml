@@ -65,7 +65,8 @@
                     android:gravity="end|center"
                     android:drawableRight="@android:drawable/sym_action_chat"
                     android:textColor="@color/black_de"
-                    android:textSize="@dimen/_10sdp" />
+                    android:textSize="@dimen/_10sdp"
+                    android:id="@+id/chatUser"/>
 
 
             </LinearLayout>

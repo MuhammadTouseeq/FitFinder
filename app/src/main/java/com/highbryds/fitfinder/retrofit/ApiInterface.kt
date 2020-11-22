@@ -158,7 +158,8 @@ interface ApiInterface {
 
     @POST("carpool/sendMessage")
     suspend fun carpoolSendMessage(@Body sendMsg: Chatting): Response<GeneralResponse>
-    @POST("carpool/searchcarpool")
+
+    @POST("carpool/requestcarpool")
     suspend fun addToCarPool(@Body model: FD_CarPool): Response<SearchCarApiResponse>
 
     @POST("carpool/requestDriver")

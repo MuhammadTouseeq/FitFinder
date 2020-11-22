@@ -32,7 +32,7 @@ class FR_SearchCarVehiclesAdapter(
 
         fun bindViews(frSearchcar: bestmatch, context: Context) {
 
-            name.text = frSearchcar.cellNumber
+            name.text = frSearchcar.regno
             CarnColor.text = "${frSearchcar.carmake} ${frSearchcar.carmodel} | ${frSearchcar.color}"
             leavingTimenLocation.text = "At: ${
                 JavaHelper.parseDateToFormat(

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.adapters.RideRequestsAdapter
@@ -12,6 +13,7 @@ import com.highbryds.fitfinder.adapters.StoryCommentsAdapter
 import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
 import com.highbryds.fitfinder.callbacks.RideActionCallback
 import com.highbryds.fitfinder.callbacks.StoryCallback
+import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.commonHelper.toast
 import com.highbryds.fitfinder.model.carpool.RIDE_STATUS
 import com.highbryds.fitfinder.model.carpool.RideRequest
@@ -33,7 +35,12 @@ class RideRequestsActivity: BaseActivity(),ApiResponseCallBack {
         setContentView(R.layout.general_recycle_view)
 
 
-        bindToolbar(toolbar,"My Request")
+        //bindToolbar(toolbar,"My Request")
+        val toolbar: Toolbar = findViewById<View>(R.id.toolbar) as Toolbar
+        setSupportActionBar(toolbar)
+        getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar()?.setDisplayShowHomeEnabled(true);
+        supportActionBar?.title = "My Request"
 
         adapter = RideRequestsAdapter(applicationContext, arrayListOf())
         recycler_view.adapter=adapter
@@ -66,7 +73,8 @@ class RideRequestsActivity: BaseActivity(),ApiResponseCallBack {
 
         FD_CarpoolViewModel.apiResponseCallBack=this
 
-        FD_CarpoolViewModel.getRiderRequest("115362360601650573089")
+        //FD_CarpoolViewModel.getRiderRequest("115362360601650573089")
+        FD_CarpoolViewModel.getRiderRequest(KotlinHelper.getUsersData().SocialId)
 
         RR_progress.visibility = View.VISIBLE
 
@@ -75,7 +83,7 @@ class RideRequestsActivity: BaseActivity(),ApiResponseCallBack {
 
             if(it) {
                 adapter.clearData()
-                FD_CarpoolViewModel.getRiderRequest("115362360601650573089")
+                FD_CarpoolViewModel.getRiderRequest(KotlinHelper.getUsersData().SocialId)
             }
         })
 
@@ -123,7 +131,7 @@ recycler_view.visibility=View.GONE
 
 
 
-        FD_CarpoolViewModel.getRiderRequest("115362360601650573089")
+        FD_CarpoolViewModel.getRiderRequest(KotlinHelper.getUsersData().SocialId)
 
         RR_progress.visibility = View.GONE
         this.toast(this , success.toString())

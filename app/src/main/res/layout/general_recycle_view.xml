@@ -1,67 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/toolbar"
+    <!--    <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--        xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--        android:id="@+id/toolbar"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:background="@color/colorPrimary"-->
+    <!--        app:title="My Request"-->
+    <!--        android:minHeight="?actionBarSize"-->
+    <!--        app:navigationIcon="@drawable/arrow_back_white_24dp"-->
+    <!--        app:titleTextColor="@android:color/white" />-->
+
+    <include
+        android:id="@+id/bar"
+        layout="@layout/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        app:title="My Request"
-        android:minHeight="?actionBarSize"
-        app:navigationIcon="@drawable/arrow_back_white_24dp"
-        app:titleTextColor="@android:color/white" />
+        android:layout_height="wrap_content" />
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_below="@id/toolbar"
-        android:orientation="vertical"
-        android:layout_height="match_parent">
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:layout_below="@id/bar"
+        android:orientation="vertical">
 
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:padding="8dp"
-/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     </LinearLayout>
+
     <RelativeLayout
+        android:id="@+id/RR_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:id="@+id/RR_progress"
         android:visibility="gone">
 
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/_10sdp"/>
+            android:layout_marginTop="@dimen/_10sdp" />
 
     </RelativeLayout>
 
     <ImageView
+        android:id="@+id/emptyView"
         android:layout_width="@dimen/_150sdp"
-        android:src="@drawable/nodata"
-       android:id="@+id/emptyView"
-        android:visibility="gone"
+        android:layout_height="@dimen/_150sdp"
         android:layout_centerInParent="true"
-        android:layout_height="@dimen/_150sdp"/>
+        android:src="@drawable/nodata"
+        android:visibility="gone" />
+
     <Button
-        android:layout_width="match_parent"
-        android:text="Add Car to pool"
-        android:layout_margin="@dimen/_15sdp"
-       android:layout_alignParentBottom="true"
         android:id="@+id/btnAddToCarpool"
-        android:layout_height="wrap_content"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/_15sdp"
+        android:text="Add Car to pool" />
 
 </RelativeLayout>

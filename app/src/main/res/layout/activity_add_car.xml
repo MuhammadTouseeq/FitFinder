@@ -1,209 +1,213 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical">
 
     <include
 
-        layout="@layout/view_toolbar"
-        />
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="@dimen/_16sdp"
-    android:orientation="vertical"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+        layout="@layout/view_toolbar" />
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/audioAnimation"
-        android:layout_width="@dimen/_80sdp"
-        android:layout_height="@dimen/_80sdp"
-
-        android:layout_gravity="center"
-        android:visibility="visible"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/car"
-        app:lottie_speed="0.9" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/_16sdp"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <AutoCompleteTextView
-            android:id="@+id/autoCompleteMake"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter Make"
-            android:padding="15dp"
-            android:singleLine="true"
-            android:lines="1"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/_16sdp"
+            android:orientation="vertical">
 
-            android:layout_gravity="center_vertical"
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/audioAnimation"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_80sdp"
 
-            tools:text="Hello" />
-        />
+                android:layout_gravity="center"
+                android:visibility="visible"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/car"
+                app:lottie_speed="0.9" />
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/_16sdp"
-        android:layout_height="wrap_content">
-
-        <AutoCompleteTextView
-            android:id="@+id/autoCompleteModel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter Model"
-            android:padding="15dp"
-            android:singleLine="true"
-            android:lines="1"
-
-            android:layout_gravity="center_vertical"
-
-            tools:text="Hello" />
-        />
-
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:id="@+id/businessLayout"
-        android:layout_marginTop="@dimen/_16sdp">
-
-        <EditText
-            android:id="@+id/edtRegNo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter Reg No.*"
-android:maxLength="10"
-            android:inputType="text"
-            android:textSize="16sp" />
-
-
-    </com.google.android.material.textfield.TextInputLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:id="@+id/containerColorPicker"
-        android:layout_marginTop="@dimen/_16sdp"
-        android:padding="@dimen/_10sdp"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:textSize="@dimen/_16sdp"
-            android:text="Pick Color"
-            android:layout_height="match_parent"/>
-
-        <TextView
-            android:layout_width="@dimen/_30sdp"
-            android:id="@+id/txtPickColor"
-            android:background="@color/colorPrimary"
-            android:layout_height="@dimen/_30sdp"/>
-    </LinearLayout>
-
-
-    <LinearLayout
-    android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:background="#838AC844"
-    android:layout_marginTop="@dimen/_16sdp"
-    android:layout_height="wrap_content">
-
-    <TextView
-        android:layout_width="wrap_content"
-android:textColor="@android:color/white"
-        android:text="Seats"
-        android:drawableTop="@drawable/ic_baseline_seat"
-        android:textSize="@dimen/_16sdp"
-        android:padding="@dimen/_10sdp"
-       android:layout_gravity="center"
-        android:layout_height="wrap_content"/>
-    <com.shawnlin.numberpicker.NumberPicker
-        android:id="@+id/number_picker"
-        android:layout_width="match_parent"
-        android:background="@color/colorPrimary"
-        android:layout_height="match_parent"
-        app:np_width="180dp"
-        app:np_height="54dp"
-        app:np_dividerColor="@android:color/white"
-        app:np_max="7"
-        app:np_min="1"
-        app:np_orientation="horizontal"
-        app:np_selectedTextColor="@android:color/white"
-        app:np_textColor="@android:color/white"
-        app:np_value="3" />
-</LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/_16sdp"
-        android:layout_height="wrap_content">
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-           >
-
-            <EditText
-                android:id="@+id/edtCostPerSeat"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Cost Per Seat"
-                android:digits="0123456789"
-                android:inputType="number"
-                android:textSize="16sp" />
+                android:layout_marginTop="@dimen/_16sdp">
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteMake"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:hint="Enter Make"
+                    android:lines="1"
+                    android:padding="15dp"
+
+                    android:singleLine="true"
+
+                    tools:text="Hello" />
+                />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp">
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteModel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:hint="Enter Model"
+                    android:lines="1"
+                    android:padding="15dp"
+
+                    android:singleLine="true"
+
+                    tools:text="Hello" />
+                />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/businessLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp">
+
+                <EditText
+                    android:id="@+id/edtRegNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Reg No.*"
+                    android:inputType="text"
+                    android:maxLength="10"
+                    android:textSize="16sp" />
 
 
-        </com.google.android.material.textfield.TextInputLayout>
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/switchAC"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:checked="false"
-            android:padding="10dp"
-            android:text="AC"
-            android:drawablePadding="@dimen/_5sdp"
-            android:drawableLeft="@drawable/ic_baseline_ac_unit_24"
-            android:textColor="@color/colorPrimary"
-            android:textOff="YES"
-            android:textOn="No"
-            android:textSize="18sp"
-            android:visibility="visible" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/containerColorPicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="@dimen/_10sdp">
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="Pick Color"
+                    android:textSize="@dimen/_16sdp" />
 
-
-    <Button
-        android:layout_width="match_parent"
-        android:text="Submit"
-        android:layout_marginTop="@dimen/_16sdp"
-    android:layout_marginBottom="@dimen/_30sdp"
-        android:id="@+id/btnSubmit"
-        android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/txtPickColor"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:background="@color/colorPrimary" />
+            </LinearLayout>
 
 
-</LinearLayout>
-</ScrollView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:background="#838AC844"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableTop="@drawable/ic_baseline_seat"
+                    android:padding="@dimen/_10sdp"
+                    android:text="Seats"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/_16sdp" />
+
+                <com.shawnlin.numberpicker.NumberPicker
+                    android:id="@+id/number_picker"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorPrimary"
+                    app:np_dividerColor="@android:color/white"
+                    app:np_height="54dp"
+                    app:np_max="7"
+                    app:np_min="1"
+                    app:np_orientation="horizontal"
+                    app:np_selectedTextColor="@android:color/white"
+                    app:np_textColor="@android:color/white"
+                    app:np_value="3"
+                    app:np_width="180dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/edtCostPerSeat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:digits="0123456789"
+                        android:hint="Cost Per Seat"
+                        android:inputType="number"
+                        android:textSize="16sp" />
+
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switchAC"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="false"
+                    android:drawableLeft="@drawable/ic_baseline_ac_unit_24"
+                    android:drawablePadding="@dimen/_5sdp"
+                    android:padding="10dp"
+                    android:text="AC"
+                    android:textColor="@color/colorPrimary"
+                    android:textOff="YES"
+                    android:textOn="No"
+                    android:textSize="18sp"
+                    android:visibility="visible" />
+
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/btnSubmit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginBottom="@dimen/_30sdp"
+                android:text="Submit" />
+
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

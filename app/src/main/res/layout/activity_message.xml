@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,7 +9,8 @@
     <include
         layout="@layout/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:id="@+id/topLL"/>
 
     <ListView
         android:id="@+id/lstMessages"
@@ -28,7 +29,7 @@
     <LinearLayout
         android:id="@+id/relSendMessage"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:gravity="bottom"
         android:orientation="horizontal"
@@ -36,7 +37,6 @@
 
 
         <EditText
-
             android:id="@+id/txtTextBody"
             android:layout_width="0dp"
             android:layout_height="45dp"
@@ -62,4 +62,4 @@
     </LinearLayout>
 
 
-</LinearLayout>
+</RelativeLayout>

@@ -120,7 +120,7 @@ class FR_RequestForm : AppCompatActivity(), ApiResponseCallBack , StoryCallback 
                 val startingPoint = FR_SearchCarStartingPoint(startingPoint, 0.0 , 0.0)
 
                 frSearchcar = FR_SearchCar("", "", "FitRide", KotlinHelper.getUsersData().cellNumber,"","","","Car",0,0, Integer.parseInt(prefFare.text.toString()),
-                    80, "2020-10-18"+"T${leavingTime.text.toString()}" , destinationLandmarks , destinationPoint , startingPoint , KotlinHelper.getUsersData().SocialId , null )
+                    80, "${JavaHelper.getDateTime()}"+"T${leavingTime.text.toString()}" , destinationLandmarks , destinationPoint , startingPoint , KotlinHelper.getUsersData().SocialId , null )
                 frSearchcarvm.SearchCar(frSearchcar)
 
             }

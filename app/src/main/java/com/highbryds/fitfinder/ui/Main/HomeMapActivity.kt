@@ -304,7 +304,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         }
 
         carpool.setOnClickListener {
-            val intent = Intent(this, FR_RequestForm::class.java)
+            val intent = Intent(this, CarpoolSelectionActivity::class.java)
             startActivity(intent)
         }
 

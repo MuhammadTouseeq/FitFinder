@@ -128,7 +128,8 @@ class FD_RequestForm : AppCompatActivity(), ApiResponseCallBack , StoryCallback 
                 val json = PrefsHelper.getString(Constants.Pref_CarData)
                 var model=Gson().fromJson<FD_CarPool>(json, FD_CarPool::class.java)
                 model.apply {
-                    startingtime = "2020-10-18" + "T${leavingTime.text.toString()}"
+                    //startingtime = "2020-10-18" + "T${leavingTime.text.toString()}"
+                    startingtime = "${JavaHelper.getDateTime()}" + "T${leavingTime.text.toString()}"
                     destination_landmarks = destinationLandmarks
                     destination=destinationPoint
                     starting_point=startingPoint
@@ -207,6 +208,7 @@ class FD_RequestForm : AppCompatActivity(), ApiResponseCallBack , StoryCallback 
     override fun getSuccess(success: String) {
         RR_progress.visibility = View.GONE
         this.toast(this , success.toString())
+        finish()
     }
 
     override fun storyItemPosition(position: Int) {
