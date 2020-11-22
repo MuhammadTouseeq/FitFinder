@@ -22,8 +22,7 @@
         android:padding="5sp"
         android:stackFromBottom="true"
         android:transcriptMode="alwaysScroll"
-        tools:listitem="@layout/message_left"
-        />
+        tools:listitem="@layout/message_left" />
 
 
     <LinearLayout

@@ -10,6 +10,7 @@ import com.highbryds.fitfinder.ui.BaseActivity
 import kotlinx.android.synthetic.main.general_recycle_view.*
 import kotlinx.android.synthetic.main.view_toolbar.*
 
+
 class RideRequestsActivity: BaseActivity() {
 
     private lateinit var adapter: RideRequestsAdapter
@@ -19,13 +20,14 @@ class RideRequestsActivity: BaseActivity() {
         setContentView(R.layout.general_recycle_view)
 
 
-        //bindToolbar(toolbar,"My Request")
+        bindToolbar(toolbar,"My Request")
 
         adapter = RideRequestsAdapter(applicationContext, arrayListOf())
         recycler_view.adapter=adapter
 
         val arrData= mutableListOf<RideRequest>()
-        for (i in 0..9){ arrData.add(RideRequest()) }
+        //for (i in 0..9){ arrData.add(RideRequest()) }
+
         adapter.addData(arrData)
 
         btnAddToCarpool.setOnClickListener {

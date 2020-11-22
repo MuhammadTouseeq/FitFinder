@@ -8,16 +8,16 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.highbryds.fitfinder.R
-import com.highbryds.fitfinder.callbacks.GeneralCallBack
 import com.highbryds.fitfinder.commonHelper.JavaHelper
+import com.highbryds.fitfinder.commonHelper.toast
 import com.highbryds.fitfinder.model.FR_SearchCar
 import com.highbryds.fitfinder.model.bestmatch
-import com.highbryds.fitfinder.model.othermatch
+import com.highbryds.fitfinder.model.carpool.PendingRequestModel
 
-class FR_SearchCarVehiclesAdapter(
-    var frSearchcar: FR_SearchCar, var context: Context, var listtype: Int,
-    var generalCallBack: GeneralCallBack) :
-    RecyclerView.Adapter<FR_SearchCarVehiclesAdapter.ViewHolder>() {
+class FR_PendingRequestAdapter
+    (
+    var frSearchcar: PendingRequestModel, var context: Context, var listtype: Int) :
+    RecyclerView.Adapter<FR_PendingRequestAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -28,9 +28,9 @@ class FR_SearchCarVehiclesAdapter(
         val ac = itemView.findViewById(R.id.ac) as TextView
         val price = itemView.findViewById(R.id.price) as TextView
         val seats = itemView.findViewById(R.id.seats) as TextView
-        val requestRide = itemView.findViewById(R.id.requestRide) as Button
+        val requestRide = itemView.findViewById(R.id.cancelRide) as Button
 
-        fun bindViews(frSearchcar: bestmatch, context: Context) {
+        fun bindViews(frSearchcar: FR_SearchCar, context: Context) {
 
             name.text = frSearchcar.cellNumber
             CarnColor.text = "${frSearchcar.carmake} ${frSearchcar.carmodel} | ${frSearchcar.color}"
@@ -51,7 +51,7 @@ class FR_SearchCarVehiclesAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(
-            R.layout.fr_search_car_list_item,
+            R.layout.fr_pendinglist_item,
             parent,
             false
         )
@@ -60,18 +60,15 @@ class FR_SearchCarVehiclesAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        holder.bindViews(frSearchcar.bestmatch!![position], context)
+        holder.bindViews(frSearchcar.carpooldata.get(position), context)
 
         holder.requestRide.setOnClickListener {
-            generalCallBack.eventOccur(frSearchcar.bestmatch!![position]._id)
+           context.toast(context, "Cancelling Request")
         }
-
-
     }
 
     override fun getItemCount(): Int {
-         return frSearchcar.bestmatch!!.size
-
+         return frSearchcar.carpooldata.size
     }
 
 }

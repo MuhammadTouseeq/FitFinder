@@ -18,4 +18,5 @@ class othermatch(  @SerializedName("carmake") val carmake : String,
                    @SerializedName("destination_landmarks") val destination_landmarks : List<FR_SearchCarDestinationLandmarks>,
                    @SerializedName("destination") val destination : FR_SearchCarDestinationPoint,
                    @SerializedName("starting_point") val starting_point : FR_SearchCarStartingPoint,
-                   @SerializedName("SocialId") val socialId : String)
+                   @SerializedName("SocialId") val socialId : String,
+                   @SerializedName("_id") val _id : String)

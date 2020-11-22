@@ -46,6 +46,8 @@ class FR_RequestForm : AppCompatActivity(), ApiResponseCallBack , StoryCallback 
     private lateinit var endPoint: String
     private lateinit var endPointLatLng: String
 
+    lateinit var frSearchcar: FR_SearchCar
+
     @Inject
     lateinit var frSearchcarvm: FR_SearchCarVM
 
@@ -117,11 +119,11 @@ class FR_RequestForm : AppCompatActivity(), ApiResponseCallBack , StoryCallback 
                 //val startingPoint = FR_SearchCarStartingPoint(startingPoint, startingPointLatLng.split(",".toRegex())[0].toDoubleOrNull()!! , startingPointLatLng.split(",".toRegex())[1].toDoubleOrNull()!!)
                 val startingPoint = FR_SearchCarStartingPoint(startingPoint, 0.0 , 0.0)
 
-                val frSearchcar = FR_SearchCar("", "", "FitRide", KotlinHelper.getUsersData().cellNumber,"","","","Car",0,0, Integer.parseInt(prefFare.text.toString()),
-                    80, "2020-10-18"+"T${leavingTime.text.toString()}" , destinationLandmarks , destinationPoint , startingPoint , KotlinHelper.getUsersData().SocialId , null)
+                frSearchcar = FR_SearchCar("", "", "FitRide", KotlinHelper.getUsersData().cellNumber,"","","","Car",0,0, Integer.parseInt(prefFare.text.toString()),
+                    80, "2020-10-18"+"T${leavingTime.text.toString()}" , destinationLandmarks , destinationPoint , startingPoint , KotlinHelper.getUsersData().SocialId , null )
                 frSearchcarvm.SearchCar(frSearchcar)
-            }
 
+            }
         }
 
         frSearchcarvm.carPoolList.observe(this , androidx.lifecycle.Observer {
@@ -129,8 +131,12 @@ class FR_RequestForm : AppCompatActivity(), ApiResponseCallBack , StoryCallback 
                 RR_progress.visibility = View.GONE
                 val intent = Intent(this, FR_SearchCarList::class.java)
                 val gson = Gson()
-                val json = gson.toJson(it)
+                var json = gson.toJson(it)
                 intent.putExtra("SearchCar", json)
+
+
+                json = gson.toJson(frSearchcar)
+                intent.putExtra("SearchCarForm", json)
                 startActivityForResult(intent, 777)
             }
         })

@@ -10,9 +10,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import com.highbryds.fitfinder.model.WrapperStory
-import com.highbryds.fitfinder.model.carpool.CarData
-import com.highbryds.fitfinder.model.carpool.CarMakeModel
-import com.highbryds.fitfinder.model.carpool.FD_CarPool
+import com.highbryds.fitfinder.model.carpool.*
 import org.json.JSONObject
 import retrofit2.Response
 import retrofit2.http.*
@@ -122,13 +120,13 @@ interface ApiInterface {
     ): Response<List<StoryComment>>
 
     @POST("users/getuserProfile/{SocialID}")
-    suspend fun getUserProfile(@Path("SocialID") SocialID: String) : Response<UserProfile>
+    suspend fun getUserProfile(@Path("SocialID") SocialID: String): Response<UserProfile>
 
     @POST("users/getstory")
-    suspend fun getStoryByID(@Body body: SingleStoryModel) : Response<dataTemp>
+    suspend fun getStoryByID(@Body body: SingleStoryModel): Response<dataTemp>
 
     @POST("users/submitSpam")
-    suspend fun submitSpam(@Body body: StorySpam) : Response<GeneralResponse>
+    suspend fun submitSpam(@Body body: StorySpam): Response<GeneralResponse>
 
 
     @POST("users/deletecomment/{commentId}/{storyid}")
@@ -144,7 +142,6 @@ interface ApiInterface {
     ): Response<WrapperStoryViews>
 
 
-
     @POST("users/gettrendingStories")
     suspend fun getTrendingStories(): Response<WrapperStory>
 
@@ -152,7 +149,7 @@ interface ApiInterface {
     /**
      * Car Pooling Web Services
      */
-@POST("carpool/getallCars")
+    @POST("carpool/getallCars")
     suspend fun getCarMakeModels(): Response<List<CarData>>
 
     @POST("carpool/searchcarpool")
@@ -160,6 +157,13 @@ interface ApiInterface {
 
     @POST("carpool/sendMessage")
     suspend fun carpoolSendMessage(@Body sendMsg: Chatting): Response<GeneralResponse>
+
     @POST("carpool/searchcarpool")
     suspend fun addToCarPool(@Body model: FD_CarPool): Response<SearchCarApiResponse>
+
+    @POST("carpool/requestDriver")
+    suspend fun sendRiderRequest(@Body rideRequest: RideRequest): Response<GeneralResponse>
+
+    @POST("carpool/getPendingRequest")
+    suspend fun getPendingRequests(@Body rideRequest: RideRequest): Response<PendingRequestModel>
 }

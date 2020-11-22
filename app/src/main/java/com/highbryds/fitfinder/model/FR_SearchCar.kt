@@ -21,6 +21,9 @@ data class FR_SearchCar (
     @SerializedName("destination") val destination : FR_SearchCarDestinationPoint,
     @SerializedName("starting_point") val starting_point : FR_SearchCarStartingPoint,
     @SerializedName("SocialId") val socialId : String,
+    @SerializedName("_id") val id : String?,
+    @SerializedName("user_data") val user_data : UserDetails?= null,
     @SerializedName("others") val others : List<othermatch>? = null,
     @SerializedName("bestmatch") val bestmatch : List<bestmatch>? = null
+
 )

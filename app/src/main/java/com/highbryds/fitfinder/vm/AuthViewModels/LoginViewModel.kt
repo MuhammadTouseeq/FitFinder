@@ -11,6 +11,7 @@ import com.highbryds.fitfinder.commonHelper.getErrors
 import com.highbryds.fitfinder.model.UserAgent
 import com.highbryds.fitfinder.model.UsersData
 import com.highbryds.fitfinder.retrofit.ApiInterface
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
 import javax.inject.Inject

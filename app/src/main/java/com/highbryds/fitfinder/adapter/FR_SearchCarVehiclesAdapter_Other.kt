@@ -14,10 +14,11 @@ import com.highbryds.fitfinder.model.FR_SearchCar
 import com.highbryds.fitfinder.model.bestmatch
 import com.highbryds.fitfinder.model.othermatch
 
-class FR_SearchCarVehiclesAdapter(
+class FR_SearchCarVehiclesAdapter_Other(
     var frSearchcar: FR_SearchCar, var context: Context, var listtype: Int,
-    var generalCallBack: GeneralCallBack) :
-    RecyclerView.Adapter<FR_SearchCarVehiclesAdapter.ViewHolder>() {
+    var generalCallBack: GeneralCallBack
+) :
+    RecyclerView.Adapter<FR_SearchCarVehiclesAdapter_Other.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -30,7 +31,7 @@ class FR_SearchCarVehiclesAdapter(
         val seats = itemView.findViewById(R.id.seats) as TextView
         val requestRide = itemView.findViewById(R.id.requestRide) as Button
 
-        fun bindViews(frSearchcar: bestmatch, context: Context) {
+        fun bindViews(frSearchcar: othermatch) {
 
             name.text = frSearchcar.cellNumber
             CarnColor.text = "${frSearchcar.carmake} ${frSearchcar.carmodel} | ${frSearchcar.color}"
@@ -60,18 +61,21 @@ class FR_SearchCarVehiclesAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        holder.bindViews(frSearchcar.bestmatch!![position], context)
+        holder.bindViews(frSearchcar.others!![position])
 
         holder.requestRide.setOnClickListener {
-            generalCallBack.eventOccur(frSearchcar.bestmatch!![position]._id)
+            generalCallBack.eventOccur(frSearchcar.others!![position]._id)
         }
-
-
     }
 
     override fun getItemCount(): Int {
-         return frSearchcar.bestmatch!!.size
+        if (listtype == 0) {
+            return frSearchcar.bestmatch!!.size
+        } else {
+            return frSearchcar.others!!.size
+        }
 
     }
+
 
 }

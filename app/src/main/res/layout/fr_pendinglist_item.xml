@@ -60,10 +60,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_gravity="end|center"
                     android:layout_weight="1"
-                    android:gravity="right"
-                    android:text="(0 ride \ncompleted)"
+                    android:gravity="end|center"
+                    android:drawableRight="@android:drawable/sym_action_chat"
+                    android:textColor="@color/black_de"
                     android:textSize="@dimen/_10sdp" />
 
 
@@ -119,9 +120,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="3.3"
+                    android:layout_weight="3.0"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="invisible">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -158,17 +160,17 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2.7"
+                    android:layout_weight="3"
                     android:gravity="right">
 
                     <Button
-                        android:id="@+id/requestRide"
+                        android:id="@+id/cancelRide"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Request Ride"
+                        android:text="Cancel Request"
                         android:textAllCaps="false"
                         android:textColor="@color/colorWhite"
-                        android:textSize="@dimen/_12sdp" />
+                        android:textSize="@dimen/_10sdp" />
 
 
                 </LinearLayout>
