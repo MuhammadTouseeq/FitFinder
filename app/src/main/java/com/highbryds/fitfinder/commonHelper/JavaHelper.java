@@ -28,6 +28,7 @@ import java.net.URISyntaxException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -192,6 +193,24 @@ public class JavaHelper {
         } catch (Exception e) {
             return null;
         }
+    }
 
+    public static  long dateTimeMilli(String date)
+    {
+        try
+        {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+            Date mDate = sdf.parse(date);
+            long timeInMilliseconds = mDate.getTime();
+            System.out.println("Date in milli :: " + timeInMilliseconds);
+            return timeInMilliseconds;
+        }
+        catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+        return 0;
     }
 }

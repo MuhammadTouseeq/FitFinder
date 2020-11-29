@@ -10,18 +10,24 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.highbryds.fitfinder.R
+import com.highbryds.fitfinder.callbacks.GeneralCallBack
 import com.highbryds.fitfinder.commonHelper.JavaHelper
 import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.commonHelper.toast
 import com.highbryds.fitfinder.model.FR_SearchCar
 import com.highbryds.fitfinder.model.bestmatch
 import com.highbryds.fitfinder.model.carpool.PendingRequestModel
+import com.highbryds.fitfinder.model.carpool.RIDE_STATUS
+import com.highbryds.fitfinder.model.carpool.RideStatus
 import com.highbryds.fitfinder.sinch.SinchSdk
 import com.highbryds.fitfinder.ui.Chatting.MessageActivity
+import com.mikepenz.fastadapter.dsl.genericFastAdapter
 
 class FR_PendingRequestAdapter
     (
-    var frSearchcar: PendingRequestModel, var context: Context, var listtype: Int) :
+    var frSearchcar: PendingRequestModel, var context: Context, var listtype: Int,
+    val generalCallBack: GeneralCallBack
+) :
     RecyclerView.Adapter<FR_PendingRequestAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -34,19 +40,30 @@ class FR_PendingRequestAdapter
         val price = itemView.findViewById(R.id.price) as TextView
         val seats = itemView.findViewById(R.id.seats) as TextView
         val requestRide = itemView.findViewById(R.id.cancelRide) as Button
+        val completeRide = itemView.findViewById(R.id.completeRide) as Button
         val chatUser = itemView.findViewById(R.id.chatUser) as TextView
+        val time = itemView.findViewById(R.id.time) as TextView
 
-        fun bindViews(frSearchcar: FR_SearchCar, context: Context) {
+        fun bindViews(frSearchcar: FR_SearchCar?, context: Context) {
 
-            name.text = frSearchcar.cellNumber
+            if (JavaHelper.dateTimeMilli(frSearchcar?.startingtime) <  System.currentTimeMillis()){
+                requestRide.visibility = View.VISIBLE
+                completeRide.visibility = View.GONE
+            }else{
+                requestRide.visibility = View.GONE
+                completeRide.visibility = View.VISIBLE
+            }
+
+            name.text = frSearchcar!!.cellNumber
             CarnColor.text = "${frSearchcar.carmake} ${frSearchcar.carmodel} | ${frSearchcar.color}"
-            leavingTimenLocation.text = "At: ${
+            time.text = "At: ${
                 JavaHelper.parseDateToFormat(
                     "yyyy-MM-ddTHH:mm:ss.SSSZ",
                     frSearchcar.startingtime
-                )
-            } From: ${frSearchcar.starting_point.name}"
-            endTimenLocation.text = "To: ${frSearchcar.destination.name}"
+                )}"
+            leavingTimenLocation.text =
+             "From: ${frSearchcar.starting_point.name}"
+            endTimenLocation.text = "\nTo: ${frSearchcar.destination.name}"
             ac.text = "AC:\n${frSearchcar.aC}"
             price.text = "Rs:\n${frSearchcar.preferredcost_min}"
             seats.text = "Seats:\n${frSearchcar.seatsleft}/${frSearchcar.totalseats}"
@@ -77,15 +94,16 @@ class FR_PendingRequestAdapter
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        holder.bindViews(frSearchcar.carpooldata.get(position), context)
+        holder.bindViews(frSearchcar.carpooldata?.get(position), context)
 
         holder.requestRide.setOnClickListener {
-           context.toast(context, "Cancelling Request")
+            generalCallBack.eventOccur(frSearchcar.carrequestdata!!.get(position).id!!)
+
         }
     }
 
     override fun getItemCount(): Int {
-         return frSearchcar.carpooldata.size
+        return frSearchcar.carpooldata!!.size
     }
 
 }

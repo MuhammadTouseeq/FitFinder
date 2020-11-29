@@ -6,6 +6,7 @@ import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.ui.carpool.fitdriver.RideRequestsActivity
+import com.highbryds.fitfinder.ui.carpool.fitrider.FR_PendingRequest
 import com.highbryds.fitfinder.ui.carpool.fitrider.FR_RequestForm
 import kotlinx.android.synthetic.main.activity_user_selection_type.*
 
@@ -18,7 +19,7 @@ class CarpoolSelectionActivity : AppCompatActivity() {
 
 
         FR_Option.setOnClickListener {
-            val intent = Intent(this, FR_RequestForm::class.java)
+            val intent = Intent(this, FR_PendingRequest::class.java)
             startActivity(intent)
         }
 

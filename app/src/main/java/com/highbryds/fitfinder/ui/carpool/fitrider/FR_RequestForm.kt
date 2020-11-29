@@ -119,8 +119,8 @@ class FR_RequestForm : AppCompatActivity(), ApiResponseCallBack , StoryCallback 
                 //val startingPoint = FR_SearchCarStartingPoint(startingPoint, startingPointLatLng.split(",".toRegex())[0].toDoubleOrNull()!! , startingPointLatLng.split(",".toRegex())[1].toDoubleOrNull()!!)
                 val startingPoint = FR_SearchCarStartingPoint(startingPoint, 0.0 , 0.0)
 
-                frSearchcar = FR_SearchCar("", "", "FitRide", KotlinHelper.getUsersData().cellNumber,"","","","Car",0,0, Integer.parseInt(prefFare.text.toString()),
-                    80, "${JavaHelper.getDateTime()}"+"T${leavingTime.text.toString()}" , destinationLandmarks , destinationPoint , startingPoint , KotlinHelper.getUsersData().SocialId , null )
+                frSearchcar = FR_SearchCar("", "", "FitRide", KotlinHelper.getUsersData().cellNumber,"","","","Car",0,0, 80,
+                Integer.parseInt(prefFare.text.toString()), "${JavaHelper.getDateTime()}"+"T${leavingTime.text.toString()}" , destinationLandmarks , destinationPoint , startingPoint , KotlinHelper.getUsersData().SocialId , null )
                 frSearchcarvm.SearchCar(frSearchcar)
 
             }
