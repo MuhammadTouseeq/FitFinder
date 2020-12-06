@@ -1,9 +1,15 @@
 package com.highbryds.fitfinder.ui.carpool.fitrider
 
+import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.Window
+import android.widget.Button
+import android.widget.RatingBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
@@ -11,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.adapter.FR_PendingRequestAdapter
-import com.highbryds.fitfinder.adapter.FR_SearchCarVehiclesAdapter
 import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
 import com.highbryds.fitfinder.callbacks.GeneralCallBack
 import com.highbryds.fitfinder.commonHelper.KotlinHelper
@@ -24,7 +29,6 @@ import com.highbryds.fitfinder.vm.CarPool.FR_SearchCarVM
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_f_r__pending_request.*
 import kotlinx.android.synthetic.main.activity_f_r__search_car_list.*
-import kotlinx.android.synthetic.main.activity_f_r__search_car_list.RV_recommended
 import javax.inject.Inject
 
 
@@ -56,19 +60,19 @@ class FR_PendingRequest : AppCompatActivity(), ApiResponseCallBack , GeneralCall
         val rideRequest = RideRequest(null, KotlinHelper.getUsersData().SocialId, null, null)
         fr_SearchCarVM.getPendingRequest(rideRequest)
         fr_SearchCarVM.pendingRequest.observe(this, Observer {
-            if (it.carpooldata != null){
+            if (it.carpooldata != null) {
                 Log.d("PendingRequest", it.toString())
-                val adapter = FR_PendingRequestAdapter(it, this, 0 , this)
+                val adapter = FR_PendingRequestAdapter(it, this, 0, this)
                 RV_pending.adapter = adapter
-            }else{
-                val intent = Intent(this , FR_RequestForm::class.java)
+            } else {
+                val intent = Intent(this, FR_RequestForm::class.java)
                 startActivity(intent)
                 finish()
             }
 
         })
 
-        FD_CarpoolViewModel.isRideStatusChange.observe(this , Observer {
+        FD_CarpoolViewModel.isRideStatusChange.observe(this, Observer {
             finish()
         })
     }
@@ -82,7 +86,30 @@ class FR_PendingRequest : AppCompatActivity(), ApiResponseCallBack , GeneralCall
     }
 
     override fun eventOccur(carpoolstatus_id: String) {
-        val model = RideStatus(RIDE_STATUS.cancelled.name, carpoolstatus_id)
+        val model = RideStatus(RIDE_STATUS.cancelled.name, carpoolstatus_id, null, null)
         FD_CarpoolViewModel.changeRideStatus(model)
+    }
+
+    override fun eventOccurCancelRideRating(carpoolstatus_id: String, socialID: String) {
+        showDialog(carpoolstatus_id, socialID)
+    }
+
+
+    fun showDialog(carpoolstatus_id: String, socialID: String) {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.ratindialoge)
+
+        val submit  = dialog.findViewById(R.id.submit) as Button
+        val ratingBar  = dialog.findViewById(R.id.ratingBar) as RatingBar
+
+        submit.setOnClickListener {
+            val model = RideStatus(RIDE_STATUS.completed.name, carpoolstatus_id, ratingBar.rating.toDouble(), socialID)
+            FD_CarpoolViewModel.changeRideStatus(model)
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }

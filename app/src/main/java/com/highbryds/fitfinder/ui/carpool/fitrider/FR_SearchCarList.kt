@@ -87,6 +87,11 @@ class FR_SearchCarList : AppCompatActivity(), GeneralCallBack, ApiResponseCallBa
         frSearchcarvm.sendRequest(rideRequest)
     }
 
+    override fun eventOccurCancelRideRating(carpoolstatus_id: String, socialID: String) {
+
+    }
+
+
     override fun getError(error: String) {
         this.toast(this, error.toString())
     }

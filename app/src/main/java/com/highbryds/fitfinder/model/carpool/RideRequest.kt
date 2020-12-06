@@ -65,5 +65,5 @@ data class RideRequest(
 
 
 enum class RIDE_STATUS {
-    pending, cancelled, accepted
+    pending, cancelled, accepted, completed
 }

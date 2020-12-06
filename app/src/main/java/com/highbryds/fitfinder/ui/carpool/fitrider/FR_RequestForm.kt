@@ -116,13 +116,12 @@ class FR_RequestForm : AppCompatActivity(), ApiResponseCallBack , StoryCallback 
                 startingPointLatLng = startingPointLatLng.replace(")" , "")
 
                 val destinationPoint = FR_SearchCarDestinationPoint(endPoint , endPointLatLng.split(",".toRegex())[0].toDoubleOrNull()!! , endPointLatLng.split(",".toRegex())[1].toDoubleOrNull()!!)
-                //val startingPoint = FR_SearchCarStartingPoint(startingPoint, startingPointLatLng.split(",".toRegex())[0].toDoubleOrNull()!! , startingPointLatLng.split(",".toRegex())[1].toDoubleOrNull()!!)
-                val startingPoint = FR_SearchCarStartingPoint(startingPoint, 0.0 , 0.0)
+                val spoint = FR_SearchCarStartingPoint(startingPoint, startingPointLatLng.split(",".toRegex())[0].toDoubleOrNull()!! , startingPointLatLng.split(",".toRegex())[1].toDoubleOrNull()!!)
+                //val startingPoint = FR_SearchCarStartingPoint(startingPoint, 0.0 , 0.0)
 
                 frSearchcar = FR_SearchCar("", "", "FitRide", KotlinHelper.getUsersData().cellNumber,"","","","Car",0,0, 80,
-                Integer.parseInt(prefFare.text.toString()), "${JavaHelper.getDateTime()}"+"T${leavingTime.text.toString()}" , destinationLandmarks , destinationPoint , startingPoint , KotlinHelper.getUsersData().SocialId , null )
+                Integer.parseInt(prefFare.text.toString()), "${JavaHelper.getDateTime()}"+"T${leavingTime.text.toString()}" , destinationLandmarks , destinationPoint , spoint , KotlinHelper.getUsersData().SocialId , null , null)
                 frSearchcarvm.SearchCar(frSearchcar)
-
             }
         }
 

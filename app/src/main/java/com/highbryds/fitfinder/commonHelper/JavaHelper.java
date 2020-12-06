@@ -34,6 +34,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import id.zelory.compressor.Compressor;
@@ -188,7 +189,8 @@ public class JavaHelper {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             SimpleDateFormat output = new SimpleDateFormat("HH:mm");
             Date d = sdf.parse(dateStart);
-            String formattedTime = output.format(d);
+            long t = d.getTime()+(5*60*60*1000);
+            String formattedTime = output.format(t);
             return formattedTime;
         } catch (Exception e) {
             return null;

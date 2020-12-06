@@ -81,7 +81,7 @@ class KotlinHelper {
 
             //performing positive action
             builder.setPositiveButton("Yes"){dialogInterface, which ->
-                logoutSocialAccount(context)
+                //logoutSocialAccount(context)
                 confirmListner.onClick()
             }
 

@@ -304,9 +304,43 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         }
 
         carpool.setOnClickListener {
-            val intent = Intent(this, CarpoolSelectionActivity::class.java)
-            startActivity(intent)
+            if (KotlinHelper.getUsersData().cellNumber != null){
+                 if (android.util.Patterns.PHONE.matcher(KotlinHelper.getUsersData().cellNumber).matches()){
+                val intent = Intent(this, CarpoolSelectionActivity::class.java)
+                startActivity(intent)
+            }else{
+
+            }
+            }else{
+                this.toast(this, "Please update profile first")
+            }
+
+
         }
+
+        //Refresh Stories
+        btnRefresh.setOnClickListener {
+
+            btnRefresh.startAnimation(
+                AnimationUtils.loadAnimation(
+                    applicationContext,
+                    R.anim.scale_anim
+                ))
+            spin_kit.visibility = View.VISIBLE
+            currentLocation?.let {
+
+
+
+                with(currentLocation)
+                {
+                    homeMapViewModel.fetchNearByStoriesData(
+                        latitude?.toString(),
+                        longitude?.toString())
+                }
+            }
+
+        }
+
 
     }
 

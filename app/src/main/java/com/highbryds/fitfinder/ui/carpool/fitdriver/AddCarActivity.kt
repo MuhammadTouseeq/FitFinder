@@ -1,12 +1,10 @@
 package com.highbryds.fitfinder.ui.carpool.fitdriver
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.CompoundButton
-import androidx.core.graphics.toColor
 import androidx.lifecycle.Observer
 import com.google.gson.Gson
 import com.highbryds.fitfinder.R
@@ -14,19 +12,20 @@ import com.highbryds.fitfinder.commonHelper.Constants
 import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.commonHelper.PrefsHelper
 import com.highbryds.fitfinder.commonHelper.toast
-import com.highbryds.fitfinder.model.FR_SearchCar
 import com.highbryds.fitfinder.model.carpool.CarData
 import com.highbryds.fitfinder.model.carpool.CarDetails
-import com.highbryds.fitfinder.model.carpool.CarMakeModel
 import com.highbryds.fitfinder.model.carpool.FD_CarPool
 import com.highbryds.fitfinder.ui.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_add_car.*
 import petrov.kristiyan.colorpicker.ColorPicker
 import petrov.kristiyan.colorpicker.ColorPicker.OnFastChooseColorListener
+import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import javax.inject.Inject
+import kotlin.collections.ArrayList
+
 
 @AndroidEntryPoint
 class AddCarActivity : BaseActivity(), View.OnClickListener {
@@ -103,19 +102,31 @@ class AddCarActivity : BaseActivity(), View.OnClickListener {
 
         when (p0?.id) {
             R.id.containerColorPicker -> {
+
+                val col = resources.getStringArray(R.array.colors)
+
+                var categoryList : ArrayList<String>?=null
+                categoryList = col.toCollection(ArrayList())
+
+
+
+//                val colors: ArrayList<String> =
+//                    resources.getStringArray(R.array.colors) as ArrayList<String>
+
                 val colorPicker = ColorPicker(this@AddCarActivity)
 
                 colorPicker.setOnFastChooseColorListener(object : OnFastChooseColorListener {
                     override fun setOnFastChooseColorListener(position: Int, color: Int) {
                         // put code
                         txtPickColor.setBackgroundColor(color)
-                        pickedColor = colorPicker.toString()
+                        pickedColor = position.toString()
                     }
 
                     override fun onCancel() {
                         // put code
                     }
                 })
+                    .setColors(categoryList)
                     .setRoundColorButton(true)
                     .setColumns(5)
                     .show()
@@ -188,7 +199,7 @@ class AddCarActivity : BaseActivity(), View.OnClickListener {
                 autoCompleteModel.setText(carmodel)
                 edtRegNo.setText(regno)
                 pickedColor = color
-                txtPickColor.setBackgroundColor(Integer.parseInt(color))
+              //  txtPickColor.setBackgroundColor(Integer.parseInt(color))
                 number_picker.value = seatsleft
                 edtCostPerSeat.setText("$preferredcost_max")
                 switchAC.isChecked = if (AC == "YES") true else false

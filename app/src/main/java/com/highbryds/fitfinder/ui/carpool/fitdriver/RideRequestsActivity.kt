@@ -55,11 +55,11 @@ class RideRequestsActivity : BaseActivity(), ApiResponseCallBack {
                 when (view.id) {
                     R.id.btnCancel -> {
 
-                        val model = RideStatus(RIDE_STATUS.cancelled.name, entity._id!!)
+                        val model = RideStatus(RIDE_STATUS.cancelled.name, entity._id!! , null , null)
                         FD_CarpoolViewModel.changeRideStatus(model)
                     }
                     R.id.btnRequestStatus -> {
-                        val model = RideStatus(RIDE_STATUS.accepted.name, entity._id!!)
+                        val model = RideStatus(RIDE_STATUS.accepted.name, entity._id!! , null , null)
                         FD_CarpoolViewModel.changeRideStatus(model)
                     }
                 }

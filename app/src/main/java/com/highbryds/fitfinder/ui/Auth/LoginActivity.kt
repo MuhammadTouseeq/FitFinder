@@ -207,6 +207,7 @@ class LoginActivity : AppCompatActivity(), ApiResponseCallBack {
             "Android",
             KotlinHelper.getAndroidVersion()
         )
+        PrefsHelper.putString("socialID" , usersData.SocialId)
         loginViewModel.loginUser(usersData, userAgent)
     }
 
