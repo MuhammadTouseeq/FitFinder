@@ -42,6 +42,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.gson.Gson
 import com.highbryds.fitfinder.BuildConfig
 import com.highbryds.fitfinder.R
@@ -146,7 +147,10 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
     private val RECORD_AUDIO_REQUEST_CODE = 101
     private var isPlaying = false
     private var chipText: String? = null
-    var headerView:  AccountHeaderView? = null
+    private var chipTextHelp: String? = ""
+    private var enableCall: String? = "0"
+    private var enableChat: String? = "0"
+    var headerView: AccountHeaderView? = null
 
     //========End=====//
     private val SELECT_VIDEO = 1
@@ -230,21 +234,87 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             it?.let {
 
                 for ((index, category) in it.withIndex()) {
-                    var mChip = this.layoutInflater.inflate(R.layout.view_chip, null, false) as Chip
+                    val mChip = this.layoutInflater.inflate(R.layout.view_chip, null, false) as Chip
                     mChip.text = category
                     mChip.id = index
                     mChip.isChipIconVisible = true
                     chipGroup.addView(mChip)
+                    chipGroupHelp.visibility = View.GONE
+                    chipReset.visibility = View.GONE
+                    chipGroup.visibility = View.VISIBLE
                 }
             }
 
         })
 
+        homeMapViewModel.helpcategories.observe(this, androidx.lifecycle.Observer {
+            it?.let {
+                for ((index, category) in it.withIndex()) {
+                    val mChip = this.layoutInflater.inflate(R.layout.view_chip, null, false) as Chip
+                    mChip.text = category
+                    mChip.id = index
+                    mChip.isChipIconVisible = true
+                    chipGroupHelp.addView(mChip)
+                }
+            }
+        })
+
         chipGroup.setOnCheckedChangeListener { group, checkedId ->
 
-            val chip: Chip = chipGroup.findViewById(checkedId)
-            //toast(applicationContext, chip.text.toString())
-            chipText = chip.text.toString()
+            if (checkedId != -1) {
+                val chip: Chip = chipGroup.findViewById(checkedId)
+                if (chip.text.toString().contains("Help", true)) {
+                    chipGroupHelp.visibility = View.VISIBLE
+                    chipReset.visibility = View.VISIBLE
+                    chipGroup.visibility = View.GONE
+
+                }else{
+                    chipGroupHelp.visibility = View.GONE
+                    chipReset.visibility = View.GONE
+                    chipGroup.visibility = View.VISIBLE
+                }
+                chipText = chip.text.toString()
+            }
+        }
+
+        chipGroupHelp.setOnCheckedChangeListener{ group, checkedId ->
+            if (checkedId != -1) {
+                val chip: Chip = chipGroupHelp.findViewById(checkedId)
+                chipGroupHelp.visibility = View.GONE
+                chipGroupOption.visibility = View.VISIBLE
+                chipTextHelp = chip.text.toString()
+            }
+        }
+
+        call.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked){
+                enableCall = "1"
+            }else{
+                enableCall = "0"
+            }
+        }
+
+         chat.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked){
+                enableChat = "1"
+            }else{
+                enableChat = "0"
+            }
+        }
+
+
+
+        chipReset.setOnClickListener {
+            chipGroupHelp.visibility = View.GONE
+            chipReset.visibility = View.GONE
+            chipGroupOption.visibility = View.GONE
+            chipGroup.visibility = View.VISIBLE
+            chipGroup.clearCheck()
+            chipGroupHelp.clearCheck()
+            chipText = ""
+            chipTextHelp = ""
+            enableChat = ""
+            enableCall = ""
         }
 
         homeMapViewModel.trendingStoriesData.observe(this, androidx.lifecycle.Observer {
@@ -252,7 +322,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             it?.let {
                 adapter.addData(it)
                 adapter.notifyDataSetChanged()
-                if (it.isNotEmpty()){
+                if (it.isNotEmpty()) {
                     multiStoryView.visibility = View.VISIBLE
                     showStoryImage(storyImg1, it.get(Random().nextInt(it.size))?.mediaUrl)
                     showStoryImage(storyImg2, it.get(Random().nextInt(it.size))?.mediaUrl)
@@ -304,14 +374,16 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         }
 
         carpool.setOnClickListener {
-            if (KotlinHelper.getUsersData().cellNumber != null){
-                 if (android.util.Patterns.PHONE.matcher(KotlinHelper.getUsersData().cellNumber).matches()){
-                val intent = Intent(this, CarpoolSelectionActivity::class.java)
-                startActivity(intent)
-            }else{
+            if (KotlinHelper.getUsersData().cellNumber != null) {
+                if (android.util.Patterns.PHONE.matcher(KotlinHelper.getUsersData().cellNumber)
+                        .matches()
+                ) {
+                    val intent = Intent(this, CarpoolSelectionActivity::class.java)
+                    startActivity(intent)
+                } else {
 
-            }
-            }else{
+                }
+            } else {
                 this.toast(this, "Please update profile first")
             }
 
@@ -325,17 +397,18 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                 AnimationUtils.loadAnimation(
                     applicationContext,
                     R.anim.scale_anim
-                ))
+                )
+            )
             spin_kit.visibility = View.VISIBLE
             currentLocation?.let {
-
 
 
                 with(currentLocation)
                 {
                     homeMapViewModel.fetchNearByStoriesData(
                         latitude?.toString(),
-                        longitude?.toString())
+                        longitude?.toString()
+                    )
                 }
             }
 
@@ -386,7 +459,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
         try {
             // Create the AccountHeader
-            headerView  = AccountHeaderView(this).apply {
+            headerView = AccountHeaderView(this).apply {
                 attachToSliderView(slider) // attach to the slider
                 addProfiles(
                     ProfileDrawerItem().withName(KotlinHelper.getUsersData().name).withEmail(
@@ -777,7 +850,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             .placeholder(R.drawable.ic_launcher_foreground)
             .into(imageView);
 
-      //  headerView.updateProfile()
+        //  headerView.updateProfile()
 
         registerLocationBroadcast()
         //val bundle = intent.extras
@@ -1029,6 +1102,12 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                     toast(applicationContext, "Please select category")
                     return
                 }
+
+                if (chipText.equals("Help" , true) && (chipTextHelp.isNullOrEmpty() || chipTextHelp.isNullOrBlank())){
+                    toast(applicationContext, "Please select help category")
+                    return
+                }
+
                 if (TextUtils.isEmpty(txtMessage.text.toString().trim())) {
                     toast(applicationContext, "Message is required")
                     return
@@ -1063,7 +1142,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                     }
 
                     MediaType.TEXT -> {
-                        val model: UserStory = UserStory(
+                        val model = UserStory(
                             JavaHelper.badWordReplace(txtMessage.text.toString()),
                             KotlinHelper.getUsersData().SocialId,
                             currentLocation.latitude.toString(),
@@ -1076,7 +1155,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                                 currentLocation.latitude,
                                 currentLocation.longitude
                             )
-                        );
+                        , enableCall, enableChat , chipTextHelp, "NO");
                         homeMapViewModel.uploadStoryData(model)
                     }
                     else -> {
@@ -1560,8 +1639,8 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             "",
             "http://highbryds.com/fitfinder/stories/" + fileName,
             chipText!!,
-            JavaHelper.getAddress(this, currentLocation.latitude, currentLocation.longitude)
-        );
+            JavaHelper.getAddress(this, currentLocation.latitude, currentLocation.longitude),
+                    enableCall, enableChat , chipTextHelp, "")
 
 //        Log.d(
 //            "HOMEMAPACTIVITY_", JavaHelper.getAddress(

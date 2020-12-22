@@ -1,10 +1,11 @@
 package com.highbryds.fitfinder.vm.Profile
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.util.Log
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.*
 import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
+import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.model.NearbyStory
 import com.highbryds.fitfinder.model.UserProfile
 import com.highbryds.fitfinder.model.UserStoriesModel
@@ -13,11 +14,19 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
 
-class UserStoriesViewModel @Inject constructor(private val provideApiInterface: ApiInterface) :
-    ViewModel() {
+class UserStoriesViewModel @Inject constructor(private val provideApiInterface: ApiInterface) : ViewModel() {
+
+    init {
+        Log.d("###################" , "init")
+        viewModelScope.launch {
+            getProfileData(KotlinHelper.getUsersData().SocialId)
+        }
+    }
+
 
     val storiesModel: LiveData<List<NearbyStory>>? = MutableLiveData()
-    val userProfile: LiveData<Response<UserProfile>>? = MutableLiveData()
+    val userProfile = MutableLiveData<Response<UserProfile>>()
+
     lateinit var apiResponseCallBack: ApiResponseCallBack
 
     fun getUserStories(userStories: String) {
@@ -36,14 +45,14 @@ class UserStoriesViewModel @Inject constructor(private val provideApiInterface: 
     }
 
 
-    fun getUserProfileData(id: String){
-        viewModelScope.launch {
-            userProfile as MutableLiveData
-            getProfileData(id)?.let {
-                userProfile.value = it
-            }
-        }
-    }
+//    fun getUserProfileData(id: String){
+//        viewModelScope.launch {
+//            userProfile as MutableLiveData
+//            getProfileData(id)?.let {
+//                userProfile.value = it
+//            }
+//        }
+//    }
 
     private suspend fun userStories(userStories: String): List<NearbyStory>? {
         try {
@@ -77,19 +86,19 @@ class UserStoriesViewModel @Inject constructor(private val provideApiInterface: 
     }
 
 
-    private suspend fun getProfileData(id: String) : Response<UserProfile>? {
+    suspend fun getProfileData(id: String) {
         try {
             val response = provideApiInterface.getUserProfile(id)
-            if (response.isSuccessful){
-                return response
+            if (response.isSuccessful!!){
+                userProfile.postValue(response)
             }else{
                 apiResponseCallBack.getError(response.errorBody().toString())
-                return null
+                //return null
             }
 
         }catch (e: Exception){
             apiResponseCallBack.getError(e.toString())
-            return null
+            //return null
         }
     }
 

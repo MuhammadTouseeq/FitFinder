@@ -1,30 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:text="Select Category"
-        android:textSize="16sp"
-        android:textStyle="bold"
-     />
+        android:orientation="horizontal"
+        android:weightSum="5">
+
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:text="Select Category"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+
+        <ImageView
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_15sdp"
+            android:layout_weight="1"
+            android:src="@drawable/cross"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            android:id="@+id/chipReset"/>
+
+    </LinearLayout>
+
+
+
 
     <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:id="@+id/chipGroup"
         android:layout_marginTop="20dp"
         app:selectionRequired="true"
-        app:singleSelection="true"/>
+        app:singleSelection="true" />
+
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupHelp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        app:selectionRequired="true"
+        app:singleSelection="true" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupOption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        app:selectionRequired="false"
+        app:singleSelection="false"
+        android:visibility="gone"
+        style="@style/CustomChipChoice">
+
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipIcon="@drawable/ic_baseline_call_24"
+            app:chipIconTint="@color/colorPrimary"
+            android:text="Enable Call"
+            android:checkable="true"
+            android:clickable="true"
+            android:id="@+id/call"
+            />
+
+
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipIcon="@android:drawable/sym_action_chat"
+            app:chipIconTint="@color/colorPrimary"
+            android:text="Enable Chat"
+            android:checkable="true"
+            android:clickable="true"
+            android:id="@+id/chat"/>
+
+    </com.google.android.material.chip.ChipGroup>
+
+
+
 
 
 </LinearLayout>

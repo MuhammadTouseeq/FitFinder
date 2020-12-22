@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -17,13 +18,19 @@ import com.highbryds.fitfinder.commonHelper.PrefsHelper
 import com.highbryds.fitfinder.commonHelper.toast
 import com.highbryds.fitfinder.model.ProfileBioModel
 import com.highbryds.fitfinder.model.UsersData
+import com.highbryds.fitfinder.retrofit.ApiInterface
+import com.highbryds.fitfinder.utils.ViewModelFactory
 import com.highbryds.fitfinder.vm.Profile.UserStoriesViewModel
+import com.sinch.android.rtc.internal.service.dispatcher.Dispatcher
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_user_profile_main.*
 import kotlinx.android.synthetic.main.activity_user_profile_main.IV_Cover
 import kotlinx.android.synthetic.main.activity_user_profile_main.IV_back
 import kotlinx.android.synthetic.main.activity_user_profile_main.IV_back2
 import kotlinx.android.synthetic.main.activity_user_profile_main.recyclerView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -33,6 +40,9 @@ class UserProfileMain : AppCompatActivity(), ApiResponseCallBack {
     @Inject
     lateinit var userStoriesViewModel: UserStoriesViewModel
 
+//    @Inject
+//    lateinit var provideApiInterface: ApiInterface
+
     lateinit var clapCount: String
     lateinit var storiesCount: String
     lateinit var commentCount: String
@@ -41,8 +51,13 @@ class UserProfileMain : AppCompatActivity(), ApiResponseCallBack {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile_main)
 
+//        userStoriesViewModel = ViewModelProvider(
+//            this@UserProfileMain,
+//            ViewModelFactory(provideApiInterface)
+//        ).get(UserStoriesViewModel::class.java)
 
-        recyclerView.layoutManager = LinearLayoutManager(this , RecyclerView.VERTICAL , false)
+        // userStoriesViewModel = ViewModelProvider(this).get(UserStoriesViewModel::class.java)
+        recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
 //        updateProfile.setOnClickListener {
 //            val intent = Intent(this, UpdateProfile::class.java)
@@ -62,39 +77,70 @@ class UserProfileMain : AppCompatActivity(), ApiResponseCallBack {
         }
 
         userStoriesViewModel.apiResponseCallBack = this
-        userStoriesViewModel.getUserProfileData(KotlinHelper.getUsersData().SocialId)
-        userStoriesViewModel.userProfile?.observe(this@UserProfileMain, Observer {
-            try {
-//                UserClaps.text = it.body()?.clap_count.toString()
-//                UserComments.text = it.body()?.comments_count.toString()
-//                UserStories.text = it.body()?.stories_count.toString()
-//                Heading.text = it.body()?.user_details?.get(0)?.Headline
-//                About.text = it.body()?.user_details?.get(0)?.About
+//        userStoriesViewModel.getUserProfileData(KotlinHelper.getUsersData().SocialId)
+//        userStoriesViewModel.userProfile?.observe(this@UserProfileMain, Observer {
+//            try {
+//
+//                clapCount = it.body()?.clap_count.toString()
+//                storiesCount = it.body()?.stories_count.toString()
+//                commentCount = it.body()?.comments_count.toString()
+//
+//                val usersData = UsersData(it.body()?.user_details?.get(0)?.Headline!!, it.body()?.user_details?.get(0)?.About!!,it.body()?.user_details?.get(0)?.name!!,it.body()?.user_details?.get(0)?.deviceToken,
+//                    it.body()?.user_details?.get(0)?.SocialId!!, it.body()?.user_details?.get(0)?.SocialType!!,
+//                    it.body()?.user_details?.get(0)?.emailAdd!!, it.body()?.user_details?.get(0)?.cellNumber!!,it.body()?.user_details?.get(0)?.imageUrl!!,
+//                    if (it.body()?.user_details?.get(0)?.age != null) Integer.parseInt(it.body()?.user_details?.get(0)?.age!!) else 0,it.body()?.user_details?.get(0)?.Gender!!,it.body()?.user_details?.get(0)?.City!!,it.body()?.user_details?.get(0)?.Country!!)
+//                KotlinHelper.updateUserInfo(usersData)
+//
+//                setUserData();
+//
+//            }catch (e: Exception){}
+//
+//        })
+//        GlobalScope.launch { Dispatchers.Main
+//            userStoriesViewModel.getProfileData(KotlinHelper.getUsersData().SocialId)
+//        }
 
-                clapCount = it.body()?.clap_count.toString()
-                storiesCount = it.body()?.stories_count.toString()
-                commentCount = it.body()?.comments_count.toString()
+            userStoriesViewModel.userProfile
+                ?.observe(this@UserProfileMain, Observer {
+                    it?.let {
+                        clapCount = it.body()?.clap_count.toString()
+                        storiesCount = it.body()?.stories_count.toString()
+                        commentCount = it.body()?.comments_count.toString()
 
-                val usersData = UsersData(it.body()?.user_details?.get(0)?.Headline!!, it.body()?.user_details?.get(0)?.About!!,it.body()?.user_details?.get(0)?.name!!,it.body()?.user_details?.get(0)?.deviceToken,
-                    it.body()?.user_details?.get(0)?.SocialId!!, it.body()?.user_details?.get(0)?.SocialType!!,
-                    it.body()?.user_details?.get(0)?.emailAdd!!, it.body()?.user_details?.get(0)?.cellNumber!!,it.body()?.user_details?.get(0)?.imageUrl!!,
-                    if (it.body()?.user_details?.get(0)?.age != null) Integer.parseInt(it.body()?.user_details?.get(0)?.age!!) else 0,it.body()?.user_details?.get(0)?.Gender!!,it.body()?.user_details?.get(0)?.City!!,it.body()?.user_details?.get(0)?.Country!!)
-                KotlinHelper.updateUserInfo(usersData)
+                        val usersData = UsersData(
+                            it.body()?.user_details?.get(0)?.Headline!!,
+                            it.body()?.user_details?.get(0)?.About!!,
+                            it.body()?.user_details?.get(0)?.name!!,
+                            it.body()?.user_details?.get(0)?.deviceToken,
+                            it.body()?.user_details?.get(0)?.SocialId!!,
+                            it.body()?.user_details?.get(0)?.SocialType!!,
+                            it.body()?.user_details?.get(0)?.emailAdd!!,
+                            it.body()?.user_details?.get(0)?.cellNumber!!,
+                            it.body()?.user_details?.get(0)?.imageUrl!!,
+                            if (it.body()?.user_details?.get(0)?.age != null) Integer.parseInt(
+                                it.body()?.user_details?.get(
+                                    0
+                                )?.age!!
+                            ) else 0,
+                            it.body()?.user_details?.get(0)?.Gender!!,
+                            it.body()?.user_details?.get(0)?.City!!,
+                            it.body()?.user_details?.get(0)?.Country!!
+                        )
+                        KotlinHelper.updateUserInfo(usersData)
 
-                setUserData();
+                        setUserData();
+                    }
+                })
 
-            }catch (e: Exception){}
-
-        })
 
     }
 
     override fun onResume() {
         super.onResume()
-        if (PrefsHelper.getBoolean(Constants.Pref_IsProfileUpdate)){
-            userStoriesViewModel.getUserProfileData(KotlinHelper.getUsersData().SocialId)
-            PrefsHelper.putBoolean(Constants.Pref_IsProfileUpdate , false)
-        }
+//        if (PrefsHelper.getBoolean(Constants.Pref_IsProfileUpdate)){
+//            userStoriesViewModel.getUserProfileData(KotlinHelper.getUsersData().SocialId)
+//            PrefsHelper.putBoolean(Constants.Pref_IsProfileUpdate , false)
+//        }
     }
 
     private fun setUserData() {
@@ -109,18 +155,26 @@ class UserProfileMain : AppCompatActivity(), ApiResponseCallBack {
         toolbarTitle.text = KotlinHelper.getUsersData().name
 
         val items = ArrayList<ProfileBioModel>();
-        items.add(ProfileBioModel(KotlinHelper.getUsersData().imageUrl , storiesCount , clapCount
-            ,commentCount, KotlinHelper.getUsersData().headline!! , KotlinHelper.getUsersData().About!!))
-        val adapter = ProfileMainAdapter(items , this)
+        items.add(
+            ProfileBioModel(
+                KotlinHelper.getUsersData().imageUrl,
+                storiesCount,
+                clapCount,
+                commentCount,
+                KotlinHelper.getUsersData().headline!!,
+                KotlinHelper.getUsersData().About!!
+            )
+        )
+        val adapter = ProfileMainAdapter(items, this)
         recyclerView.adapter = adapter
 
     }
 
     override fun getError(error: String) {
-        this.toast(this , error.toString())
+        this.toast(this, error.toString())
     }
 
     override fun getSuccess(success: String) {
-        this.toast(this , success.toString())
+        this.toast(this, success.toString())
     }
 }

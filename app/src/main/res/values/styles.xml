@@ -27,4 +27,10 @@
         <item name="actionMenuTextColor">@android:color/white</item>
 
     </style>
+
+
+    <style name="CustomChipChoice" parent="@style/Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/chipselection</item>
+        <item name="android:textColor">@color/chipselectiontext</item>
+    </style>
 </resources>

@@ -1,5 +1,6 @@
 package com.highbryds.fitfinder.retrofit
 
+import androidx.lifecycle.LiveData
 import com.highbryds.fitfinder.model.*
 import com.highbryds.fitfinder.model.GeneralResponse
 import com.highbryds.fitfinder.model.UserAgent
@@ -97,8 +98,11 @@ interface ApiInterface {
         @Field("longitude") longitude: String,
         @Field("mediaUrl") mediaUrl: String?,
         @Field("Category") Category: String,
-        @Field("Address") Address: String
-    ): Response<WrapperUploadStory>
+        @Field("Address") Address: String,
+        @Field("enableCall") enableCall: String?,
+        @Field("enableChat") enableChat: String?,
+        @Field("helpCategory") helpCategory: String?,
+        @Field("desc") desc: String?): Response<WrapperUploadStory>
 
 
 //    @POST("users/getnearbystories")

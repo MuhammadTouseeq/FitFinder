@@ -126,7 +126,7 @@ class AddCarActivity : BaseActivity(), View.OnClickListener {
                         // put code
                     }
                 })
-                    .setColors(categoryList)
+                    //.setColors(categoryList)
                     .setRoundColorButton(true)
                     .setColumns(5)
                     .show()
@@ -142,11 +142,11 @@ class AddCarActivity : BaseActivity(), View.OnClickListener {
                     return
                 }
                 if (edtRegNo.text.trim().isEmpty()) {
-                    toast(applicationContext, "Please enter registeration number")
+                    toast(applicationContext, "Please enter registration number")
                     return
                 }
                 if (!checkValidPlate()) {
-                    toast(applicationContext, "Please enter valid registeration number")
+                    toast(applicationContext, "Please enter valid registration number")
                     return
                 }
 

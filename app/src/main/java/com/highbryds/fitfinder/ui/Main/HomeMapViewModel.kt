@@ -28,6 +28,7 @@ class HomeMapViewModel @Inject constructor(private val apiInterface: ApiInterfac
     val storiesData = MutableLiveData<List<NearbyStory>>()
     val trendingStoriesData = MutableLiveData<List<NearbyStory>>()
     val categoriesData = MutableLiveData<List<String>>()
+    val helpcategories = MutableLiveData<List<String>>()
     val userLocation = MutableLiveData<LatLng>()
 
 
@@ -58,6 +59,7 @@ class HomeMapViewModel @Inject constructor(private val apiInterface: ApiInterfac
             if (allNearByStories.code() == 200 && allNearByStories.body()?.status.equals("1")) {
                 storiesData.value = allNearByStories.body()?.data
                 categoriesData.value = allNearByStories.body()?.categories
+                helpcategories.value = allNearByStories.body()?.helpcategories
                 apiErrorsCallBack.getSuccess(allNearByStories.message())
             } else {
                 apiErrorsCallBack.getError(allNearByStories.message())
@@ -90,7 +92,11 @@ class HomeMapViewModel @Inject constructor(private val apiInterface: ApiInterfac
                     longitude,
                     mediaUrl,
                     chipText,
-                    address
+                    address,
+                    enableCall,
+                    enableChat,
+                    helpCategory,
+                    desc
                 )
 
             if (uploadStory.code() == 200) {
