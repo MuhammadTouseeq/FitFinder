@@ -96,17 +96,23 @@ class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissi
                     .isEmpty() ||
                 gender.editText!!.text.isEmpty() || city.text.toString()
                     .isEmpty() || country.text.toString().isEmpty() ||
-                heading.text.toString().isEmpty() || description.text.toString().isEmpty() || phone.text.toString().length != 11
+                heading.text.toString().isEmpty() || description.text.toString()
+                    .isEmpty() || phone.text.toString().length != 11
             ) {
                 this.toast(this, "Please provide complete and proper info")
             } else {
 
-                val ph = "+92"+phone.text.toString().substring(1);
+                val ph = "+92" + phone.text.toString().substring(1);
 
-                if (PrefsHelper.getBoolean(Constants.Pref_isOTPVerifed) && ph.equals(PrefsHelper.getString(Constants.Pref_isOTPMobile))) {
+                if (PrefsHelper.getBoolean(Constants.Pref_isOTPVerifed) && phone.text.toString()
+                        .equals(PrefsHelper.getString(Constants.Pref_isOTPMobile))
+                ) {
                     // can update profile
                     updateProfile()
-                } else if (PrefsHelper.getBoolean(Constants.Pref_isOTPVerifed) && !ph.equals(PrefsHelper.getString(Constants.Pref_isOTPMobile))) {
+                } else if (PrefsHelper.getBoolean(Constants.Pref_isOTPVerifed) && !ph.equals(
+                        PrefsHelper.getString(Constants.Pref_isOTPMobile)
+                    )
+                ) {
                     otpVerifyPopup(ph)
                     // you have to verify again phone seems to be changes
                 } else if (!PrefsHelper.getBoolean(Constants.Pref_isOTPVerifed)) {
@@ -216,7 +222,7 @@ class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissi
         country.setText(ud.Country)
         heading.setText(ud.headline)
         description.setText(ud.About)
-        phone.setText(ud.cellNumber.replace("+92" , "0"))
+        phone.setText(ud.cellNumber.replace("+92", "0"))
 
         Glide
             .with(this)
@@ -263,18 +269,22 @@ class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissi
 
         dialogVerify.setOnClickListener {
             if (!dialogotpVerify.text.toString().isEmpty()) {
-                verifyPhoneNumberWithCode(storedVerificationId, dialogotpVerify.text.toString() , phone)
+                verifyPhoneNumberWithCode(
+                    storedVerificationId,
+                    dialogotpVerify.text.toString(),
+                    phone
+                )
             } else {
                 this@UpdateProfile.toast(this@UpdateProfile, "Enter OTP Code")
             }
         }
 
-       // dialog.setCancelable(false)
+        // dialog.setCancelable(false)
         dialog.show()
     }
 
 
-    fun verifyPhoneNumberWithCode(verificationId: String?, code: String , phone: String) {
+    fun verifyPhoneNumberWithCode(verificationId: String?, code: String, phone: String) {
         if (verificationId !== "" || verificationId != null) {
             val credential = PhoneAuthProvider.getCredential(
                 verificationId!!,

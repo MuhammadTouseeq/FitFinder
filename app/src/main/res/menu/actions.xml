@@ -5,6 +5,9 @@
         android:icon="@android:drawable/stat_notify_chat"
         android:title="Chat" />
 
+    <item android:id="@+id/call"
+        android:icon="@android:drawable/ic_menu_call"
+        android:title="Call" />
 
     <item android:id="@+id/report"
         android:icon="@android:drawable/stat_notify_chat"

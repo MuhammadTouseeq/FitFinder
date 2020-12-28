@@ -86,6 +86,7 @@ class FirebaseService : FirebaseMessagingService() {
                         ), LatLng(PrefsHelper.getDouble("LAT"), PrefsHelper.getDouble("LNG"))
                     )
                     if (distance <= 2.5) {
+                        PrefsHelper.putString(Constants.Pref_ToOpenStoryAuto, p0.getData().get("storyid"))
                         sendNotification(data[0], "Help Alert")
                     }
                 }
@@ -96,7 +97,7 @@ class FirebaseService : FirebaseMessagingService() {
             val data: Map<String, String> = p0.getData()
             // handle backend
             if (data.get("type") != null) {
-                PrefsHelper.putString(Constants.Pref_ToOpenStoryAuto, data.get("type"))
+                PrefsHelper.putString(Constants.Pref_ToOpenStoryAuto, data.get("storyid"))
                 val title = data.get("title")
                 val des = data.get("body")
                 val img = data.get("img")

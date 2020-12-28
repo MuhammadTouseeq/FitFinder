@@ -14,6 +14,8 @@ data class NearbyStory (
     @SerializedName("createdAt") var createdAt : String,
     @SerializedName("__v") var __v : Int,
     @SerializedName("Category") var Category : String?,
+    @SerializedName("enableCall") var enableCall : Int?,
+    @SerializedName("enableChat") var enableChat : Int?,
     @SerializedName("users_data") var userData : List<UsersData>?,
     @SerializedName("clap_data") var storyClapData : List<StoryClap>?,
     @SerializedName("views_data") var storyViewsData : List<StoryViews>?

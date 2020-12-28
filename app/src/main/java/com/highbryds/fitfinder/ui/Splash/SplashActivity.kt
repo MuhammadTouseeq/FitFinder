@@ -31,14 +31,14 @@ class SplashActivity : AppCompatActivity() {
         Handler().postDelayed({
 
             // PrefsHelper.putString("FCMFCM" , "")
-            if (PrefsHelper.getString("FCMFCM" , "").equals("TRUE")){
-                this.toast(this , PrefsHelper.getString("FCMFCM2" , "nhi aya"))
-            }
+//            if (PrefsHelper.getString("FCMFCM" , "").equals("TRUE")){
+//                this.toast(this , PrefsHelper.getString("FCMFCM2" , "nhi aya"))
+//            }
 
             try {
                 val bundle = intent.extras
                 if(bundle != null){
-                    val key = bundle.getString("type")
+                    val key = bundle.getString("storyid")
                     PrefsHelper.putString(Constants.Pref_ToOpenStoryAuto, key)
                     Log.d("bundle"  , key!!)
                     Log.d("bundle"  , PrefsHelper.getString(Constants.Pref_ToOpenStoryAuto))

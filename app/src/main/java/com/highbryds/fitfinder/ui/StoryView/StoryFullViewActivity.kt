@@ -1,21 +1,20 @@
 package com.highbryds.fitfinder.ui.StoryView
 
-import android.content.Intent
 import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.SystemClock
 import android.os.*
 import android.text.TextUtils
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -32,27 +31,29 @@ import com.highbryds.fitfinder.adapters.StoryCommentsAdapter
 import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
 import com.highbryds.fitfinder.callbacks.StoryCallback
 import com.highbryds.fitfinder.callbacks.onConfirmListner
-import com.highbryds.fitfinder.commonHelper.Constants
-import com.highbryds.fitfinder.commonHelper.KotlinHelper
-import com.highbryds.fitfinder.commonHelper.SwipeToDeleteCallback
-import com.highbryds.fitfinder.commonHelper.PrefsHelper
-import com.highbryds.fitfinder.commonHelper.toast
+import com.highbryds.fitfinder.commonHelper.*
 import com.highbryds.fitfinder.model.NearbyStory
 import com.highbryds.fitfinder.model.StoryComment
 import com.highbryds.fitfinder.model.StorySpam
 import com.highbryds.fitfinder.sinch.SinchSdk
 import com.highbryds.fitfinder.ui.Chatting.MessageActivity
 import com.highbryds.fitfinder.ui.StoryComment.StoryCommentViewModel
+import com.highbryds.fitfinder.vm.Profile.UserStoriesViewModel
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.DexterBuilder
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.single.PermissionListener
 import com.petersamokhin.android.floatinghearts.HeartsRenderer
 import com.petersamokhin.android.floatinghearts.HeartsView
-import com.highbryds.fitfinder.vm.Profile.UserStoriesViewModel
-import com.highbryds.fitfinder.vm.UserChatting.UserChattingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_story_view.*
-import kotlinx.android.synthetic.main.activity_user_profile_main.*
 import kotlinx.android.synthetic.main.view_bottom_sheet_comments.*
 import java.io.IOException
 import java.util.*
+import java.util.jar.Manifest
 import javax.inject.Inject
 import kotlin.collections.HashMap
 
@@ -82,8 +83,8 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener, ApiResp
         userStoriesViewModel.apiResponseCallBack = this
 
 
-
-        val v: View = LayoutInflater.from(applicationContext).inflate(R.layout.view_popupwindow, null, false)
+        val v: View =
+            LayoutInflater.from(applicationContext).inflate(R.layout.view_popupwindow, null, false)
         val pw = PopupWindow(v, 500, 500, true)
 //        imgAction.setOnClickListener {
 //            pw.showAtLocation(
@@ -319,7 +320,7 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener, ApiResp
     /**
      * Video Player
      */
-    lateinit var videoPlayer: MediaPlayer
+     var videoPlayer: MediaPlayer? = null
 
     lateinit var handler: Handler
     var flyingCount: Int = 0;
@@ -613,9 +614,17 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener, ApiResp
             popup.getMenu().findItem(R.id.report).setVisible(false);
         }
 
-        if (storyData.userData?.get(0)?.SocialId.equals(KotlinHelper.getUsersData().SocialId)) {
+        if (storyData.userData?.get(0)?.SocialId.equals(KotlinHelper.getUsersData().SocialId) ||
+            storyData.enableChat == 0) {
             popup.getMenu().findItem(R.id.chat).setVisible(false);
         }
+
+        if (storyData.userData?.get(0)?.SocialId.equals(KotlinHelper.getUsersData().SocialId) ||
+            storyData.enableCall == 0) {
+            popup.getMenu().findItem(R.id.call).setVisible(false);
+        }
+
+
 
         //registering popup with OnMenuItemClickListener
         popup.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
@@ -662,6 +671,35 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener, ApiResp
                                 StorySpam(storyData._id, storyData.userData!!.get(0).SocialId)
                             storyFullViewModel.spamStoryById(spam)
                         }
+                    }
+                    R.id.call -> {
+
+
+                        Dexter.withContext(this@StoryFullViewActivity)
+                            .withPermission(android.Manifest.permission.CALL_PHONE)
+                            .withListener(object : PermissionListener {
+                                override
+                                fun onPermissionGranted(response: PermissionGrantedResponse?) {
+                                    val intent = Intent(Intent.ACTION_DIAL)
+                                    intent.data = Uri.parse("tel:" +storyData.userData?.get(0)?.cellNumber)
+                                    startActivity(intent)
+                                }
+
+                                override
+                                fun onPermissionDenied(response: PermissionDeniedResponse?) {
+                                }
+
+                                override
+                                fun onPermissionRationaleShouldBeShown(
+                                    permission: PermissionRequest?,
+                                    token: PermissionToken?
+                                ) {
+                                    token!!.continuePermissionRequest();
+                                }
+                            }
+                            ).check()
+
+
                     }
                 }
                 // Toast.makeText(this@StoryFullViewActivity, "You Clicked : " + item.title, Toast.LENGTH_SHORT).show()
