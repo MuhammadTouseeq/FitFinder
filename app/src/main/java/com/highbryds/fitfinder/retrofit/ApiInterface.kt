@@ -98,7 +98,7 @@ interface ApiInterface {
         @Field("longitude") longitude: String,
         @Field("mediaUrl") mediaUrl: String?,
         @Field("Category") Category: String,
-        @Field("Address") Address: String,
+        @Field("address") Address: String,
         @Field("enableCall") enableCall: String?,
         @Field("enableChat") enableChat: String?,
         @Field("helpCategory") helpCategory: String?,

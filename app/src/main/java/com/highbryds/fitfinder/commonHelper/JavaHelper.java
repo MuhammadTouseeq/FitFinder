@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -215,4 +216,20 @@ public class JavaHelper {
 
         return 0;
     }
+
+
+    public static int calculateDistance(LatLng a , LatLng b){
+
+        Location locationA = new Location("point A");
+        locationA.setLatitude(a.latitude);
+        locationA.setLongitude(a.longitude);
+
+        Location locationB = new Location("point B");
+        locationB.setLatitude(b.latitude);
+        locationB.setLongitude(b.longitude);
+
+        return (int) locationA.distanceTo(locationB) / 1000;
+
+    }
+
 }

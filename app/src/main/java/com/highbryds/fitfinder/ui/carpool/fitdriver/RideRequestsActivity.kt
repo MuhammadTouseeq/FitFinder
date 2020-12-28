@@ -48,13 +48,13 @@ class RideRequestsActivity : BaseActivity(), ApiResponseCallBack {
 
 
         adapter.rideActionCallback = object : RideActionCallback {
+
             override fun onItemClicked(position: Int, view: View) {
                 RR_progress.visibility = View.VISIBLE
 
                 val entity = adapter.getitem(position)
                 when (view.id) {
                     R.id.btnCancel -> {
-
                         val model = RideStatus(RIDE_STATUS.cancelled.name, entity._id!! , null , null)
                         FD_CarpoolViewModel.changeRideStatus(model)
                     }

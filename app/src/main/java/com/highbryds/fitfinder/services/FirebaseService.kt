@@ -15,17 +15,16 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.highbryds.fitfinder.R
-import com.highbryds.fitfinder.commonHelper.Constants
-import com.highbryds.fitfinder.commonHelper.KotlinHelper
-import com.highbryds.fitfinder.commonHelper.NotificationClass
-import com.highbryds.fitfinder.commonHelper.PrefsHelper
+import com.highbryds.fitfinder.commonHelper.*
 import com.highbryds.fitfinder.room.Dao
 import com.highbryds.fitfinder.room.Tables.UserChat
 import com.highbryds.fitfinder.ui.Chatting.uc
 import com.highbryds.fitfinder.ui.Main.HomeMapActivity
+import com.highbryds.fitfinder.utils.LocationHelper
 import com.highbryds.fitfinder.utils.NotificationData
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Picasso.LoadedFrom
@@ -73,6 +72,25 @@ class FirebaseService : FirebaseMessagingService() {
             uc.setRead(false)
             insertChatMessages(uc)
 
+        } else if (obj != null && obj.equals("help")) {
+            try {
+                var data = emptyList<String>()
+                data = p0.getData().get("message")!!.split("|")
+                if (!data[2].equals(KotlinHelper.getUsersData().SocialId)) {
+                    val locationHelper = LocationHelper()
+                    locationHelper.LocationInitialize(getApplicationContext())
+                    val distance = JavaHelper.calculateDistance(
+                        LatLng(
+                            data[1].split(",")[0].toDouble(),
+                            data[1].split(",")[1].toDouble()
+                        ), LatLng(PrefsHelper.getDouble("LAT"), PrefsHelper.getDouble("LNG"))
+                    )
+                    if (distance <= 2.5) {
+                        sendNotification(data[0], "Help Alert")
+                    }
+                }
+
+            } catch (e: Exception) { }
         } else {
 
             val data: Map<String, String> = p0.getData()

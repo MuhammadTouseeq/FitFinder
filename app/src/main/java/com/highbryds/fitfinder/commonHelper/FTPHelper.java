@@ -36,8 +36,8 @@ public class FTPHelper {
 
                 fileName = System.currentTimeMillis()+strings[1];
                 ftpClient = new FTPClient();
-                ftpClient.connect(InetAddress.getByName("maarkaz.co.uk"));
-                ftpClient.login("highbryds@maarkaz.co.uk", "!@#$%^&*()");
+                ftpClient.connect(InetAddress.getByName("highbryds.com"));
+                ftpClient.login("ff@highbryds.com", "!@#$%^&*()");
                 ftpClient.changeWorkingDirectory("/fitfinder/stories/");
                 ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 
@@ -47,8 +47,7 @@ public class FTPHelper {
                 ProgressInputStream progressInput = new ProgressInputStream(
                         buffIn);
                 ftpClient.storeFile(fileName, buffIn);
-                 result = ftpClient.storeFile("test2.mp4",
-                        progressInput);
+                result = ftpClient.storeFile("test2.mp4", progressInput);
 
                 Log.d("DResult", String.valueOf(result));
                 buffIn.close();

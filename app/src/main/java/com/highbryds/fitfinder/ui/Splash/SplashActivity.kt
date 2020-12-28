@@ -1,29 +1,31 @@
 package com.highbryds.fitfinder.ui.Splash
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
-
 import android.util.Log
-import androidx.constraintlayout.motion.widget.MotionLayout
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.messaging.FirebaseMessaging
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.commonHelper.Constants
 import com.highbryds.fitfinder.commonHelper.PrefsHelper
 import com.highbryds.fitfinder.commonHelper.toast
-import com.highbryds.fitfinder.ui.Auth.LoginActivity
 import com.highbryds.fitfinder.ui.Main.HomeMapActivity
 import com.highbryds.fitfinder.ui.OnBoarding.FirstScreen
-import com.highbryds.fitfinder.ui.Profile.UserProfileMain
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_splash.*
+
 
 @AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
+
+        FirebaseMessaging.getInstance().subscribeToTopic("all")
+            .addOnSuccessListener {
+                Toast.makeText(applicationContext, "Success", Toast.LENGTH_LONG).show()
+            }
 
 
         Handler().postDelayed({
