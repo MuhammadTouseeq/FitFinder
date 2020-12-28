@@ -268,7 +268,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                     chipReset.visibility = View.VISIBLE
                     chipGroup.visibility = View.GONE
 
-                }else{
+                } else {
                     chipGroupHelp.visibility = View.GONE
                     chipReset.visibility = View.GONE
                     chipGroup.visibility = View.VISIBLE
@@ -277,7 +277,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             }
         }
 
-        chipGroupHelp.setOnCheckedChangeListener{ group, checkedId ->
+        chipGroupHelp.setOnCheckedChangeListener { group, checkedId ->
             if (checkedId != -1) {
                 val chip: Chip = chipGroupHelp.findViewById(checkedId)
                 chipGroupHelp.visibility = View.GONE
@@ -287,17 +287,17 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         }
 
         call.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked){
+            if (isChecked) {
                 enableCall = "1"
-            }else{
+            } else {
                 enableCall = "0"
             }
         }
 
-         chat.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked){
+        chat.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
                 enableChat = "1"
-            }else{
+            } else {
                 enableChat = "0"
             }
         }
@@ -1103,7 +1103,11 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                     return
                 }
 
-                if (chipText.equals("Help" , true) && (chipTextHelp.isNullOrEmpty() || chipTextHelp.isNullOrBlank())){
+                if (chipText.equals(
+                        "Help",
+                        true
+                    ) && (chipTextHelp.isNullOrEmpty() || chipTextHelp.isNullOrBlank())
+                ) {
                     toast(applicationContext, "Please select help category")
                     return
                 }
@@ -1132,10 +1136,14 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                 when (mediaType) {
                     MediaType.AUDIO -> {
 
-                        if (mRecorder != null) {
-                            prepareStop()
-                            stopRecording()
-                        }
+                        // if (mRecorder != null) {
+                        prepareStop()
+                        stopRecording()
+                        val filename: String = filePath.substring(filePath.lastIndexOf("/") + 1)
+                        val ftpHelper: FTPHelper = FTPHelper()
+                        ftpHelper.init(this)
+                        ftpHelper.AsyncTaskExample().execute(filePath, filename)
+                        // }
                     }
                     MediaType.VIDEO -> {
                         JavaHelper.compress(filePath, this, this)
@@ -1155,7 +1163,8 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                                 currentLocation.latitude,
                                 currentLocation.longitude
                             )
-                        , enableCall, enableChat , chipTextHelp, "NO");
+                            , enableCall, enableChat, chipTextHelp, "NO"
+                        );
                         homeMapViewModel.uploadStoryData(model)
                     }
                     else -> {
@@ -1640,7 +1649,8 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             "http://highbryds.com/fitfinder/stories/" + fileName,
             chipText!!,
             JavaHelper.getAddress(this, currentLocation.latitude, currentLocation.longitude),
-                    enableCall, enableChat , chipTextHelp, "")
+            enableCall, enableChat, chipTextHelp, ""
+        )
 
 //        Log.d(
 //            "HOMEMAPACTIVITY_", JavaHelper.getAddress(
