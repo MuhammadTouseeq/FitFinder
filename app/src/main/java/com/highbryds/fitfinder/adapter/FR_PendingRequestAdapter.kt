@@ -52,7 +52,8 @@ class FR_PendingRequestAdapter
 
             //carreq.status
             if (carreq.status.equals("accepted")){
-                if ((JavaHelper.dateTimeMilli(frSearchcar?.startingtime)+(5*60*60*1000)) >  System.currentTimeMillis()){
+                //removing 5 hour
+                if ((JavaHelper.dateTimeMilli(frSearchcar?.startingtime)) >  System.currentTimeMillis()){
                     requestRide.visibility = View.VISIBLE
                     completeRide.visibility = View.GONE
                 }else{

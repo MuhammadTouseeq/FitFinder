@@ -190,7 +190,8 @@ public class JavaHelper {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             SimpleDateFormat output = new SimpleDateFormat("HH:mm");
             Date d = sdf.parse(dateStart);
-            long t = d.getTime()+(5*60*60*1000);
+            // removing 5 hour
+            long t = d.getTime();
             String formattedTime = output.format(t);
             return formattedTime;
         } catch (Exception e) {

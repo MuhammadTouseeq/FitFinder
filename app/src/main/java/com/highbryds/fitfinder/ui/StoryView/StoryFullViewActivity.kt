@@ -320,7 +320,7 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener, ApiResp
     /**
      * Video Player
      */
-     var videoPlayer: MediaPlayer? = null
+    var videoPlayer: MediaPlayer? = null
 
     lateinit var handler: Handler
     var flyingCount: Int = 0;
@@ -615,15 +615,16 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener, ApiResp
         }
 
         if (storyData.userData?.get(0)?.SocialId.equals(KotlinHelper.getUsersData().SocialId) ||
-            storyData.enableChat == 0) {
+            storyData.enableChat == 0
+        ) {
             popup.getMenu().findItem(R.id.chat).setVisible(false);
         }
 
         if (storyData.userData?.get(0)?.SocialId.equals(KotlinHelper.getUsersData().SocialId) ||
-            storyData.enableCall == 0) {
+            storyData.enableCall == 0
+        ) {
             popup.getMenu().findItem(R.id.call).setVisible(false);
         }
-
 
 
         //registering popup with OnMenuItemClickListener
@@ -681,7 +682,8 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener, ApiResp
                                 override
                                 fun onPermissionGranted(response: PermissionGrantedResponse?) {
                                     val intent = Intent(Intent.ACTION_DIAL)
-                                    intent.data = Uri.parse("tel:" +storyData.userData?.get(0)?.cellNumber)
+                                    intent.data =
+                                        Uri.parse("tel:" + storyData.userData?.get(0)?.cellNumber)
                                     startActivity(intent)
                                 }
 
