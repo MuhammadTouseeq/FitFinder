@@ -36,7 +36,7 @@ class FR_SearchCarVehiclesAdapter(
             CarnColor.text = "${frSearchcar.carmake} ${frSearchcar.carmodel} | ${frSearchcar.color}"
             leavingTimenLocation.text = "At: ${
                 JavaHelper.parseDateToFormat(
-                    "yyyy-MM-ddTHH:mm:ss.SSSZ",
+                    "yyyy-MM-ddTHH:mm",
                     frSearchcar.startingtime
                 )
             } From: ${frSearchcar.starting_point.name}"

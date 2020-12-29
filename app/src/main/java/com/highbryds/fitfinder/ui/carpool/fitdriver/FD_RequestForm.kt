@@ -122,7 +122,7 @@ class FD_RequestForm : AppCompatActivity(), ApiResponseCallBack , StoryCallback 
 
                 val destinationPoint = FR_SearchCarDestinationPoint(endPoint , endPointLatLng.split(",".toRegex())[0].toDoubleOrNull()!! , endPointLatLng.split(",".toRegex())[1].toDoubleOrNull()!!)
                 //val startingPoint = FR_SearchCarStartingPoint(startingPoint, startingPointLatLng.split(",".toRegex())[0].toDoubleOrNull()!! , startingPointLatLng.split(",".toRegex())[1].toDoubleOrNull()!!)
-                val startingPoint = FR_SearchCarStartingPoint(startingPoint, 0.0 , 0.0)
+                val startingPoint = FR_SearchCarStartingPoint(startingPoint, startingPointLatLng.split(",".toRegex())[0].toDoubleOrNull()!! , startingPointLatLng.split(",".toRegex())[1].toDoubleOrNull()!!)
 
 
                 val json = PrefsHelper.getString(Constants.Pref_CarData)

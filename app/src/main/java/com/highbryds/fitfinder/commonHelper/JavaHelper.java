@@ -187,7 +187,7 @@ public class JavaHelper {
 
     public static String parseDateToFormat(String f, String dateStart) {
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-ddTHH:mm");
             SimpleDateFormat output = new SimpleDateFormat("HH:mm");
             Date d = sdf.parse(dateStart);
             // removing 5 hour
