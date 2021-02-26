@@ -52,13 +52,21 @@ class MessagesListActivity : AppCompatActivity() {
             finish()
         }
 
+
         RV_userMsgsList.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         userChattingViewModel.getGroupMsgs()
         adapter = UserMsgsAdapter( getDatabaseDao.getmsgs().value , this)
         RV_userMsgsList.adapter = adapter
         userChattingViewModel.userGroupMsgs.observe(this , androidx.lifecycle.Observer {
-            adapter.loadChat(it)
-            adapter.notifyDataSetChanged()
+            if (it.size > 0){
+                RV_userMsgsList.visibility = View.VISIBLE
+                adapter.loadChat(it)
+                adapter.notifyDataSetChanged()
+            }else{
+                RV_userMsgsList.visibility = View.GONE
+                emptyView.visibility = View.VISIBLE
+            }
+
         })
 
 

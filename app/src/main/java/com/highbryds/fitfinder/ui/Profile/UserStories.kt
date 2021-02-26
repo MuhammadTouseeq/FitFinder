@@ -22,6 +22,7 @@ import com.highbryds.fitfinder.commonHelper.PrefsHelper
 import com.highbryds.fitfinder.commonHelper.toast
 import com.highbryds.fitfinder.model.NearbyStory
 import com.highbryds.fitfinder.model.UserStoriesModel
+import com.highbryds.fitfinder.ui.Main.HomeMapActivity
 import com.highbryds.fitfinder.vm.Profile.UserStoriesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_user_stories.*
@@ -83,6 +84,7 @@ class UserStories : AppCompatActivity(), ApiResponseCallBack , StoryCallback{
                 override fun onClick() {
                     itemPosition = position
                     userStoriesViewModel.deactivate(userStoriesModel.get(position)._id)
+                    HomeMapActivity.isStoryDeletedFromSection = true
                 }
             })
 

@@ -19,6 +19,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/RV_userMsgsList"
-        android:layout_margin="@dimen/_10sdp"/>
+        android:layout_margin="@dimen/_10sdp"
+        />
+
+    <ImageView
+        android:id="@+id/emptyView"
+        android:layout_width="@dimen/_150sdp"
+        android:layout_height="@dimen/_150sdp"
+        android:src="@drawable/nodata"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_40sdp"
+        android:visibility="gone"/>
+
 
 </LinearLayout>

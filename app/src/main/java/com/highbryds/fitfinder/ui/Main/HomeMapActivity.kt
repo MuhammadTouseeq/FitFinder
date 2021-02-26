@@ -42,7 +42,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
 import com.google.gson.Gson
 import com.highbryds.fitfinder.BuildConfig
 import com.highbryds.fitfinder.R
@@ -59,14 +58,12 @@ import com.highbryds.fitfinder.model.UserStory
 import com.highbryds.fitfinder.sinch.SinchSdk
 import com.highbryds.fitfinder.ui.Auth.LoginActivity
 import com.highbryds.fitfinder.ui.BaseActivity
-import com.highbryds.fitfinder.ui.Chatting.MessageActivity
 import com.highbryds.fitfinder.ui.Chatting.MessagesListActivity
 import com.highbryds.fitfinder.ui.Profile.UserProfileMain
 import com.highbryds.fitfinder.ui.Profile.UserProfileSetting
 import com.highbryds.fitfinder.ui.Profile.UserStories
 import com.highbryds.fitfinder.ui.StoryView.StoryFullViewActivity
 import com.highbryds.fitfinder.ui.carpool.CarpoolSelectionActivity
-import com.highbryds.fitfinder.ui.carpool.fitrider.FR_RequestForm
 import com.highbryds.fitfinder.vm.AuthViewModels.LogoutViewModel
 import com.highbryds.fitfinder.vm.Main.StoryViewModel
 import com.highbryds.snapryde.rider_app.recievers.GpsLocationReceiver
@@ -170,6 +167,11 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
     // lateinit var adapter: TrendingStoriesAdapter
 
     var isTrendingStoryView: Boolean = false
+
+    companion object {
+        var isStoryDeletedFromSection: Boolean = false
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -798,33 +800,64 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
     //request permission for location
     private fun requestLocationPermissions() {
 
-        Dexter.withActivity(this@HomeMapActivity)
-            .withPermissions(
-                android.Manifest.permission.ACCESS_COARSE_LOCATION,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-            ).withListener(object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                    report?.let {
 
-                        if (report.areAllPermissionsGranted()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            Dexter.withActivity(this@HomeMapActivity)
+                .withPermissions(
+                    android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                ).withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                        report?.let {
 
-                            startLocationUpdates()
-                            d("All permisssion granted")
-                            showAutoGPSDialog()
+                            if (report.areAllPermissionsGranted()) {
+
+                                startLocationUpdates()
+                                d("All permisssion granted")
+                                showAutoGPSDialog()
 
 
+                            }
                         }
                     }
-                }
 
-                override fun onPermissionRationaleShouldBeShown(
-                    permissions: MutableList<com.karumi.dexter.listener.PermissionRequest>?,
-                    token: PermissionToken?
-                ) {
+                    override fun onPermissionRationaleShouldBeShown(
+                        permissions: MutableList<com.karumi.dexter.listener.PermissionRequest>?,
+                        token: PermissionToken?
+                    ) {
 
-                }
+                    }
 
-            }).check()
+                }).check()
+        } else {
+            Dexter.withActivity(this@HomeMapActivity)
+                .withPermissions(
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                ).withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                        report?.let {
+
+                            if (report.areAllPermissionsGranted()) {
+
+                                startLocationUpdates()
+                                d("All permisssion granted")
+                                showAutoGPSDialog()
+
+
+                            }
+                        }
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(
+                        permissions: MutableList<com.karumi.dexter.listener.PermissionRequest>?,
+                        token: PermissionToken?
+                    ) {
+
+                    }
+
+                }).check()
+        }
+
     }
 
 
@@ -865,6 +898,23 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                     startActivityForResult(intent, 777)
                 }
             })
+        }
+
+        if (isStoryDeletedFromSection) {
+            isStoryDeletedFromSection = false
+            mGoogleMap.clear()
+            spin_kit.visibility = View.VISIBLE
+            currentLocation?.let {
+
+
+                with(currentLocation)
+                {
+                    homeMapViewModel.fetchNearByStoriesData(
+                        latitude?.toString(),
+                        longitude?.toString()
+                    )
+                }
+            }
         }
 
     }
@@ -1057,8 +1107,8 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
             return
         } else if (requestCode == EasyImagePicker.REQUEST_TAKE_PHOTO || requestCode == EasyImagePicker.REQUEST_GALLERY_PHOTO) {
-            if (data?.data == null)
-                return
+//            if (data?.data == null)
+//                return
             EasyImagePicker.getInstance().passActivityResult(requestCode, resultCode, data, object :
                 EasyImagePicker.easyPickerCallback {
                 override fun onFailed(error: String?) {
@@ -1067,13 +1117,25 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
                 override fun onMediaFilePicked(result: String?) {
 
-                    val uri: Uri? = data?.data
-                    val file: File = File(PathUtil.getPath(this@HomeMapActivity, uri))
-                    filePath = JavaHelper.CompressPic(file, this@HomeMapActivity)
 
-                    // filePath = result!!
-                    imgStory.visibility = View.VISIBLE
-                    imgStory.setImageURI(Uri.fromFile(File(result)))
+                    if (requestCode == EasyImagePicker.REQUEST_TAKE_PHOTO) {
+
+                        val file: File = File(result)
+                        val myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath())
+                        imgStory.visibility = View.VISIBLE
+                        imgStory.setImageBitmap(myBitmap)
+
+                    } else {
+
+                        val uri: Uri? = data?.data
+                        val file: File = File(PathUtil.getPath(this@HomeMapActivity, uri))
+                        filePath = JavaHelper.CompressPic(file, this@HomeMapActivity)
+
+                        // filePath = result!!
+                        imgStory.visibility = View.VISIBLE
+                        imgStory.setImageURI(Uri.fromFile(File(result)))
+                    }
+
                 }
 
 

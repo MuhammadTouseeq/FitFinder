@@ -25,6 +25,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
 
 
     <application
@@ -38,6 +39,21 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
+
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.highbryds.fitfinder.provider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            tools:replace="android:authorities">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"
+                tools:replace="android:resource"/>
+        </provider>
+
+
         <activity android:name=".ui.carpool.fitrider.FR_PendingRequest" />
         <!-- <activity android:name=".ui.carpool.CarpoolSelectionActivity"/> -->
         <activity android:name=".ui.Splash.SplashActivity">

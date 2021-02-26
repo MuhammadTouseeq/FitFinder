@@ -47,6 +47,7 @@ class UserProfileMain : AppCompatActivity(), ApiResponseCallBack {
     lateinit var storiesCount: String
     lateinit var commentCount: String
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile_main)
@@ -137,10 +138,10 @@ class UserProfileMain : AppCompatActivity(), ApiResponseCallBack {
 
     override fun onResume() {
         super.onResume()
-//        if (PrefsHelper.getBoolean(Constants.Pref_IsProfileUpdate)){
-//            userStoriesViewModel.getUserProfileData(KotlinHelper.getUsersData().SocialId)
-//            PrefsHelper.putBoolean(Constants.Pref_IsProfileUpdate , false)
-//        }
+        if (PrefsHelper.getBoolean(Constants.Pref_IsProfileUpdate)){
+            userStoriesViewModel.getUserProfileData(KotlinHelper.getUsersData().SocialId)
+            PrefsHelper.putBoolean(Constants.Pref_IsProfileUpdate , false)
+        }
     }
 
     private fun setUserData() {

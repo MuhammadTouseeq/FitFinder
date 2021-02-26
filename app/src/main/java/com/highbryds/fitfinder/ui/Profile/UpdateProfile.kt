@@ -104,9 +104,7 @@ class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissi
 
                 val ph = "+92" + phone.text.toString().substring(1);
 
-                if (PrefsHelper.getBoolean(Constants.Pref_isOTPVerifed) && phone.text.toString()
-                        .equals(PrefsHelper.getString(Constants.Pref_isOTPMobile))
-                ) {
+                if (PrefsHelper.getBoolean(Constants.Pref_isOTPVerifed) && if (!PrefsHelper.getString(Constants.Pref_isOTPMobile).contains("+92")) phone.text.toString().equals(PrefsHelper.getString(Constants.Pref_isOTPMobile)) else ph.equals(PrefsHelper.getString(Constants.Pref_isOTPMobile))) {
                     // can update profile
                     updateProfile()
                 } else if (PrefsHelper.getBoolean(Constants.Pref_isOTPVerifed) && !ph.equals(
@@ -156,7 +154,7 @@ class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissi
                 // The SMS verification code has been sent to the provided phone number, we
                 // now need to ask the user to enter the code and then construct a credential
                 // by combining the code with a verification ID.
-                this@UpdateProfile.toast(this@UpdateProfile, "Code has been sent")
+                this@UpdateProfile.toast(this@UpdateProfile, "Code sent on entered number.")
 
                 // Save verification ID and resending token so we can use them later
                 storedVerificationId = verificationId
@@ -294,7 +292,7 @@ class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissi
                 .addOnCompleteListener(this, object : OnCompleteListener<AuthResult?> {
                     override fun onComplete(@NonNull task: Task<AuthResult?>) {
                         if (task.isSuccessful()) {
-                            this@UpdateProfile.toast(this@UpdateProfile, "Verify")
+                            this@UpdateProfile.toast(this@UpdateProfile, "Code verified")
                             PrefsHelper.putString(Constants.Pref_isOTPMobile, phone)
                             PrefsHelper.putBoolean(Constants.Pref_isOTPVerifed, true)
                             updateProfile()

@@ -45,14 +45,14 @@ class UserStoriesViewModel @Inject constructor(private val provideApiInterface: 
     }
 
 
-//    fun getUserProfileData(id: String){
-//        viewModelScope.launch {
-//            userProfile as MutableLiveData
-//            getProfileData(id)?.let {
-//                userProfile.value = it
-//            }
-//        }
-//    }
+    fun getUserProfileData(id: String){
+        viewModelScope.launch {
+            userProfile as MutableLiveData
+            getProfileData(id)?.let {
+                userProfile.value
+            }
+        }
+    }
 
     private suspend fun userStories(userStories: String): List<NearbyStory>? {
         try {
