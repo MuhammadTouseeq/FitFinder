@@ -117,6 +117,7 @@ import kotlin.concurrent.schedule
 open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickListener,
     ApiResponseCallBack, videoCompressionCallback, FTPCallback {
 
+    lateinit var  provider: Uri
 
     private lateinit var mediaType: MediaType
     private val TAG = HomeMapActivity::class.java!!.getSimpleName()
@@ -812,7 +813,9 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             Dexter.withActivity(this@HomeMapActivity)
                 .withPermissions(
-                    android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                    android.Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
                 ).withListener(object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
                         report?.let {
@@ -941,7 +944,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                     Timer("SettingUp", false).schedule(3000) {
                         showAutoGPSDialog()
                     }
-                    
+
                 } else {
                     // Handle Location turned OFF
                 }
@@ -1133,45 +1136,54 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         } else if (requestCode == ACTION_TAKE_VIDEO) {
 
             // filePath = getPath(data!!.getData()).toString();
-            prepareVideoPlayer(data!!.getData(), view_video)
+            //prepareVideoPlayer(data!!.getData(), view_video)
+            prepareVideoPlayer(provider, view_video)
 
             return
         } else if (requestCode == EasyImagePicker.REQUEST_TAKE_PHOTO || requestCode == EasyImagePicker.REQUEST_GALLERY_PHOTO) {
 //            if (data?.data == null)
 //                return
             try {
-                EasyImagePicker.getInstance().passActivityResult(requestCode, resultCode, data, object :
-                    EasyImagePicker.easyPickerCallback {
-                    override fun onFailed(error: String?) {
-                        Toast.makeText(applicationContext, "Failed to pick image", Toast.LENGTH_LONG)
-                    }
-
-                    override fun onMediaFilePicked(result: String?) {
-
-
-                        if (requestCode == EasyImagePicker.REQUEST_TAKE_PHOTO) {
-
-                            val file: File = File(result)
-                            val myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath())
-                            imgStory.visibility = View.VISIBLE
-                            imgStory.setImageBitmap(myBitmap)
-
-                        } else {
-
-                            val uri: Uri? = data?.data
-                            val file: File = File(PathUtil.getPath(this@HomeMapActivity, uri))
-                            filePath = JavaHelper.CompressPic(file, this@HomeMapActivity)
-
-                            // filePath = result!!
-                            imgStory.visibility = View.VISIBLE
-                            imgStory.setImageURI(Uri.fromFile(File(result)))
+                EasyImagePicker.getInstance()
+                    .passActivityResult(requestCode, resultCode, data, object :
+                        EasyImagePicker.easyPickerCallback {
+                        override fun onFailed(error: String?) {
+                            Toast.makeText(
+                                applicationContext,
+                                "Failed to pick image",
+                                Toast.LENGTH_LONG
+                            )
                         }
 
-                    }
+                        override fun onMediaFilePicked(result: String?) {
 
 
-                })
-            }catch (e: Exception){}
+                            if (requestCode == EasyImagePicker.REQUEST_TAKE_PHOTO) {
+
+                                var file: File = File(result)
+                                filePath = file.absolutePath
+                                val myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath())
+                                imgStory.visibility = View.VISIBLE
+                                imgStory.setImageBitmap(myBitmap)
+
+
+                            } else {
+
+                                val uri: Uri? = data?.data
+                                val file: File = File(PathUtil.getPath(this@HomeMapActivity, uri))
+                                filePath = JavaHelper.CompressPic(file, this@HomeMapActivity)
+
+                                // filePath = result!!
+                                imgStory.visibility = View.VISIBLE
+                                imgStory.setImageURI(Uri.fromFile(File(result)))
+                            }
+
+                        }
+
+
+                    })
+            } catch (e: Exception) {
+            }
 
         }
     }
@@ -1566,7 +1578,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         //takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
 
 
-        var provider = FileProvider.getUriForFile(
+         provider = FileProvider.getUriForFile(
             this@HomeMapActivity,
             BuildConfig.APPLICATION_ID + ".provider",
             getOutputMediaFile(2)!!
