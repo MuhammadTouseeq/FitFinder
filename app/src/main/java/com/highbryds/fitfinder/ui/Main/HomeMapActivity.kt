@@ -2,6 +2,7 @@ package com.highbryds.fitfinder.ui.Main
 
 import android.app.Activity
 import android.app.ProgressDialog
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -10,6 +11,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.location.Location
+import android.location.LocationManager
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.net.Uri
@@ -108,6 +110,7 @@ import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import kotlin.concurrent.schedule
 
 
 @AndroidEntryPoint
@@ -130,7 +133,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
     lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
 
-    lateinit var reciever: GpsLocationReceiver
+    //lateinit var reciever: GpsLocationReceiver
 
     lateinit var currentMarker: Marker
     lateinit var currentLocation: LatLng
@@ -697,10 +700,15 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
     //Register broadcast reciever for location
     private fun registerLocationBroadcast() {
 
-        val filter: IntentFilter = IntentFilter()
-        filter.addAction("android.location.PROVIDERS_CHANGED");
-        reciever = GpsLocationReceiver()
-        registerReceiver(reciever, filter)
+//        val filter: IntentFilter = IntentFilter()
+//        filter.addAction("android.location.PROVIDERS_CHANGED");
+//        reciever = GpsLocationReceiver()
+//        registerReceiver(reciever, filter)
+
+        val filter = IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION)
+        filter.addAction(Intent.ACTION_PROVIDER_CHANGED)
+        registerReceiver(gpsSwitchStateReceiver, filter)
+
 
     }
 
@@ -919,6 +927,28 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
     }
 
+    private val gpsSwitchStateReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override
+        fun onReceive(context: Context, intent: Intent) {
+            if (LocationManager.PROVIDERS_CHANGED_ACTION.equals(intent.action)) {
+                val locationManager: LocationManager =
+                    context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                val isGpsEnabled: Boolean =
+                    locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                val isNetworkEnabled: Boolean =
+                    locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+                if (isGpsEnabled || isNetworkEnabled) {
+                    Timer("SettingUp", false).schedule(3000) {
+                        showAutoGPSDialog()
+                    }
+                    
+                } else {
+                    // Handle Location turned OFF
+                }
+            }
+        }
+    }
+
     override fun onPause() {
         super.onPause()
         //Remove location updates
@@ -926,9 +956,9 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             fusedLocationProviderClient.removeLocationUpdates(locationCallback!!)
         }
 
-        if (reciever != null) {
-            unregisterReceiver(reciever)
-        }
+//        if (reciever != null) {
+//            unregisterReceiver(reciever)
+//        }
     }
 
     //location callback for fusedLocation provider client
@@ -1109,37 +1139,40 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         } else if (requestCode == EasyImagePicker.REQUEST_TAKE_PHOTO || requestCode == EasyImagePicker.REQUEST_GALLERY_PHOTO) {
 //            if (data?.data == null)
 //                return
-            EasyImagePicker.getInstance().passActivityResult(requestCode, resultCode, data, object :
-                EasyImagePicker.easyPickerCallback {
-                override fun onFailed(error: String?) {
-                    Toast.makeText(applicationContext, "Failed to pick image", Toast.LENGTH_LONG)
-                }
-
-                override fun onMediaFilePicked(result: String?) {
-
-
-                    if (requestCode == EasyImagePicker.REQUEST_TAKE_PHOTO) {
-
-                        val file: File = File(result)
-                        val myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath())
-                        imgStory.visibility = View.VISIBLE
-                        imgStory.setImageBitmap(myBitmap)
-
-                    } else {
-
-                        val uri: Uri? = data?.data
-                        val file: File = File(PathUtil.getPath(this@HomeMapActivity, uri))
-                        filePath = JavaHelper.CompressPic(file, this@HomeMapActivity)
-
-                        // filePath = result!!
-                        imgStory.visibility = View.VISIBLE
-                        imgStory.setImageURI(Uri.fromFile(File(result)))
+            try {
+                EasyImagePicker.getInstance().passActivityResult(requestCode, resultCode, data, object :
+                    EasyImagePicker.easyPickerCallback {
+                    override fun onFailed(error: String?) {
+                        Toast.makeText(applicationContext, "Failed to pick image", Toast.LENGTH_LONG)
                     }
 
-                }
+                    override fun onMediaFilePicked(result: String?) {
 
 
-            })
+                        if (requestCode == EasyImagePicker.REQUEST_TAKE_PHOTO) {
+
+                            val file: File = File(result)
+                            val myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath())
+                            imgStory.visibility = View.VISIBLE
+                            imgStory.setImageBitmap(myBitmap)
+
+                        } else {
+
+                            val uri: Uri? = data?.data
+                            val file: File = File(PathUtil.getPath(this@HomeMapActivity, uri))
+                            filePath = JavaHelper.CompressPic(file, this@HomeMapActivity)
+
+                            // filePath = result!!
+                            imgStory.visibility = View.VISIBLE
+                            imgStory.setImageURI(Uri.fromFile(File(result)))
+                        }
+
+                    }
+
+
+                })
+            }catch (e: Exception){}
+
         }
     }
 

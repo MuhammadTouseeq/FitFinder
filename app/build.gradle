@@ -19,6 +19,7 @@ android {
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
 
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -41,6 +42,8 @@ android {
     packagingOptions {
         exclude 'AndroidManifest.xml'
     }
+
+
 
 }
 

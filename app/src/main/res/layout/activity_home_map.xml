@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -52,13 +51,13 @@
 
 
             <ImageView
+                android:id="@+id/carpool"
                 android:layout_width="@dimen/_50sdp"
                 android:layout_height="@dimen/_50sdp"
                 android:layout_alignParentBottom="true"
-                android:layout_marginBottom="@dimen/_80sdp"
                 android:layout_marginLeft="@dimen/_10sdp"
-                android:src="@drawable/carpool"
-                android:id="@+id/carpool" />
+                android:layout_marginBottom="@dimen/_80sdp"
+                android:src="@drawable/carpool" />
 
 
             <LinearLayout
@@ -155,12 +154,12 @@
                 android:visibility="gone" />
 
 
-                <ProgressBar
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:id="@+id/progress_bar"
-                    android:visibility="gone"/>
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
         </RelativeLayout>
 
         <include layout="@layout/view_bottom_sheet" />
