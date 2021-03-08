@@ -11,6 +11,7 @@ class LogoutViewModel @Inject constructor(private val provideApiInterface: ApiIn
 
     lateinit var apiResponseCallBack: ApiResponseCallBack
 
+
     fun logoutUser(socialID : String){
         viewModelScope.launch {
             logoutCall(socialID)
@@ -23,6 +24,7 @@ class LogoutViewModel @Inject constructor(private val provideApiInterface: ApiIn
             if (response.isSuccessful){
                 if (response.body()?.status == 1){
                     apiResponseCallBack.getSuccess("User Logout Successfully")
+
                 }
             }else{
                 apiResponseCallBack.getError(response.errorBody().toString())

@@ -118,6 +118,9 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
     ApiResponseCallBack, videoCompressionCallback, FTPCallback {
 
 
+    lateinit var provider: Uri
+     var mediacontroller: MediaController? = null
+
     private lateinit var mediaType: MediaType
     private val TAG = HomeMapActivity::class.java!!.getSimpleName()
 
@@ -812,7 +815,9 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             Dexter.withActivity(this@HomeMapActivity)
                 .withPermissions(
-                    android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                    android.Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
                 ).withListener(object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
                         report?.let {
@@ -832,7 +837,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                         permissions: MutableList<com.karumi.dexter.listener.PermissionRequest>?,
                         token: PermissionToken?
                     ) {
-
+                        token?.continuePermissionRequest()
                     }
 
                 }).check()
@@ -847,12 +852,14 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
                             if (report.areAllPermissionsGranted()) {
 
+
                                 startLocationUpdates()
                                 d("All permisssion granted")
                                 showAutoGPSDialog()
 
 
                             }
+
                         }
                     }
 
@@ -882,6 +889,12 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
     override fun onResume() {
         super.onResume()
+
+
+       // if (view_video.isPlaying){
+            view_video.stopPlayback()
+            mediacontroller?.hide()
+       // }
 
         slider.setSelectionAtPosition(1)
         val imageView = headerView!!.currentProfileView
@@ -1132,8 +1145,10 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             )
         } else if (requestCode == ACTION_TAKE_VIDEO) {
 
+
             // filePath = getPath(data!!.getData()).toString();
-            prepareVideoPlayer(data!!.getData(), view_video)
+           // prepareVideoPlayer(data!!.getData(), view_video)
+            prepareVideoPlayer( provider, view_video)
 
             return
         } else if (requestCode == EasyImagePicker.REQUEST_TAKE_PHOTO || requestCode == EasyImagePicker.REQUEST_GALLERY_PHOTO) {
@@ -1152,6 +1167,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                         if (requestCode == EasyImagePicker.REQUEST_TAKE_PHOTO) {
 
                             val file: File = File(result)
+                            filePath = file.absolutePath
                             val myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath())
                             imgStory.visibility = View.VISIBLE
                             imgStory.setImageBitmap(myBitmap)
@@ -1566,14 +1582,15 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         //takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
 
 
-        var provider = FileProvider.getUriForFile(
+         provider = FileProvider.getUriForFile(
             this@HomeMapActivity,
             BuildConfig.APPLICATION_ID + ".provider",
             getOutputMediaFile(2)!!
         )
         val mimeType = applicationContext.contentResolver.getType(provider)
         //  takeVideoIntent.setDataAndType(provider,mimeType)
-        takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, provider);
+        takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, provider)
+
         takeVideoIntent.flags =
             Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
         startActivityForResult(takeVideoIntent, ACTION_TAKE_VIDEO)
@@ -1588,10 +1605,10 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         mediaTypeVideo.visibility = View.VISIBLE
         try {
             // Start the MediaController
-            val mediacontroller = MediaController(
+             mediacontroller = MediaController(
                 this@HomeMapActivity
             )
-            mediacontroller.setAnchorView(videoview)
+            mediacontroller?.setAnchorView(videoview)
             // Get the URL from String VideoURL
             // val video = Uri.fromFile(File(path))
             videoview.setMediaController(mediacontroller)

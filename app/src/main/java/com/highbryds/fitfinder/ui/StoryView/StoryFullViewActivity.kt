@@ -40,7 +40,6 @@ import com.highbryds.fitfinder.ui.Chatting.MessageActivity
 import com.highbryds.fitfinder.ui.StoryComment.StoryCommentViewModel
 import com.highbryds.fitfinder.vm.Profile.UserStoriesViewModel
 import com.karumi.dexter.Dexter
-import com.karumi.dexter.DexterBuilder
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
@@ -53,7 +52,6 @@ import kotlinx.android.synthetic.main.activity_story_view.*
 import kotlinx.android.synthetic.main.view_bottom_sheet_comments.*
 import java.io.IOException
 import java.util.*
-import java.util.jar.Manifest
 import javax.inject.Inject
 import kotlin.collections.HashMap
 
@@ -74,6 +72,8 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener, ApiResp
     lateinit var storyData: NearbyStory
     lateinit var storyID: String
     var storyClapCounter = 0
+     var  mediacontroller: MediaController? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_story_view)
@@ -374,10 +374,10 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener, ApiResp
 
         try {
             // Start the MediaController
-            val mediacontroller = MediaController(
+            mediacontroller = MediaController(
                 this
             )
-            mediacontroller.setAnchorView(videoview)
+            mediacontroller?.setAnchorView(videoview)
             videoview.setMediaController(mediacontroller)
 
             videoview.setVideoURI(uri)
@@ -595,6 +595,12 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener, ApiResp
     }
 
     fun resetAllViews() {
+        mediacontroller?.let {
+              mediacontroller?.hide()
+        }
+
+        videoPlayer?.stop()
+        //view_video.setMediaController(null)
         containerAudioPlayer.visibility = View.GONE
         view_video.visibility = View.GONE
         imgStory.visibility = View.GONE
@@ -810,5 +816,10 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener, ApiResp
 
         // Display the alert dialog on app interface
         dialog.show()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        resetAllViews()
     }
 }
