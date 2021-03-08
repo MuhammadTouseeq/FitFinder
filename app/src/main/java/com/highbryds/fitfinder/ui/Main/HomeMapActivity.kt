@@ -117,7 +117,9 @@ import kotlin.concurrent.schedule
 open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickListener,
     ApiResponseCallBack, videoCompressionCallback, FTPCallback {
 
-    lateinit var  provider: Uri
+
+    lateinit var provider: Uri
+     var mediacontroller: MediaController? = null
 
     private lateinit var mediaType: MediaType
     private val TAG = HomeMapActivity::class.java!!.getSimpleName()
@@ -835,7 +837,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                         permissions: MutableList<com.karumi.dexter.listener.PermissionRequest>?,
                         token: PermissionToken?
                     ) {
-
+                        token?.continuePermissionRequest()
                     }
 
                 }).check()
@@ -850,12 +852,14 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
                             if (report.areAllPermissionsGranted()) {
 
+
                                 startLocationUpdates()
                                 d("All permisssion granted")
                                 showAutoGPSDialog()
 
 
                             }
+
                         }
                     }
 
@@ -885,6 +889,12 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
     override fun onResume() {
         super.onResume()
+
+
+       // if (view_video.isPlaying){
+            view_video.stopPlayback()
+            mediacontroller?.hide()
+       // }
 
         slider.setSelectionAtPosition(1)
         val imageView = headerView!!.currentProfileView
@@ -1136,54 +1146,47 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         } else if (requestCode == ACTION_TAKE_VIDEO) {
 
             // filePath = getPath(data!!.getData()).toString();
-            //prepareVideoPlayer(data!!.getData(), view_video)
-            prepareVideoPlayer(provider, view_video)
+           // prepareVideoPlayer(data!!.getData(), view_video)
+            prepareVideoPlayer( provider, view_video)
 
             return
         } else if (requestCode == EasyImagePicker.REQUEST_TAKE_PHOTO || requestCode == EasyImagePicker.REQUEST_GALLERY_PHOTO) {
 //            if (data?.data == null)
 //                return
             try {
-                EasyImagePicker.getInstance()
-                    .passActivityResult(requestCode, resultCode, data, object :
-                        EasyImagePicker.easyPickerCallback {
-                        override fun onFailed(error: String?) {
-                            Toast.makeText(
-                                applicationContext,
-                                "Failed to pick image",
-                                Toast.LENGTH_LONG
-                            )
+                EasyImagePicker.getInstance().passActivityResult(requestCode, resultCode, data, object :
+                    EasyImagePicker.easyPickerCallback {
+                    override fun onFailed(error: String?) {
+                        Toast.makeText(applicationContext, "Failed to pick image", Toast.LENGTH_LONG)
+                    }
+
+                    override fun onMediaFilePicked(result: String?) {
+
+
+                        if (requestCode == EasyImagePicker.REQUEST_TAKE_PHOTO) {
+
+                            val file: File = File(result)
+                            filePath = file.absolutePath
+                            val myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath())
+                            imgStory.visibility = View.VISIBLE
+                            imgStory.setImageBitmap(myBitmap)
+
+                        } else {
+
+                            val uri: Uri? = data?.data
+                            val file: File = File(PathUtil.getPath(this@HomeMapActivity, uri))
+                            filePath = JavaHelper.CompressPic(file, this@HomeMapActivity)
+
+                            // filePath = result!!
+                            imgStory.visibility = View.VISIBLE
+                            imgStory.setImageURI(Uri.fromFile(File(result)))
                         }
 
-                        override fun onMediaFilePicked(result: String?) {
+                    }
 
 
-                            if (requestCode == EasyImagePicker.REQUEST_TAKE_PHOTO) {
-
-                                var file: File = File(result)
-                                filePath = file.absolutePath
-                                val myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath())
-                                imgStory.visibility = View.VISIBLE
-                                imgStory.setImageBitmap(myBitmap)
-
-
-                            } else {
-
-                                val uri: Uri? = data?.data
-                                val file: File = File(PathUtil.getPath(this@HomeMapActivity, uri))
-                                filePath = JavaHelper.CompressPic(file, this@HomeMapActivity)
-
-                                // filePath = result!!
-                                imgStory.visibility = View.VISIBLE
-                                imgStory.setImageURI(Uri.fromFile(File(result)))
-                            }
-
-                        }
-
-
-                    })
-            } catch (e: Exception) {
-            }
+                })
+            }catch (e: Exception){}
 
         }
     }
@@ -1585,7 +1588,8 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         )
         val mimeType = applicationContext.contentResolver.getType(provider)
         //  takeVideoIntent.setDataAndType(provider,mimeType)
-        takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, provider);
+        takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, provider)
+
         takeVideoIntent.flags =
             Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
         startActivityForResult(takeVideoIntent, ACTION_TAKE_VIDEO)
@@ -1600,10 +1604,10 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         mediaTypeVideo.visibility = View.VISIBLE
         try {
             // Start the MediaController
-            val mediacontroller = MediaController(
+             mediacontroller = MediaController(
                 this@HomeMapActivity
             )
-            mediacontroller.setAnchorView(videoview)
+            mediacontroller?.setAnchorView(videoview)
             // Get the URL from String VideoURL
             // val video = Uri.fromFile(File(path))
             videoview.setMediaController(mediacontroller)

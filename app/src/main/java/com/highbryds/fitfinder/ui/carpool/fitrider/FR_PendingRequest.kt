@@ -60,6 +60,7 @@ class FR_PendingRequest : AppCompatActivity(), ApiResponseCallBack , GeneralCall
         val rideRequest = RideRequest(null, KotlinHelper.getUsersData().SocialId, null, null)
         fr_SearchCarVM.getPendingRequest(rideRequest)
         fr_SearchCarVM.pendingRequest.observe(this, Observer {
+            // TODO: 12/29/2020 to check below condition
             if (it.carpooldata != null) {
                 Log.d("PendingRequest", it.toString())
                 val adapter = FR_PendingRequestAdapter(it, this, 0, this)
