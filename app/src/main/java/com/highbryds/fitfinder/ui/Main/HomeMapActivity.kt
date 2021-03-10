@@ -89,6 +89,8 @@ import com.stfalcon.multiimageview.MultiImageView
 import dagger.hilt.android.AndroidEntryPoint
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_home_map.*
+import kotlinx.android.synthetic.main.activity_home_map.coordinatorLayout
+import kotlinx.android.synthetic.main.activity_story_view.*
 import kotlinx.android.synthetic.main.record_audio_activity.chronometer
 import kotlinx.android.synthetic.main.record_audio_activity.imgBtRecord
 import kotlinx.android.synthetic.main.record_audio_activity.imgBtStop
@@ -98,10 +100,14 @@ import kotlinx.android.synthetic.main.record_audio_activity.llRecorder
 import kotlinx.android.synthetic.main.record_audio_activity.seekBar
 import kotlinx.android.synthetic.main.view_audio_recorder.chronometerAudio
 import kotlinx.android.synthetic.main.view_bottom_sheet.*
+import kotlinx.android.synthetic.main.view_bottom_sheet.btnSend
+import kotlinx.android.synthetic.main.view_bottom_sheet.imgStory
+import kotlinx.android.synthetic.main.view_bottom_sheet.txtMessage
 import kotlinx.android.synthetic.main.view_category_selection.*
 import kotlinx.android.synthetic.main.view_multiple_storyview.*
 import kotlinx.android.synthetic.main.view_turn_location_on.*
 import kotlinx.android.synthetic.main.view_video_recorder.*
+import kotlinx.android.synthetic.main.view_video_recorder.view_video
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
@@ -119,7 +125,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
 
     lateinit var provider: Uri
-     var mediacontroller: MediaController? = null
+    var mediacontroller: MediaController? = null
 
     private lateinit var mediaType: MediaType
     private val TAG = HomeMapActivity::class.java!!.getSimpleName()
@@ -348,7 +354,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             if (it.size == 1) {
                 loadingProgress.visibility = View.GONE
                 //for new story added by user and append in map
-                resetAll()
+                //resetAll()
                 txtMessage.setText("")
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
                 moveGoogleMap(LatLng(it.get(0).latitude, it.get(0).longitude))
@@ -886,17 +892,26 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
     }
 
-
     override fun onResume() {
         super.onResume()
 
-
-       // if (view_video.isPlaying){
-            view_video.stopPlayback()
+        if (bottomSheetBehavior.getState() === BottomSheetBehavior.STATE_EXPANDED) {
+            mediaTypeVideo.visibility = View.VISIBLE
+        }else{
+            view_video?.clearAnimation();
+            view_video?.suspend(); // clears media player
+            view_video?.setVideoURI(null);
+           // view_video?.stopPlayback()
+            view_video?.stopPlayback()
             mediacontroller?.hide()
-       // }
+            mediaTypeVideo.visibility = View.GONE
+        }
+            // if (view_video.isPlaying){
+            //view_video.stopPlayback()
+            //mediacontroller?.hide()
+            // }
 
-        slider.setSelectionAtPosition(1)
+            slider . setSelectionAtPosition (1)
         val imageView = headerView!!.currentProfileView
         Glide
             .with(this)
@@ -1146,47 +1161,53 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         } else if (requestCode == ACTION_TAKE_VIDEO) {
 
             // filePath = getPath(data!!.getData()).toString();
-           // prepareVideoPlayer(data!!.getData(), view_video)
-            prepareVideoPlayer( provider, view_video)
+            // prepareVideoPlayer(data!!.getData(), view_video)
+            prepareVideoPlayer(provider, view_video)
 
             return
         } else if (requestCode == EasyImagePicker.REQUEST_TAKE_PHOTO || requestCode == EasyImagePicker.REQUEST_GALLERY_PHOTO) {
 //            if (data?.data == null)
 //                return
             try {
-                EasyImagePicker.getInstance().passActivityResult(requestCode, resultCode, data, object :
-                    EasyImagePicker.easyPickerCallback {
-                    override fun onFailed(error: String?) {
-                        Toast.makeText(applicationContext, "Failed to pick image", Toast.LENGTH_LONG)
-                    }
-
-                    override fun onMediaFilePicked(result: String?) {
-
-
-                        if (requestCode == EasyImagePicker.REQUEST_TAKE_PHOTO) {
-
-                            val file: File = File(result)
-                            filePath = file.absolutePath
-                            val myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath())
-                            imgStory.visibility = View.VISIBLE
-                            imgStory.setImageBitmap(myBitmap)
-
-                        } else {
-
-                            val uri: Uri? = data?.data
-                            val file: File = File(PathUtil.getPath(this@HomeMapActivity, uri))
-                            filePath = JavaHelper.CompressPic(file, this@HomeMapActivity)
-
-                            // filePath = result!!
-                            imgStory.visibility = View.VISIBLE
-                            imgStory.setImageURI(Uri.fromFile(File(result)))
+                EasyImagePicker.getInstance()
+                    .passActivityResult(requestCode, resultCode, data, object :
+                        EasyImagePicker.easyPickerCallback {
+                        override fun onFailed(error: String?) {
+                            Toast.makeText(
+                                applicationContext,
+                                "Failed to pick image",
+                                Toast.LENGTH_LONG
+                            )
                         }
 
-                    }
+                        override fun onMediaFilePicked(result: String?) {
 
 
-                })
-            }catch (e: Exception){}
+                            if (requestCode == EasyImagePicker.REQUEST_TAKE_PHOTO) {
+
+                                val file: File = File(result)
+                                filePath = file.absolutePath
+                                val myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath())
+                                imgStory.visibility = View.VISIBLE
+                                imgStory.setImageBitmap(myBitmap)
+
+                            } else {
+
+                                val uri: Uri? = data?.data
+                                val file: File = File(PathUtil.getPath(this@HomeMapActivity, uri))
+                                filePath = JavaHelper.CompressPic(file, this@HomeMapActivity)
+
+                                // filePath = result!!
+                                imgStory.visibility = View.VISIBLE
+                                imgStory.setImageURI(Uri.fromFile(File(result)))
+                            }
+
+                        }
+
+
+                    })
+            } catch (e: Exception) {
+            }
 
         }
     }
@@ -1581,7 +1602,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         //takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
 
 
-         provider = FileProvider.getUriForFile(
+        provider = FileProvider.getUriForFile(
             this@HomeMapActivity,
             BuildConfig.APPLICATION_ID + ".provider",
             getOutputMediaFile(2)!!
@@ -1604,7 +1625,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         mediaTypeVideo.visibility = View.VISIBLE
         try {
             // Start the MediaController
-             mediacontroller = MediaController(
+            mediacontroller = MediaController(
                 this@HomeMapActivity
             )
             mediacontroller?.setAnchorView(videoview)
@@ -1720,6 +1741,11 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         }
         resetAll()
         spin_kit.visibility = View.GONE
+//        if (view_video.isPlaying) {
+//            view_video.stopPlayback()
+//        }
+//        view_video.visibility = View.GONE
+//        mediacontroller?.hide()
     }
 
     fun resetAll() {
@@ -1728,7 +1754,11 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         imgStory.visibility = View.GONE
         filePath = ""
 
+        view_video?.stopPlayback()
+        view_video?.stopPlayback()
 
+        mediacontroller?.hide()
+        mediaTypeVideo.visibility = View.GONE
     }
 
 

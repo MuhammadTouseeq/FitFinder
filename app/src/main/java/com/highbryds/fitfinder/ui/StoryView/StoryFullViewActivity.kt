@@ -522,7 +522,7 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener, ApiResp
             }
             R.id.imgCancel -> {
 
-                setResult(777)
+            //    setResult(777)
                 finish()
             }
             R.id.btnSendComment -> {
