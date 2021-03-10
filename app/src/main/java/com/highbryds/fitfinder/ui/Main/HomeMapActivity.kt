@@ -132,7 +132,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
     private val UPDATE_INTERVAL: Long = 5000
     private val REQUEST_SETTINGS: Int = 0x2
-    private val FASTEST_INTERVAL: Long = 5000; // = 5 seconds
+    private val FASTEST_INTERVAL: Long = 5000 // = 5 seconds
 
     private lateinit var LocationRequest: LocationRequest
 
@@ -160,6 +160,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
     private var enableCall: String? = "0"
     private var enableChat: String? = "0"
     var headerView: AccountHeaderView? = null
+    var isCamera: Boolean = false;
 
     //========End=====//
     private val SELECT_VIDEO = 1
@@ -895,7 +896,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
     override fun onResume() {
         super.onResume()
 
-        if (bottomSheetBehavior.getState() === BottomSheetBehavior.STATE_EXPANDED) {
+        if (bottomSheetBehavior.getState() === BottomSheetBehavior.STATE_EXPANDED && isCamera) {
             mediaTypeVideo.visibility = View.VISIBLE
         }else{
             view_video?.clearAnimation();
@@ -1182,6 +1183,8 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
                         override fun onMediaFilePicked(result: String?) {
 
+                            result
+
 
                             if (requestCode == EasyImagePicker.REQUEST_TAKE_PHOTO) {
 
@@ -1327,6 +1330,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                 resetAll()
                 EasyImagePicker.getInstance().withContext(this, BuildConfig.APPLICATION_ID)
                     .openCamera()
+                isCamera = false;
             }
             R.id.btnGallery -> {
 
@@ -1334,6 +1338,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                 resetAll()
                 EasyImagePicker.getInstance().withContext(this, BuildConfig.APPLICATION_ID)
                     .openGallery()
+                isCamera = false;
             }
             R.id.btnVideo -> {
 
@@ -1344,6 +1349,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                 } else {
                     openVideoRecorder()
                 }
+                isCamera = false;
             }
             R.id.btnAudioRecorder -> {
 
@@ -1359,6 +1365,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                     prepareRecording()
                     startRecording()
                 }
+                isCamera = false;
             }
             //---------Audio Recorder----------//
             R.id.imgBtRecord -> {
@@ -1621,6 +1628,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
      */
 
     fun prepareVideoPlayer(uri: Uri?, videoview: VideoView) {
+        isCamera = true
         mediaTypeAudio.visibility = View.GONE
         mediaTypeVideo.visibility = View.VISIBLE
         try {
