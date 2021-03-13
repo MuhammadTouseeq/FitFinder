@@ -61,14 +61,13 @@ import com.highbryds.fitfinder.sinch.SinchSdk
 import com.highbryds.fitfinder.ui.Auth.LoginActivity
 import com.highbryds.fitfinder.ui.BaseActivity
 import com.highbryds.fitfinder.ui.Chatting.MessagesListActivity
-import com.highbryds.fitfinder.ui.Profile.UserProfileMain
+import com.highbryds.fitfinder.ui.Profile.MyProfile
 import com.highbryds.fitfinder.ui.Profile.UserProfileSetting
 import com.highbryds.fitfinder.ui.Profile.UserStories
 import com.highbryds.fitfinder.ui.StoryView.StoryFullViewActivity
 import com.highbryds.fitfinder.ui.carpool.CarpoolSelectionActivity
 import com.highbryds.fitfinder.vm.AuthViewModels.LogoutViewModel
 import com.highbryds.fitfinder.vm.Main.StoryViewModel
-import com.highbryds.snapryde.rider_app.recievers.GpsLocationReceiver
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -88,8 +87,6 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_home_map.*
 import kotlinx.android.synthetic.main.activity_home_map.coordinatorLayout
 import kotlinx.android.synthetic.main.activity_story_view.*
-import kotlinx.android.synthetic.main.activity_update_profile.view.*
-import kotlinx.android.synthetic.main.fr_pendinglist_item.view.*
 import kotlinx.android.synthetic.main.record_audio_activity.chronometer
 import kotlinx.android.synthetic.main.record_audio_activity.imgBtRecord
 import kotlinx.android.synthetic.main.record_audio_activity.imgBtStop
@@ -474,10 +471,14 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
         try {
             // Create the AccountHeader
+            //ProfileDrawerItem().textColor = ColorHolder.fromColor(Color.WHITE).
             headerView = AccountHeaderView(this).apply {
                 attachToSliderView(slider) // attach to the slider
                 addProfiles(
-                    ProfileDrawerItem().withName(KotlinHelper.getUsersData().name).withEmail(KotlinHelper.getUsersData().emailAdd))
+                    ProfileDrawerItem().withName(KotlinHelper.getUsersData().name).withEmail(
+                        KotlinHelper.getUsersData().emailAdd
+                    )
+                )
                 onAccountHeaderListener = { view, profile, current ->
                     // react to profile changes
                     false
@@ -485,11 +486,9 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             }
 
 
-
-            headerView!!.setBackgroundColor(resources.getColor(R.color.colorAccent))
+            headerView!!.setBackgroundColor(resources.getColor(R.color.colorPrimary))
+            headerView
             headerView!!.selectionListEnabledForSingleProfile = false
-            headerView!!.email.setTextColor(resources.getColor(R.color.white))
-
 
 
             val imageView = headerView!!.currentProfileView
@@ -526,7 +525,8 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                         //this.toast(this, "Home")
                     }
                     2 -> {
-                        val intent = Intent(this, UserProfileMain::class.java)
+                        // val intent = Intent(this, UserProfileMain::class.java)
+                        val intent = Intent(this, MyProfile::class.java)
                         startActivity(intent)
                     }
                     3 -> {
@@ -897,27 +897,27 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
         if (bottomSheetBehavior.getState() === BottomSheetBehavior.STATE_EXPANDED && isCamera) {
             mediaTypeVideo.visibility = View.VISIBLE
-        }else{
+        } else {
             view_video?.clearAnimation();
             view_video?.suspend(); // clears media player
             view_video?.setVideoURI(null);
-           // view_video?.stopPlayback()
+            // view_video?.stopPlayback()
             view_video?.stopPlayback()
             mediacontroller?.hide()
             mediaTypeVideo.visibility = View.GONE
         }
-            // if (view_video.isPlaying){
-            //view_video.stopPlayback()
-            //mediacontroller?.hide()
-            // }
+        // if (view_video.isPlaying){
+        //view_video.stopPlayback()
+        //mediacontroller?.hide()
+        // }
 
-            slider . setSelectionAtPosition (1)
+        slider.setSelectionAtPosition(1)
         val imageView = headerView!!.currentProfileView
         Glide
             .with(this)
             .load(KotlinHelper.getUsersData().imageUrl)
             .placeholder(R.drawable.ic_launcher_foreground)
-
+            .centerCrop()
             .into(imageView);
 
         //  headerView.updateProfile()
@@ -1296,8 +1296,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                                 this,
                                 currentLocation.latitude,
                                 currentLocation.longitude
-                            )
-                            , enableCall, enableChat, chipTextHelp, "NO"
+                            ), enableCall, enableChat, chipTextHelp, "NO"
                         );
                         homeMapViewModel.uploadStoryData(model)
                     }

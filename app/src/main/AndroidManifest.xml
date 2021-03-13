@@ -25,7 +25,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
 
     <application
@@ -50,7 +50,7 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths"
-                tools:replace="android:resource"/>
+                tools:replace="android:resource" />
         </provider>
 
 
@@ -89,6 +89,7 @@
         <activity android:name=".ui.StoryView.StoryFullViewActivity" />
         <activity android:name=".ui.Profile.UpdateProfile" />
         <activity android:name=".ui.Profile.UserProfileMain" /> <!-- <activity -->
+        <activity android:name=".ui.Profile.MyProfile" /> <!-- <activity -->
         <!-- android:name=".ui.Auth.LoginActivity" -->
         <!-- android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" -->
         <!-- android:label="@string/app_name"/> -->
