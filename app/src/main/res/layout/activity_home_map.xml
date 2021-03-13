@@ -66,16 +66,14 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:layout_margin="@dimen/_8sdp"
-                android:background="@drawable/shape_rounded_corner"
                 android:padding="@dimen/_8sdp">
 
-                <TextView
+                <ImageView
                     android:id="@+id/btnRefresh"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_baseline_refresh_24"
                     android:gravity="center"
-                    android:text="Refresh"
+                    android:src="@drawable/sync"
                     android:textColor="@android:color/white" />
 
             </LinearLayout>

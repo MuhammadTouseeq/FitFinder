@@ -1,51 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:padding="@dimen/_20sdp"
-    android:visibility="visible"
-    android:background="@drawable/shape_circle_lite_primary"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/multiStoryView"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_width="@dimen/_100sdp"
+    android:layout_height="@dimen/_100sdp"
+    android:background="@drawable/shape_circle_lite_primary"
+    android:padding="@dimen/_10sdp"
+    android:gravity="center"
+    android:visibility="visible">
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/fire"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:visibility="visible"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:layout_marginLeft="@dimen/_9sdp"
+        app:lottie_rawRes="@raw/fire"
+        app:lottie_speed="1" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fire">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/storyImg3"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/storyImg1"
+            android:layout_marginLeft="17dp"
+            android:layout_marginTop="-15dp"
+            android:src="@drawable/marker_thinking_boy"
+            app:civ_border_color="@android:color/holo_green_dark"
+            app:civ_border_width="2dp" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/storyImg2"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="-10dp"
+            android:layout_toRightOf="@id/storyImg1"
+            android:src="@drawable/marker_thinking_boy"
+            app:civ_border_color="@android:color/holo_green_dark"
+            app:civ_border_width="2dp" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/storyImg1"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/marker_thinking_boy"
+            app:civ_border_color="@android:color/holo_green_dark"
+            app:civ_border_width="2dp" />
+
+        <com.github.ybq.android.spinkit.SpinKitView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/spin_kit_multiple_story"
+            style="@style/SpinKitView.Large.Pulse"
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="@dimen/_60sdp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:layout_marginLeft="-20dp"
+            android:layout_marginTop="-20dp"
+            app:SpinKit_Color="@color/colorPrimary" />
 
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/storyImg3"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="-15dp"
-     android:layout_marginLeft="17dp"
-       android:layout_below="@id/storyImg1"
-        android:src="@drawable/marker_thinking_boy"
-        app:civ_border_width="2dp"
-        app:civ_border_color="@android:color/holo_green_dark"/>
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/storyImg2"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginLeft="-10dp"
-        android:layout_toRightOf="@id/storyImg1"
-        android:src="@drawable/marker_thinking_boy"
-        app:civ_border_width="2dp"
-        app:civ_border_color="@android:color/holo_green_dark"/>
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/storyImg1"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/marker_thinking_boy"
-        app:civ_border_width="2dp"
-        app:civ_border_color="@android:color/holo_green_dark"/>
+    </RelativeLayout>
 
-    <com.github.ybq.android.spinkit.SpinKitView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/spin_kit_multiple_story"
-        style="@style/SpinKitView.Large.Pulse"
-        android:layout_width="@dimen/_60sdp"
-        android:layout_centerInParent="true"
-        android:layout_marginLeft="-20dp"
-        android:layout_marginTop="-20dp"
-        android:layout_height="@dimen/_60sdp"
-        android:layout_gravity="center"
-        app:SpinKit_Color="@color/colorPrimary" />
 
 </RelativeLayout>

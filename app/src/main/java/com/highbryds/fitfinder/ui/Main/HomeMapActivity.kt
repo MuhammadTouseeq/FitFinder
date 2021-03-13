@@ -335,6 +335,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         homeMapViewModel.trendingStoriesData.observe(this, androidx.lifecycle.Observer {
 
             it?.let {
+                adapter.removeData()
                 adapter.addData(it)
                 adapter.notifyDataSetChanged()
                 if (it.isNotEmpty()) {
@@ -796,7 +797,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
     private fun configMap() {
         mGoogleMap.setMapStyle(MapStyling.styleMap())
         mGoogleMap.uiSettings.isMyLocationButtonEnabled = true
-
+        mGoogleMap.uiSettings.isCompassEnabled = false
     }
 
     lateinit var adapter: TrendingStoriesAdapter
