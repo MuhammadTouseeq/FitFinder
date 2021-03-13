@@ -153,7 +153,7 @@ class UserProfileMain : AppCompatActivity(), ApiResponseCallBack {
             .into(IV_Cover);
 
 
-        toolbarTitle.text = KotlinHelper.getUsersData().name
+       // toolbarTitle.text = KotlinHelper.getUsersData().name
 
         val items = ArrayList<ProfileBioModel>();
         items.add(

@@ -1,5 +1,6 @@
 package com.highbryds.fitfinder.ui.Main
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.BroadcastReceiver
@@ -61,7 +62,7 @@ import com.highbryds.fitfinder.sinch.SinchSdk
 import com.highbryds.fitfinder.ui.Auth.LoginActivity
 import com.highbryds.fitfinder.ui.BaseActivity
 import com.highbryds.fitfinder.ui.Chatting.MessagesListActivity
-import com.highbryds.fitfinder.ui.Profile.UserProfileMain
+import com.highbryds.fitfinder.ui.Profile.MyProfile
 import com.highbryds.fitfinder.ui.Profile.UserProfileSetting
 import com.highbryds.fitfinder.ui.Profile.UserStories
 import com.highbryds.fitfinder.ui.StoryView.StoryFullViewActivity
@@ -527,7 +528,8 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                         //this.toast(this, "Home")
                     }
                     2 -> {
-                        val intent = Intent(this, UserProfileMain::class.java)
+                        // val intent = Intent(this, UserProfileMain::class.java)
+                        val intent = Intent(this, MyProfile::class.java)
                         startActivity(intent)
                     }
                     3 -> {
@@ -898,21 +900,21 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
         if (bottomSheetBehavior.getState() === BottomSheetBehavior.STATE_EXPANDED && isCamera) {
             mediaTypeVideo.visibility = View.VISIBLE
-        }else{
+        } else {
             view_video?.clearAnimation();
             view_video?.suspend(); // clears media player
             view_video?.setVideoURI(null);
-           // view_video?.stopPlayback()
+            // view_video?.stopPlayback()
             view_video?.stopPlayback()
             mediacontroller?.hide()
             mediaTypeVideo.visibility = View.GONE
         }
-            // if (view_video.isPlaying){
-            //view_video.stopPlayback()
-            //mediacontroller?.hide()
-            // }
+        // if (view_video.isPlaying){
+        //view_video.stopPlayback()
+        //mediacontroller?.hide()
+        // }
 
-            slider . setSelectionAtPosition (1)
+        slider.setSelectionAtPosition(1)
         val imageView = headerView!!.currentProfileView
         Glide
             .with(this)
@@ -1296,8 +1298,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                                 this,
                                 currentLocation.latitude,
                                 currentLocation.longitude
-                            )
-                            , enableCall, enableChat, chipTextHelp, "NO"
+                            ), enableCall, enableChat, chipTextHelp, "NO"
                         );
                         homeMapViewModel.uploadStoryData(model)
                     }
