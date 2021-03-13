@@ -25,9 +25,10 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_user_profile_main.*
 
 
-class TrendingStoriesAdapter(var userStories: ArrayList<NearbyStory>,var context: Context): RecyclerView.Adapter<TrendingStoriesAdapter.ViewHolder>() {
+class TrendingStoriesAdapter(var userStories: ArrayList<NearbyStory>, var context: Context) :
+    RecyclerView.Adapter<TrendingStoriesAdapter.ViewHolder>() {
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val img = itemView.findViewById(R.id.IV_Story) as ImageView
         val storyType = itemView.findViewById(R.id.storyType) as ImageView
         val userImage = itemView.findViewById(R.id.userImage) as CircleImageView
@@ -37,24 +38,24 @@ class TrendingStoriesAdapter(var userStories: ArrayList<NearbyStory>,var context
         var viewsCount = itemView.findViewById(R.id.viewsCount) as TextView
         val RL_ViewStory = itemView.findViewById(R.id.RL_ViewStory) as RelativeLayout
 
-        fun bindViews(userStories: NearbyStory, context: Context){
+        fun bindViews(userStories: NearbyStory, context: Context) {
 
-           with(userStories)
-           {
-               if (storyClapData != null && storyClapData?.size!! > 0) let {
-                   clapCount.text = storyClapData?.size.toString()
-               } else {
-                   clapCount.text = ""
-               }
-               if (storyViewsData != null && storyViewsData?.size!! > 0) let {
-                   viewsCount.text = storyViewsData?.size.toString()
-               } else {
-                   viewsCount.text=""
-               }
+            with(userStories)
+            {
+                if (storyClapData != null && storyClapData?.size!! > 0) let {
+                    clapCount.text = storyClapData?.size.toString()
+                } else {
+                    clapCount.text = ""
+                }
+                if (storyViewsData != null && storyViewsData?.size!! > 0) let {
+                    viewsCount.text = storyViewsData?.size.toString()
+                } else {
+                    viewsCount.text = ""
+                }
 
-               txtUserName.text=userData?.get(0)?.name
-               txtUserName.isSelected=true
-           }
+                txtUserName.text = userData?.get(0)?.name
+                txtUserName.isSelected = true
+            }
 
 
             Glide
@@ -67,19 +68,19 @@ class TrendingStoriesAdapter(var userStories: ArrayList<NearbyStory>,var context
                 .load(userStories?.userData?.get(0)?.imageUrl)
                 .placeholder(R.drawable.bg_round_green)
                 .into(userImage);
-            if (userStories.mediaUrl.contains(".mp4")){
+            if (userStories.mediaUrl.contains(".mp4")) {
                 Glide
                     .with(context)
                     .load(R.drawable.video)
                     .placeholder(R.drawable.placeholder)
                     .into(storyType);
-            }else if (userStories.mediaUrl.contains(".mp3")){
+            } else if (userStories.mediaUrl.contains(".mp3")) {
                 Glide
                     .with(context)
                     .load(R.drawable.speaker)
                     .placeholder(R.drawable.placeholder)
                     .into(storyType);
-            }else{
+            } else {
                 Glide
                     .with(context)
                     .load(R.drawable.photo)
@@ -90,31 +91,37 @@ class TrendingStoriesAdapter(var userStories: ArrayList<NearbyStory>,var context
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.trending_stories_item, parent, false)
+        val v = LayoutInflater.from(parent.context)
+            .inflate(R.layout.trending_stories_item, parent, false)
         return ViewHolder(v)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindViews(userStories[position] , context)
+        holder.bindViews(userStories[position], context)
 
 
 
-        holder.RL_ViewStory.setOnClickListener{
+        holder.RL_ViewStory.setOnClickListener {
             val intent = Intent(context, StoryFullViewActivity::class.java)
             val gson = Gson()
             val json = gson.toJson(userStories[position])
             intent.putExtra("storyData", json)
-intent.flags=Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             context.startActivity(intent)
         }
 
     }
 
     override fun getItemCount(): Int {
-        return  userStories.size
+        return userStories.size
     }
 
     fun addData(list: List<NearbyStory>) {
         userStories?.addAll(list)
+    }
+
+    fun removeData(){
+        userStories.clear()
+
     }
 }
