@@ -78,10 +78,7 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
-import com.mikepenz.materialdrawer.model.interfaces.withEmail
-import com.mikepenz.materialdrawer.model.interfaces.withIcon
-import com.mikepenz.materialdrawer.model.interfaces.withIdentifier
-import com.mikepenz.materialdrawer.model.interfaces.withName
+import com.mikepenz.materialdrawer.model.interfaces.*
 import com.mikepenz.materialdrawer.util.addStickyFooterItem
 import com.mikepenz.materialdrawer.widget.AccountHeaderView
 import com.pakdev.easypicker.utils.EasyImagePicker
@@ -91,6 +88,8 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_home_map.*
 import kotlinx.android.synthetic.main.activity_home_map.coordinatorLayout
 import kotlinx.android.synthetic.main.activity_story_view.*
+import kotlinx.android.synthetic.main.activity_update_profile.view.*
+import kotlinx.android.synthetic.main.fr_pendinglist_item.view.*
 import kotlinx.android.synthetic.main.record_audio_activity.chronometer
 import kotlinx.android.synthetic.main.record_audio_activity.imgBtRecord
 import kotlinx.android.synthetic.main.record_audio_activity.imgBtStop
@@ -478,10 +477,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             headerView = AccountHeaderView(this).apply {
                 attachToSliderView(slider) // attach to the slider
                 addProfiles(
-                    ProfileDrawerItem().withName(KotlinHelper.getUsersData().name).withEmail(
-                        KotlinHelper.getUsersData().emailAdd
-                    )
-                )
+                    ProfileDrawerItem().withName(KotlinHelper.getUsersData().name).withEmail(KotlinHelper.getUsersData().emailAdd))
                 onAccountHeaderListener = { view, profile, current ->
                     // react to profile changes
                     false
@@ -492,6 +488,8 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
             headerView!!.setBackgroundColor(resources.getColor(R.color.colorAccent))
             headerView!!.selectionListEnabledForSingleProfile = false
+            headerView!!.email.setTextColor(resources.getColor(R.color.white))
+
 
 
             val imageView = headerView!!.currentProfileView
@@ -919,6 +917,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             .with(this)
             .load(KotlinHelper.getUsersData().imageUrl)
             .placeholder(R.drawable.ic_launcher_foreground)
+
             .into(imageView);
 
         //  headerView.updateProfile()
