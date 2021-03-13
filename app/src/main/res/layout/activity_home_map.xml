@@ -98,7 +98,7 @@
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true"
                 app:lottie_rawRes="@raw/map_marker"
-                app:lottie_speed="0.9" />
+                app:lottie_speed="0.4" />
 
             <ImageView
                 android:layout_width="50dp"

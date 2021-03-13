@@ -1,6 +1,5 @@
 package com.highbryds.fitfinder.ui.Main
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.BroadcastReceiver
@@ -69,7 +68,6 @@ import com.highbryds.fitfinder.ui.StoryView.StoryFullViewActivity
 import com.highbryds.fitfinder.ui.carpool.CarpoolSelectionActivity
 import com.highbryds.fitfinder.vm.AuthViewModels.LogoutViewModel
 import com.highbryds.fitfinder.vm.Main.StoryViewModel
-import com.highbryds.snapryde.rider_app.recievers.GpsLocationReceiver
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -79,10 +77,7 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
-import com.mikepenz.materialdrawer.model.interfaces.withEmail
-import com.mikepenz.materialdrawer.model.interfaces.withIcon
-import com.mikepenz.materialdrawer.model.interfaces.withIdentifier
-import com.mikepenz.materialdrawer.model.interfaces.withName
+import com.mikepenz.materialdrawer.model.interfaces.*
 import com.mikepenz.materialdrawer.util.addStickyFooterItem
 import com.mikepenz.materialdrawer.widget.AccountHeaderView
 import com.pakdev.easypicker.utils.EasyImagePicker
@@ -476,6 +471,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
         try {
             // Create the AccountHeader
+            //ProfileDrawerItem().textColor = ColorHolder.fromColor(Color.WHITE).
             headerView = AccountHeaderView(this).apply {
                 attachToSliderView(slider) // attach to the slider
                 addProfiles(
@@ -490,8 +486,8 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             }
 
 
-
-            headerView!!.setBackgroundColor(resources.getColor(R.color.colorAccent))
+            headerView!!.setBackgroundColor(resources.getColor(R.color.colorPrimary))
+            headerView
             headerView!!.selectionListEnabledForSingleProfile = false
 
 
@@ -921,6 +917,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             .with(this)
             .load(KotlinHelper.getUsersData().imageUrl)
             .placeholder(R.drawable.ic_launcher_foreground)
+            .centerCrop()
             .into(imageView);
 
         //  headerView.updateProfile()
