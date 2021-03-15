@@ -3,6 +3,7 @@ package com.highbryds.fitfinder.ui.Profile
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
@@ -26,6 +27,7 @@ import javax.inject.Inject
 class MyProfile : AppCompatActivity(), ApiResponseCallBack {
     @Inject
     lateinit var userStoriesViewModel: UserStoriesViewModel
+    var isViewed: Boolean = false
 
     @Inject
     lateinit var provideApiInterface: ApiInterface
@@ -41,9 +43,18 @@ class MyProfile : AppCompatActivity(), ApiResponseCallBack {
         setContentView(R.layout.myprofile)
         userStoriesViewModel.apiResponseCallBack = this
 
+        if (!isViewed) {
+            isViewed = true
+            profileView.visibility = View.GONE
+            loadingView.visibility = View.VISIBLE
+        }
+
+
         userStoriesViewModel.userProfile
             ?.observe(this@MyProfile, Observer {
                 it?.let {
+                    profileView.visibility = View.VISIBLE
+                    loadingView.visibility = View.GONE
                     clapCount = it.body()?.clap_count.toString()
                     storiesCount = it.body()?.stories_count.toString()
                     commentCount = it.body()?.comments_count.toString()
@@ -117,6 +128,8 @@ class MyProfile : AppCompatActivity(), ApiResponseCallBack {
 
     override fun onResume() {
         super.onResume()
+
+
         if (PrefsHelper.getBoolean(Constants.Pref_IsProfileUpdate)) {
             userStoriesViewModel.getUserProfileData(KotlinHelper.getUsersData().SocialId)
             PrefsHelper.putBoolean(Constants.Pref_IsProfileUpdate, false)

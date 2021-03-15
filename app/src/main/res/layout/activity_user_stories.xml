@@ -9,38 +9,38 @@
 
 
     <include
+        layout="@layout/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/toolbar"/>
+        android:layout_height="wrap_content" />
 
-    <ProgressBar
-        android:id="@+id/loadingProgress"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
+
+    <include
+        android:id="@+id/loadingView"
+        layout="@layout/loading_view"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/_150sdp" />
+
 
     <ImageView
         android:id="@+id/nodata"
         android:layout_width="@dimen/_150sdp"
         android:layout_height="@dimen/_150sdp"
         android:layout_gravity="center"
-        android:src="@drawable/nodata"
         android:layout_marginTop="@dimen/_150sdp"
-        android:visibility="gone"
-        />
+        android:src="@drawable/nodata"
+        android:visibility="gone" />
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RV_Stories"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="@dimen/_5sdp"/>
-
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </LinearLayout>

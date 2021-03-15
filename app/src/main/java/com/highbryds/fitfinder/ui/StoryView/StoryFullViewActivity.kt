@@ -116,6 +116,10 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener, ApiResp
         with(storyData)
         {
 
+            //set Cat and Title
+            storyCat.text = Category
+            storyTitle.text = storyName
+
             //show username in comment write section
             edtComment.setHint("comment on ${userData?.get(0)?.name}'s story")
 
@@ -327,31 +331,31 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener, ApiResp
     override fun onResume() {
         super.onResume()
 
-        var bitmap = BitmapFactory.decodeResource(resources, R.drawable.clap_icon)
-        bitmap = Bitmap.createScaledBitmap(bitmap, 30, 30, false)
-
-        handler = Handler(Looper.getMainLooper())
-        runnable =
-            Runnable {
-
-                storyData.storyClapData?.let {
-
-                    if (flyingCount != storyData?.storyClapData?.size!!) {
-                        heartView.emitHeart(
-                            HeartsView.Model(Random().nextInt(100), bitmap),
-                            HeartsView.MAX_Y_FULL
-                        )
-                        flyingCount++
-                        handler.postDelayed(runnable, 1000)
-                    } else {
-                        handler.removeCallbacks { runnable }
-                    }
-
-                }
-
-
-            }
-        handler.postDelayed(runnable, 1000)
+//        var bitmap = BitmapFactory.decodeResource(resources, R.drawable.clap_icon)
+//        bitmap = Bitmap.createScaledBitmap(bitmap, 30, 30, false)
+//
+//        handler = Handler(Looper.getMainLooper())
+//        runnable =
+//            Runnable {
+//
+//                storyData.storyClapData?.let {
+//
+//                    if (flyingCount != storyData?.storyClapData?.size!!) {
+//                        heartView.emitHeart(
+//                            HeartsView.Model(Random().nextInt(100), bitmap),
+//                            HeartsView.MAX_Y_FULL
+//                        )
+//                        flyingCount++
+//                        handler.postDelayed(runnable, 1000)
+//                    } else {
+//                        handler.removeCallbacks { runnable }
+//                    }
+//
+//                }
+//
+//
+//            }
+//        handler.postDelayed(runnable, 1000)
 
 
 //        Thread(Runnable {
@@ -620,9 +624,11 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener, ApiResp
             popup.getMenu().findItem(R.id.report).setVisible(false);
         }
 
-        if (storyData.userData?.get(0)?.SocialId.equals(KotlinHelper.getUsersData().SocialId) ||
-            storyData.enableChat == 0
-        ) {
+        if (storyData.userData?.get(0)?.SocialId.equals(KotlinHelper.getUsersData().SocialId)) {
+            popup.getMenu().findItem(R.id.profile).setVisible(false);
+        }
+
+        if (storyData.userData?.get(0)?.SocialId.equals(KotlinHelper.getUsersData().SocialId) || storyData.enableChat == 0) {
             popup.getMenu().findItem(R.id.chat).setVisible(false);
         }
 
@@ -707,6 +713,10 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener, ApiResp
                             }
                             ).check()
 
+
+                    }
+
+                    R.id.profile -> {
 
                     }
                 }

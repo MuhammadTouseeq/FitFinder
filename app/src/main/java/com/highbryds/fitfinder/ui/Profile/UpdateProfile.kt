@@ -104,7 +104,14 @@ class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissi
 
                 val ph = "+92" + phone.text.toString().substring(1);
 
-                if (PrefsHelper.getBoolean(Constants.Pref_isOTPVerifed) && if (!PrefsHelper.getString(Constants.Pref_isOTPMobile).contains("+92")) phone.text.toString().equals(PrefsHelper.getString(Constants.Pref_isOTPMobile)) else ph.equals(PrefsHelper.getString(Constants.Pref_isOTPMobile))) {
+                if (PrefsHelper.getBoolean(Constants.Pref_isOTPVerifed) && if (!PrefsHelper.getString(
+                            Constants.Pref_isOTPMobile
+                        ).contains("+92")
+                    ) phone.text.toString()
+                        .equals(PrefsHelper.getString(Constants.Pref_isOTPMobile)) else ph.equals(
+                        PrefsHelper.getString(Constants.Pref_isOTPMobile)
+                    )
+                ) {
                     // can update profile
                     updateProfile()
                 } else if (PrefsHelper.getBoolean(Constants.Pref_isOTPVerifed) && !ph.equals(
@@ -203,6 +210,7 @@ class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissi
     override fun getSuccess(success: String) {
         this.toast(this, success)
         PrefsHelper.getString(Constants.Pref_UserData)
+        loadingView.visibility = View.GONE
         finish()
     }
 
@@ -335,6 +343,7 @@ class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissi
             ftpHelper.AsyncTaskExample().execute(filePath, filename)
             PrefsHelper.putBoolean(Constants.Pref_IsProfileUpdate, true)
         } else {
+            loadingView.visibility = View.VISIBLE
             updateProfileViewModel.uploadUsersData(usersData)
             PrefsHelper.putBoolean(Constants.Pref_IsProfileUpdate, true)
         }

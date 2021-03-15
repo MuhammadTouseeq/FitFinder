@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.activity_user_stories.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class UserStories : AppCompatActivity(), ApiResponseCallBack , StoryCallback{
+class UserStories : AppCompatActivity(), ApiResponseCallBack, StoryCallback {
 
     @Inject
     lateinit var userStoriesViewModel: UserStoriesViewModel
@@ -60,18 +60,18 @@ class UserStories : AppCompatActivity(), ApiResponseCallBack , StoryCallback{
 
     override fun getError(error: String) {
         this.toast(this, error)
-        loadingProgress.visibility = View.GONE
-        if (error.equals("No Data Found", true)){
+        loadingView.visibility = View.GONE
+        if (error.equals("No Data Found", true)) {
             nodata.visibility = View.VISIBLE
         }
     }
 
     override fun getSuccess(success: String) {
         this.toast(this, success)
-        if (success.contains("Story Deactivate Successfully", true)){
+        if (success.contains("Story Deactivate Successfully", true)) {
             userStoriesModel.removeAt(itemPosition)
             adapter.notifyDataSetChanged()
-           // PrefsHelper.putBoolean(Constants.Pref_IsStoryDeleted , true)
+            // PrefsHelper.putBoolean(Constants.Pref_IsStoryDeleted , true)
         }
     }
 
@@ -97,7 +97,7 @@ class UserStories : AppCompatActivity(), ApiResponseCallBack , StoryCallback{
         userStoriesViewModel.storiesModel?.observe(this@UserStories, Observer {
             userStoriesModel.clear()
             userStoriesModel.addAll(it)
-            loadingProgress.visibility = View.GONE
+            loadingView.visibility = View.GONE
             adapter = UserStoriesAdapter(userStoriesModel, this, this)
             RV_Stories.adapter = adapter
         });

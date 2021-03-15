@@ -1,250 +1,271 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:id="@+id/profileView">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:background="@drawable/background_profile"
+            android:layout_height="match_parent"
             android:orientation="vertical">
-
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/background_profile"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/IV_bio"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginTop="50dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/tahir_raza_cropped" />
+
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="Tahir R. Zaidi"
+                        android:textColor="@color/white"
+                        android:textSize="30sp"
+                        android:textStyle="bold"></TextView>
+
+                    <TextView
+                        android:id="@+id/profession"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Passionate Mobile Apps Developer"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="normal"></TextView>
+
+                    <TextView
+                        android:id="@+id/email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+
+                        android:text="tahir.raza@hotmail.com"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="normal"></TextView>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.20"
+                android:background="@color/white"
                 android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/IV_bio"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:layout_marginTop="50dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/tahir_raza_cropped" />
-
-                <TextView
-                    android:id="@+id/name"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:text="Tahir R. Zaidi"
-                    android:textColor="@color/white"
-                    android:textSize="30sp"
-                    android:textStyle="bold"></TextView>
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="60dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/profession"
+                    <TextView
+                        android:id="@+id/stories"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="2332"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="26sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Stories"
+
+                        android:textColor="@color/black_de"
+                        android:textSize="18sp"
+                        android:textStyle="normal" />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Passionate Mobile Apps Developer"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:textStyle="normal"></TextView>
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="60dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/email"
+                    <TextView
+                        android:id="@+id/claps"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="2332"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="26sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Claps"
+
+                        android:textColor="@color/black_de"
+                        android:textSize="18sp"
+                        android:textStyle="normal" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="60dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical">
 
-                    android:text="tahir.raza@hotmail.com"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="normal"></TextView>
+                    <TextView
+                        android:id="@+id/comments"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="2332"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="26sp"
+                        android:textStyle="bold" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Comments"
+
+                        android:textColor="@color/black_de"
+                        android:textSize="18sp"
+                        android:textStyle="normal" />
+
+
+                </LinearLayout>
 
             </LinearLayout>
 
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.20"
-            android:background="@color/white"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="60dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="15dp"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/stories"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="2332"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="26sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Stories"
-
-                    android:textColor="@color/black_de"
-                    android:textSize="18sp"
-                    android:textStyle="normal" />
-
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="60dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="15dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/claps"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="2332"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="26sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Claps"
-
-                    android:textColor="@color/black_de"
-                    android:textSize="18sp"
-                    android:textStyle="normal" />
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="60dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="15dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/comments"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="2332"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="26sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Comments"
-
-                    android:textColor="@color/black_de"
-                    android:textSize="18sp"
-                    android:textStyle="normal" />
-
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.30"
-            android:background="#eff9f8"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/about_heading"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:padding="@dimen/_5sdp"
-                android:text="About Tahir Raza"
-                android:textColor="@color/black_de"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:layout_height="0dp"
+                android:layout_weight="0.30"
+                android:background="#eff9f8"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/about_des"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:ellipsize="end"
-                android:maxLines="3"
-                android:minLines="1"
-                android:padding="@dimen/_8sdp"
-                android:text="Hi! My name is Tahir Raza. I'm an Accomplished Applications Developer who is Adept at developing apps based on customer specifications, Specializes in corporate and industrial applications. am an effective leader and a presenter, skilled in enlisting the support of all team members in aligning with project and organizational goals."
-                android:textColor="@color/black_de"
-                android:textSize="18sp"
-                android:textStyle="normal" />
+                <TextView
+                    android:id="@+id/about_heading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:padding="@dimen/_5sdp"
+                    android:text="About Tahir Raza"
+                    android:textColor="@color/black_de"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/about_des"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:ellipsize="end"
+                    android:maxLines="3"
+                    android:minLines="1"
+                    android:padding="@dimen/_8sdp"
+                    android:text="Hi! My name is Tahir Raza. I'm an Accomplished Applications Developer who is Adept at developing apps based on customer specifications, Specializes in corporate and industrial applications. am an effective leader and a presenter, skilled in enlisting the support of all team members in aligning with project and organizational goals."
+                    android:textColor="@color/black_de"
+                    android:textSize="18sp"
+                    android:textStyle="normal" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/edit"
-            android:layout_width="100dp"
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:backgroundTint="@color/colorPrimary"
-            android:text="Edit"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/back"
+            <Button
+                android:id="@+id/edit"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:backgroundTint="@color/colorPrimary"
+                android:text="Edit"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/back"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="10dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:text="Back to Stories"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:id="@+id/loadingView">
+
+        <include
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="10dp"
-            android:backgroundTint="@color/colorPrimary"
-            android:text="Back to Stories"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
+            layout="@layout/loading_view"/>
+
     </RelativeLayout>
+
 </RelativeLayout>
 

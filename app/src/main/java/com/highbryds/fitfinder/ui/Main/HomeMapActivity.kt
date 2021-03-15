@@ -547,7 +547,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                         KotlinHelper.alertDialog("Alert", "Are you sure you want to logout ?", this,
                             object : onConfirmListner {
                                 override fun onClick() {
-                                    progress_bar.visibility = View.VISIBLE
+                                    loadingView.visibility = View.VISIBLE
                                     logoutViewModel.logoutUser(KotlinHelper.getUsersData().SocialId)
                                     PrefsHelper.putBoolean(Constants.Pref_IsLogin, false)
                                 }
@@ -1729,14 +1729,14 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
     override fun getError(error: String) {
         loadingProgress.visibility = View.GONE
-        progress_bar.visibility = View.GONE
+        loadingView.visibility = View.GONE
         spin_kit.visibility = View.GONE
     }
 
     override fun getSuccess(success: String) {
         loadingProgress.visibility = View.GONE
         if (success.equals("User Logout Successfully", true)) {
-            progress_bar.visibility = View.GONE
+            loadingView.visibility = View.GONE
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             PrefsHelper.putString(Constants.Pref_UserData, "")
