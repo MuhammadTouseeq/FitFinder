@@ -7,9 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.database.Cursor
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
+import android.graphics.*
 import android.location.Location
 import android.location.LocationManager
 import android.media.MediaPlayer
@@ -73,7 +71,6 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.log4k.d
-import com.mikepenz.materialdrawer.model.DividerDrawerItem
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
@@ -479,6 +476,14 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                         KotlinHelper.getUsersData().emailAdd
                     )
                 )
+                slider.accountHeader?.currentProfileName?.setTextColor(Color.WHITE)
+                slider.accountHeader?.currentProfileEmail?.setTextColor(Color.WHITE)
+                slider.accountHeader?.accountHeaderBackground?.setBackgroundResource(R.drawable.background_profile)
+
+                // slider.accountHeader?.accountHeader = getDrawable(R.drawable.background_profile)
+
+                // .textColor = ColorStateList.valueOf(Color.WHITE)
+
                 onAccountHeaderListener = { view, profile, current ->
                     // react to profile changes
                     false
@@ -486,7 +491,6 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             }
 
 
-            headerView!!.setBackgroundColor(resources.getColor(R.color.colorPrimary))
             headerView
             headerView!!.selectionListEnabledForSingleProfile = false
 
@@ -500,23 +504,31 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
             //if you want to update the items at a later time it is recommended to keep it in a variable
             val home = PrimaryDrawerItem().withIdentifier(1).withName("Home")
-            val story = PrimaryDrawerItem().withIdentifier(2).withName("My Contributions")
-            val chat = PrimaryDrawerItem().withIdentifier(3).withName("My Messages")
+
+            val story = PrimaryDrawerItem().withIdentifier(2).withName("Contributions")
+            val chat = PrimaryDrawerItem().withIdentifier(3).withName("Messages")
             val profile = PrimaryDrawerItem().withIdentifier(4).withName("Profile")
             val settings = PrimaryDrawerItem().withIdentifier(5).withName("Settings")
+            val privayPolicy = PrimaryDrawerItem().withIdentifier(5).withName("Privacy Policy")
             val logout = PrimaryDrawerItem().withIdentifier(6).withName("Logout")
 
 
             // get the reference to the slider and add the items
             slider.itemAdapter.add(
                 home, profile, chat, story,
-                DividerDrawerItem(),
-                settings, logout
+                // DividerDrawerItem(),
+                settings,
+                privayPolicy,
+                logout
             )
 
             slider.headerView = headerView
-            slider.addStickyFooterItem(PrimaryDrawerItem().withName("Powered By HIGHBRYDS | V 1.0"))
-
+            slider.addStickyFooterItem(
+                PrimaryDrawerItem().withName("Powered by HIGHBRYDS | Version  " + BuildConfig.VERSION_NAME)
+                    .withTypeface(
+                        Typeface.DEFAULT_BOLD
+                    )
+            )
 
             // specify a click listener
             slider.onDrawerItemClickListener = { v, drawerItem, position ->
