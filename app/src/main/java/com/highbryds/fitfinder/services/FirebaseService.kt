@@ -22,7 +22,6 @@ import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.commonHelper.*
 import com.highbryds.fitfinder.room.Dao
 import com.highbryds.fitfinder.room.Tables.UserChat
-import com.highbryds.fitfinder.ui.Chatting.uc
 import com.highbryds.fitfinder.ui.Main.HomeMapActivity
 import com.highbryds.fitfinder.utils.LocationHelper
 import com.highbryds.fitfinder.utils.NotificationData
@@ -39,10 +38,12 @@ class FirebaseService : FirebaseMessagingService() {
     lateinit var getDatabaseDao: Dao
 
     @Override
-    override fun onNewToken(p0: String) {
-        super.onNewToken(p0)
-        Log.d("NEW_TOKEN", p0);
-        PrefsHelper.putString(Constants.Pref_DeviceToken, p0)
+    override fun onNewToken(token: String) {
+          super.onNewToken(token)
+        Log.d("NEW_TOKEN", token);
+      //  Log.d(TAG, "Refreshed token: $token")
+
+        PrefsHelper.putString(Constants.Pref_DeviceToken, token)
     }
 
     override fun onMessageReceived(p0: RemoteMessage) {
@@ -86,12 +87,16 @@ class FirebaseService : FirebaseMessagingService() {
                         ), LatLng(PrefsHelper.getDouble("LAT"), PrefsHelper.getDouble("LNG"))
                     )
                     if (distance <= 2.5) {
-                        PrefsHelper.putString(Constants.Pref_ToOpenStoryAuto, p0.getData().get("storyid"))
+                        PrefsHelper.putString(
+                            Constants.Pref_ToOpenStoryAuto,
+                            p0.getData().get("storyid")
+                        )
                         sendNotification(data[0], "Help Alert")
                     }
                 }
 
-            } catch (e: Exception) { }
+            } catch (e: Exception) {
+            }
         } else {
 
             val data: Map<String, String> = p0.getData()

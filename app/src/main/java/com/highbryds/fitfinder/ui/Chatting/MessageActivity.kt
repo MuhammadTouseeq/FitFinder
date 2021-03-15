@@ -1,16 +1,11 @@
 package com.highbryds.fitfinder.ui.Chatting
 
-import android.Manifest
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ListView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.Observer
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.adapters.MessageAdapter
@@ -23,17 +18,7 @@ import com.highbryds.fitfinder.room.Dao
 import com.highbryds.fitfinder.room.Tables.UserChat
 import com.highbryds.fitfinder.sinch.SinchSdk
 import com.highbryds.fitfinder.vm.UserChatting.UserChattingViewModel
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import com.sinch.android.rtc.PushPair
 import com.sinch.android.rtc.SinchClient
-import com.sinch.android.rtc.calling.Call
-import com.sinch.android.rtc.calling.CallClient
-import com.sinch.android.rtc.calling.CallClientListener
-import com.sinch.android.rtc.messaging.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_message.*
 import javax.inject.Inject
@@ -128,6 +113,8 @@ class MessageActivity : AppCompatActivity(), ApiResponseCallBack {
                 JavaHelper.getDateTimeSeconds(),
                 KotlinHelper.getUsersData().SocialId
             )
+
+            // FirebaseInstanceId.getInstance().getToken()
             userChattingViewModel.sendChat(chattingViewModel)
             txtTextBody.setText("")
         } else {
