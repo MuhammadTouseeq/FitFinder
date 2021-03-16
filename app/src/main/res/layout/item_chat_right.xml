@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="left"
+    android:clickable="false"
+    android:focusable="false"
+
     android:orientation="vertical"
     android:padding="10dp">
 
@@ -11,20 +14,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/chat_bubble_right"
-        android:minWidth="100dp"
+        android:minHeight="@dimen/_30sdp"
         android:orientation="vertical"
-        android:padding="5dp">
+        android:padding="12dp">
 
         <TextView
             android:id="@+id/txtMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
-            android:layout_marginBottom="15dp"
-            android:padding="4dp"
             android:text="dhdsdfnd"
             android:textColor="@android:color/black" />
-
 
     </LinearLayout>
 
@@ -32,10 +32,13 @@
         android:id="@+id/txtDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
         android:layout_marginTop="@dimen/_2sdp"
         android:layout_marginBottom="5dp"
         android:gravity="end"
         android:text="25 June 2020 11:00 AM"
         android:textColor="@android:color/darker_gray"
-        android:textSize="8sp" />
+        android:textSize="@dimen/_8sdp"
+        android:textStyle="bold" />
+
 </LinearLayout>

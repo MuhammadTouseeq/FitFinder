@@ -85,13 +85,15 @@ public class UserMsgsAdapter(var userChat: List<UserChat>?, var context: Context
                 LL_card.visibility = View.VISIBLE
                 ViewDivider.visibility = View.VISIBLE
                 userID.text = userMsgsList?.senderName
-                if (userMsgsList.isRead){
+                if (userMsgsList.isRead) {
                     userMSG.setTypeface(null, Typeface.NORMAL);
-                }else{
+                } else {
                     userMSG.setTypeface(null, Typeface.BOLD);
                 }
                 userMSG.text = msg
-                dateTime.text = userMsgsList?.TimeStamp
+
+                dateTime.text = KotlinHelper.getTimeDifference(userMsgsList?.TimeStamp)
+
                 Glide
                     .with(context)
                     .load(userMsgsList?.recipientImage)
