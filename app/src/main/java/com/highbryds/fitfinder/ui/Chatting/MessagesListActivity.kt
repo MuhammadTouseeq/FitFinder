@@ -1,47 +1,41 @@
 package com.highbryds.fitfinder.ui.Chatting
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.zxing.common.StringUtils
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.adapter.UserMsgsAdapter
-import com.highbryds.fitfinder.adapters.MessageAdapter
-import com.highbryds.fitfinder.commonHelper.toast
-import com.highbryds.fitfinder.room.Dao
+import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.room.Tables.UserChat
-import com.highbryds.fitfinder.room.Tables.UserMsgsList
-import com.highbryds.fitfinder.sinch.SinchSdk
+import com.highbryds.fitfinder.vm.MyViewModelFactory
 import com.highbryds.fitfinder.vm.UserChatting.UserChattingViewModel
-import com.sinch.android.rtc.PushPair
-import com.sinch.android.rtc.calling.Call
-import com.sinch.android.rtc.calling.CallClient
-import com.sinch.android.rtc.calling.CallClientListener
-import com.sinch.android.rtc.messaging.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_messages_list.*
-import java.util.Observer
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MessagesListActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var getDatabaseDao: Dao
+    //    @Inject
+//    lateinit var getDatabaseDao: Dao
     lateinit var adapter: UserMsgsAdapter
     var isCurrentActivity = false
-    @Inject
+    var msgList = mutableListOf<UserChat>()
+
+    // var usersList = emptyArray<String>()
+    var usersList = mutableListOf<String>()
+
+    // @Inject
     lateinit var userChattingViewModel: UserChattingViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_messages_list)
-
+        userChattingViewModel =
+            ViewModelProvider(this, MyViewModelFactory()).get(userChattingViewModel::class.java)
         context = this
         val toolbar: Toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
@@ -54,15 +48,61 @@ class MessagesListActivity : AppCompatActivity() {
 
 
         RV_userMsgsList.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        userChattingViewModel.getGroupMsgs()
-        adapter = UserMsgsAdapter( getDatabaseDao.getmsgs().value , this)
+        // userChattingViewModel.getGroupMsgs()
+        adapter = UserMsgsAdapter(msgList, this)
         RV_userMsgsList.adapter = adapter
-        userChattingViewModel.userGroupMsgs.observe(this , androidx.lifecycle.Observer {
-            if (it.size > 0){
+        userChattingViewModel.userGroupMsgs.observe(this, androidx.lifecycle.Observer {
+            if (it.size > 0) {
+
                 RV_userMsgsList.visibility = View.VISIBLE
-                adapter.loadChat(it)
+                // myObjectList.distinctBy { Pair(it.myField, it.myOtherField) }
+                //   var counter = 0
+                for (i in it) {
+
+                    usersList.add(i.senderId)
+                    usersList.add(i.RecipientId)
+/*
+                    for (j in msgList) {
+                        if (i.senderId.equals(j.senderId) || i.senderId.equals(j.recipientId))
+                    }*/
+                    // if (msgList)
+
+                    //  counter++
+                }
+
+
+
+                usersList = usersList.distinct().toMutableList()
+                usersList.remove(KotlinHelper.getSocialID())
+                var counter = 0
+                for (user in usersList) {
+
+                    var temp = 0
+                    for (i in it) {
+
+                        if (i.senderId.equals(user) || i.RecipientId.equals(user)) {
+                            if (i.id > temp) {
+                                temp = i.id
+                                msgList.add(counter, i)
+
+                            }
+
+
+                        }
+
+
+                    }
+                    counter++
+
+                }
+                //     }
+
+                //  msgList
+
+                adapter.loadChat(msgList)
                 adapter.notifyDataSetChanged()
-            }else{
+
+            } else {
                 RV_userMsgsList.visibility = View.GONE
                 emptyView.visibility = View.VISIBLE
             }

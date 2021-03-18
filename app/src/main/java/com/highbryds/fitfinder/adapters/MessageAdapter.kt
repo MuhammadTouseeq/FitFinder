@@ -8,16 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
-import androidx.lifecycle.LiveData
 import com.highbryds.fitfinder.R
-import com.highbryds.fitfinder.commonHelper.DateConverter
+import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.room.Tables.UserChat
-import com.highbryds.fitfinder.ui.Chatting.context
-import java.util.*
 
-class MessageAdapter constructor(activity: Activity, var context: Context, uc: List<UserChat>?): BaseAdapter() {
+class MessageAdapter constructor(activity: Activity, var context: Context, uc: List<UserChat>?) :
+    BaseAdapter() {
 
-    companion object{
+    companion object {
         val DIRECTION_INCOMING = 0
 
         val DIRECTION_OUTGOING = 1
@@ -29,7 +27,7 @@ class MessageAdapter constructor(activity: Activity, var context: Context, uc: L
 
     private var mInflater: LayoutInflater? = activity.getLayoutInflater();
 
-    fun loadChat(userChat: List<UserChat>){
+    fun loadChat(userChat: List<UserChat>) {
         mMessagesnew = userChat
     }
 
@@ -74,13 +72,14 @@ class MessageAdapter constructor(activity: Activity, var context: Context, uc: L
 
         if (direction == DIRECTION_INCOMING) {
             txtMessage.setTextColor(context.resources.getColor(R.color.colorBlack))
-            txtDate.setTextColor(context.resources.getColor(R.color.colorBlack))
-        }else{
+
+            // txtDate.setTextColor(context.resources.getColor(R.color.colorBlack))
+        } else {
             txtMessage.setTextColor(context.resources.getColor(R.color.colorWhite))
-            txtDate.setTextColor(context.resources.getColor(R.color.colorWhite))
+            // txtDate.setTextColor(context.resources.getColor(R.color.colorWhite))
         }
         txtMessage.text = mMessagesnew!![i].getMessage().split("~".toRegex()).toTypedArray()[0]
-        txtDate.setText(mMessagesnew!![i].TimeStamp)
+        txtDate.setText(KotlinHelper.getMeaningFullTime(mMessagesnew!![i].TimeStamp))
         return convertView
     }
 }

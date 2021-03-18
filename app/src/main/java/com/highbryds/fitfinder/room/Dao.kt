@@ -21,9 +21,29 @@ interface Dao {
     @Insert()
     fun insertMsgsList(userMsgsList: UserMsgsList)
 
- //   @Query("Select * from UserChat group by SenderId order by id desc")
+    /*//   @Query("Select * from UserChat group by SenderId order by id desc")
     @Query("Select max(id), * from UserChat group by SenderId ORDER by count(id) desc")
     fun getmsgs() : LiveData<List<UserChat>>
+*/
+    //Select *  from UserChat where SenderId in (Select distinct  SenderId  from UserChat where SenderId<>'107544249111821919185')
+
+    //Select max(id),* from UserChat  where  SenderId in(Select distinct  SenderId  from UserChat where SenderId<>'107544249111821919185')
+    //OR
+    //   Select max(id),* from UserChat  where  SenderId in(Select distinct  SenderId  from UserChat where SenderId<>'107544249111821919185')
+    //OR
+    //   RecipientId  in (Select distinct  SenderId  from UserChat where SenderId<>'107544249111821919185')  group by RecipientId  order by id  desc
+
+
+    /*  Select max(id),* from UserChat  where  SenderId in(Select distinct  SenderId  from UserChat where SenderId<>'107544249111821919185')
+      OR
+      RecipientId  in (Select distinct  SenderId  from UserChat where SenderId<>'107544249111821919185')  group by RecipientId  order by id  desc
+
+  */
+
+  //  @Query("Select max(id),* from UserChat  where  SenderId in(Select distinct  SenderId  from UserChat where SenderId<>:userSocialId) OR RecipientId  in (Select distinct  SenderId  from UserChat where SenderId<>:userSocialId)  group by RecipientId  order by id  desc")
+    @Query("select * from UserChat order by id desc")
+    fun getmsgs(): LiveData<List<UserChat>>
+
 
     @Query("Delete from UserMsgsList")
     fun deleteUserMsgsList()

@@ -131,8 +131,6 @@ dependencies {
     implementation 'com.github.AmrDeveloper.ReactButton:reactbutton:1.0.7'
     implementation 'com.github.rtoshiro.fullscreenvideoview:fullscreenvideoview:1.1.2'
 
-
-
     //SDP - a scalable size unit
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
     //Material Design
