@@ -37,6 +37,7 @@ import com.highbryds.fitfinder.model.StoryComment
 import com.highbryds.fitfinder.model.StorySpam
 import com.highbryds.fitfinder.sinch.SinchSdk
 import com.highbryds.fitfinder.ui.Chatting.MessageActivity
+import com.highbryds.fitfinder.ui.Profile.MyProfile
 import com.highbryds.fitfinder.ui.StoryComment.StoryCommentViewModel
 import com.highbryds.fitfinder.vm.Profile.UserStoriesViewModel
 import com.karumi.dexter.Dexter
@@ -72,7 +73,7 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener, ApiResp
     lateinit var storyData: NearbyStory
     lateinit var storyID: String
     var storyClapCounter = 0
-     var  mediacontroller: MediaController? = null
+    var mediacontroller: MediaController? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -526,7 +527,7 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener, ApiResp
             }
             R.id.imgCancel -> {
 
-            //    setResult(777)
+                //    setResult(777)
                 finish()
             }
             R.id.btnSendComment -> {
@@ -600,7 +601,7 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener, ApiResp
 
     fun resetAllViews() {
         mediacontroller?.let {
-              mediacontroller?.hide()
+            mediacontroller?.hide()
         }
 
         videoPlayer?.stop()
@@ -717,7 +718,9 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener, ApiResp
                     }
 
                     R.id.profile -> {
-
+                        Constants.SocialIdToView = storyData.userData?.get(0)?.SocialId
+                        val intent = Intent(this@StoryFullViewActivity, MyProfile::class.java)
+                        startActivity(intent)
                     }
                 }
                 // Toast.makeText(this@StoryFullViewActivity, "You Clicked : " + item.title, Toast.LENGTH_SHORT).show()

@@ -5,6 +5,7 @@ import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
+import com.highbryds.fitfinder.commonHelper.Constants
 import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.model.NearbyStory
 import com.highbryds.fitfinder.model.UserProfile
@@ -19,7 +20,8 @@ class UserStoriesViewModel @Inject constructor(private val provideApiInterface: 
     init {
         Log.d("###################" , "init")
         viewModelScope.launch {
-            getProfileData(KotlinHelper.getUsersData().SocialId)
+            //getProfileData(KotlinHelper.getUsersData().SocialId)
+            getProfileData(Constants.SocialIdToView!!)
         }
     }
 

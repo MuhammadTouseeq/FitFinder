@@ -240,12 +240,13 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
         homeMapViewModel.categoriesData.observe(this, androidx.lifecycle.Observer {
 
             it?.let {
-
+                chipGroup.removeAllViews()
                 for ((index, category) in it.withIndex()) {
                     val mChip = this.layoutInflater.inflate(R.layout.view_chip, null, false) as Chip
                     mChip.text = category
                     mChip.id = index
                     mChip.isChipIconVisible = true
+
                     chipGroup.addView(mChip)
                     chipGroupHelp.visibility = View.GONE
                     chipReset.visibility = View.GONE
@@ -257,11 +258,13 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
 
         homeMapViewModel.helpcategories.observe(this, androidx.lifecycle.Observer {
             it?.let {
+                chipGroupHelp.removeAllViews()
                 for ((index, category) in it.withIndex()) {
                     val mChip = this.layoutInflater.inflate(R.layout.view_chip, null, false) as Chip
                     mChip.text = category
                     mChip.id = index
                     mChip.isChipIconVisible = true
+
                     chipGroupHelp.addView(mChip)
                 }
             }
@@ -538,6 +541,7 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                     }
                     2 -> {
                         // val intent = Intent(this, UserProfileMain::class.java)
+                        Constants.SocialIdToView = KotlinHelper.getUsersData().SocialId
                         val intent = Intent(this, MyProfile::class.java)
                         startActivity(intent)
                     }

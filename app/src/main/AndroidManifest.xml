@@ -82,7 +82,8 @@
 
         </activity>
         <activity android:name=".ui.Main.VoiceRecorderActivity" /> <!-- <activity android:name=".ui.StoryView.StoryFullViewActivity"/> -->
-        <activity android:name=".ui.Main.HomeMapActivity"></activity>
+        <activity android:name=".ui.Main.HomeMapActivity"
+            android:screenOrientation="fullSensor"/>
         <activity android:name=".ui.Auth.LoginActivity">
 
         </activity>

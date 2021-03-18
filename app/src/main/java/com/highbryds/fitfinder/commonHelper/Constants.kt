@@ -19,5 +19,7 @@ class Constants {
         //UserJSON
         val Pref_UserData = "USERDATA"
         val Pref_CarData = "CARDATA"
+
+        var SocialIdToView :String? = ""
     }
 }

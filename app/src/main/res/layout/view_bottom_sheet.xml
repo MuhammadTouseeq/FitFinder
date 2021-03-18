@@ -18,9 +18,9 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/imgProfile"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:id="@+id/imgProfile"
             android:background="@drawable/shape_circle_primary"
             android:padding="2dp"
             android:src="@drawable/marker_thinking_boy" />
@@ -75,7 +75,6 @@
                 android:visibility="gone"
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true"
-                app:lottie_rawRes="@raw/social_network"
                 app:lottie_speed="0.9" />
 
             <ProgressBar
@@ -84,8 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
 
 
             <EditText
@@ -115,9 +113,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_200sdp"
                 android:layout_gravity="center"
-                android:scaleType="fitCenter"
                 android:layout_margin="10dp"
                 android:padding="3dp"
+                android:scaleType="fitCenter"
                 android:visibility="gone" />
 
             <RelativeLayout
@@ -183,5 +181,5 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="40dp"/>
+        android:layout_height="40dp" />
 </LinearLayout>

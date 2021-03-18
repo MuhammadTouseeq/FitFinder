@@ -199,19 +199,15 @@ public class JavaHelper {
         }
     }
 
-    public static  long dateTimeMilli(String date)
-    {
-        try
-        {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    public static long dateTimeMilli(String date) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
             Date mDate = sdf.parse(date);
             long timeInMilliseconds = mDate.getTime();
             System.out.println("Date in milli :: " + timeInMilliseconds);
             return timeInMilliseconds;
-        }
-        catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
@@ -219,7 +215,7 @@ public class JavaHelper {
     }
 
 
-    public static int calculateDistance(LatLng a , LatLng b){
+    public static int calculateDistance(LatLng a, LatLng b) {
 
         Location locationA = new Location("point A");
         locationA.setLatitude(a.latitude);

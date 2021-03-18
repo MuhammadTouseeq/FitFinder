@@ -13,6 +13,7 @@ import com.highbryds.fitfinder.commonHelper.Constants
 import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.commonHelper.PrefsHelper
 import com.highbryds.fitfinder.commonHelper.toast
+import com.highbryds.fitfinder.model.UserDetails
 import com.highbryds.fitfinder.model.UsersData
 import com.highbryds.fitfinder.retrofit.ApiInterface
 import com.highbryds.fitfinder.vm.Profile.UserStoriesViewModel
@@ -78,9 +79,14 @@ class MyProfile : AppCompatActivity(), ApiResponseCallBack {
                         it.body()?.user_details?.get(0)?.City!!,
                         it.body()?.user_details?.get(0)?.Country!!
                     )
-                    KotlinHelper.updateUserInfo(usersData)
+                    if (it.body()?.user_details?.get(0)?.SocialId!!.equals(KotlinHelper.getUsersData().SocialId)) {
+                        KotlinHelper.updateUserInfo(usersData)
+                        setUserData()
+                    } else {
+                        setUserDataOther(it.body()?.user_details!!.get(0))
+                    }
 
-                    setUserData();
+
                 }
             })
     }
@@ -117,6 +123,32 @@ class MyProfile : AppCompatActivity(), ApiResponseCallBack {
 
     }
 
+    private fun setUserDataOther(data: UserDetails) {
+
+        edit.visibility = View.GONE
+        Glide
+            .with(this)
+            .load(data.imageUrl)
+            .placeholder(R.drawable.ic_launcher_foreground)
+            .into(IV_bio);
+
+        name.setText(data.name)
+        profession.setText(data.Headline)
+        stories.setText(storiesCount)
+        claps.setText(clapCount)
+        comments.setText(commentCount)
+        email.setText(data.emailAdd)
+        about_heading.setText("About " + data.name)
+        about_des.setText(data.About)
+
+        back.setOnClickListener({
+
+            finish()
+
+        })
+
+    }
+
     override fun getError(error: String) {
         this.toast(this, error.toString())
     }
@@ -131,8 +163,13 @@ class MyProfile : AppCompatActivity(), ApiResponseCallBack {
 
 
         if (PrefsHelper.getBoolean(Constants.Pref_IsProfileUpdate)) {
-            userStoriesViewModel.getUserProfileData(KotlinHelper.getUsersData().SocialId)
+            userStoriesViewModel.getUserProfileData(Constants.SocialIdToView!!)
             PrefsHelper.putBoolean(Constants.Pref_IsProfileUpdate, false)
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
     }
 }
