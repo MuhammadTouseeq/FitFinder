@@ -41,58 +41,58 @@ public class UserMsgsAdapter(var userChat: List<UserChat>?, var context: Context
 
         fun bindViews(userMsgsList: UserChat?, uc: List<UserChat>, pos: Int, context: Context) {
 
-
-            if (userMsgsList?.senderId.equals(KotlinHelper.getUsersData().SocialId)) {
-
-
-                LL_card.visibility = View.GONE
-                ViewDivider.visibility = View.GONE
-
-            } else {
-
-
-                msg = userMsgsList!!.message
-
-
-                val ob = uc.filter {
-                    it.senderId.equals(userMsgsList?.senderId) and it.recipientId.equals(
-                        userMsgsList?.recipientId
-                    )
-                }.lastOrNull()
-
-                val ob1 = uc.filter {
-                    it.recipientId.equals(userMsgsList?.senderId) and it.senderId.equals(
-                        userMsgsList?.recipientId
-                    )
-                }.lastOrNull()
-
-                if (ob != null && ob1 != null) {
-                    if (ob!!.id > ob1!!.id) {
-                        // ob is greater
-
-                        msg = ob.message
-
-                    } else {
-                        // ob1 is greater
-                        msg = ob1.message
-
-                    }
-
-                }
+//
+//            if (userMsgsList?.senderId.equals(KotlinHelper.getUsersData().SocialId)) {
+//
+//
+//                LL_card.visibility = View.GONE
+//                ViewDivider.visibility = View.GONE
+//
+//            } else {
+//
+//
+//                msg = userMsgsList!!.message
+//
+//
+//                val ob = uc.filter {
+//                    it.senderId.equals(userMsgsList?.senderId) and it.recipientId.equals(
+//                        userMsgsList?.recipientId
+//                    )
+//                }.lastOrNull()
+//
+//                val ob1 = uc.filter {
+//                    it.recipientId.equals(userMsgsList?.senderId) and it.senderId.equals(
+//                        userMsgsList?.recipientId
+//                    )
+//                }.lastOrNull()
+//
+//                if (ob != null && ob1 != null) {
+//                    if (ob!!.id > ob1!!.id) {
+//                        // ob is greater
+//
+//                        msg = ob.message
+//
+//                    } else {
+//                        // ob1 is greater
+//                        msg = ob1.message
+//
+//                    }
+//
+//                }
 
 
 
                 LL_card.visibility = View.VISIBLE
                 ViewDivider.visibility = View.VISIBLE
-                userID.text = userMsgsList?.senderName
-                if (userMsgsList.isRead) {
+                userID.text = if (KotlinHelper.getSocialID().equals(userMsgsList?.senderId)) userMsgsList?.recipientName else userMsgsList?.senderName
+                if (userMsgsList!!.isRead) {
                     userMSG.setTypeface(null, Typeface.NORMAL);
                 } else {
                     userMSG.setTypeface(null, Typeface.BOLD);
                 }
-                userMSG.text = msg
+                userMSG.text = userMsgsList?.message
 
-                dateTime.text = KotlinHelper.getTimeDifference(userMsgsList?.TimeStamp)
+                dateTime.text = KotlinHelper.getTimeDifference(userMsgsList?.timeStamp!!)
 
                 Glide
                     .with(context)
@@ -107,7 +107,7 @@ public class UserMsgsAdapter(var userChat: List<UserChat>?, var context: Context
         }
 
 //        }
-    }
+
 
 //    fun addMessage(userMsgsList: MutableList<UserMsgsList>) {
 //        //    mMessages.add(new Pair(message, direction));
