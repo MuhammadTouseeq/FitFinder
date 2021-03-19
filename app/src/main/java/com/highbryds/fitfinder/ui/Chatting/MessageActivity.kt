@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.ListView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
@@ -35,8 +36,8 @@ class MessageActivity : AppCompatActivity(), ApiResponseCallBack {
     @Inject
     lateinit var getDatabaseDao: Dao
 
-    @Inject
-    lateinit var userChattingViewModel: UserChattingViewModel
+
+    val userChattingViewModel: UserChattingViewModel by viewModels()
 
     lateinit var textBody: String
 

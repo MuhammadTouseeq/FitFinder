@@ -2,6 +2,7 @@ package com.highbryds.fitfinder.ui.Chatting
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
@@ -11,7 +12,7 @@ import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.adapter.UserMsgsAdapter
 import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.room.Tables.UserChat
-import com.highbryds.fitfinder.vm.MyViewModelFactory
+
 import com.highbryds.fitfinder.vm.UserChatting.UserChattingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_messages_list.*
@@ -28,14 +29,13 @@ class MessagesListActivity : AppCompatActivity() {
     // var usersList = emptyArray<String>()
     var usersList = mutableListOf<String>()
 
-    // @Inject
-    lateinit var userChattingViewModel: UserChattingViewModel
+
+    val userChattingViewModel: UserChattingViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_messages_list)
-        userChattingViewModel =
-            ViewModelProvider(this, MyViewModelFactory()).get(userChattingViewModel::class.java)
+//        userChattingViewModel = ViewModelProvider(this, MyViewModelFactory()).get(userChattingViewModel::class.java)
         context = this
         val toolbar: Toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
@@ -49,10 +49,13 @@ class MessagesListActivity : AppCompatActivity() {
 
         RV_userMsgsList.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         // userChattingViewModel.getGroupMsgs()
-        adapter = UserMsgsAdapter(msgList, this)
-        RV_userMsgsList.adapter = adapter
+
         userChattingViewModel.userGroupMsgs.observe(this, androidx.lifecycle.Observer {
             if (it.size > 0) {
+
+                msgList.clear()
+                adapter = UserMsgsAdapter(msgList, this)
+                RV_userMsgsList.adapter = adapter
 
                 RV_userMsgsList.visibility = View.VISIBLE
                 // myObjectList.distinctBy { Pair(it.myField, it.myOtherField) }

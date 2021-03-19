@@ -13,7 +13,7 @@ import com.highbryds.fitfinder.room.Tables.UserChat
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class UserChattingViewModel @Inject constructor(
+class UserChattingViewModel @ViewModelInject constructor(
     private val provideApiInterface: ApiInterface,
     private val getDatabase: com.highbryds.fitfinder.room.Dao
 ) : ViewModel() {
