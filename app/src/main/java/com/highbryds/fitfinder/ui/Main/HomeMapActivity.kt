@@ -555,9 +555,12 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                         val intent = Intent(this, UserStories::class.java)
                         startActivity(intent)
                     }
-                    6 -> {
+                    5 -> {
                         val intent = Intent(this, UserProfileSetting::class.java)
                         startActivity(intent)
+                    }
+                    6 -> {
+                        // Privcay Policy
                     }
                     7 -> {
 

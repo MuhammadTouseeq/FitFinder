@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/pref_title_notifications"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:key="@string/notifications_emergency"
+            android:title="@string/title_new_notification_emergency"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:key="@string/key_profile_view"
+            android:summary="@string/summary_profile_view"
+            android:title="@string/title_profile_view"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="General"
+        app:iconSpaceReserved="false">
+        <EditTextPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="@string/default_feedback_summary"
+            android:key="@string/key_gallery_name"
+            android:summary="@string/default_feedback_summary"
+            android:title="@string/key_send_feedback"
+            app:iconSpaceReserved="false" />
+
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/pref_header_about"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:summary="@string/app_version"
+            android:title="@string/title_version"
+            app:iconSpaceReserved="false" />
+
+        <!-- preference opens url in browser -->
+        <Preference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:summary="View our website"
+            android:title="Website"
+            app:iconSpaceReserved="false">
+            <intent
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:action="android.intent.action.VIEW"
+                android:data="@string/url_faq" />
+        </Preference>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

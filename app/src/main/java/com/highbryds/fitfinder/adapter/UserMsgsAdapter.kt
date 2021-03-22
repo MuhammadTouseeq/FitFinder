@@ -81,30 +81,31 @@ public class UserMsgsAdapter(var userChat: List<UserChat>?, var context: Context
 //                }
 
 
-
-                LL_card.visibility = View.VISIBLE
-                ViewDivider.visibility = View.VISIBLE
-                userID.text = if (KotlinHelper.getSocialID().equals(userMsgsList?.senderId)) userMsgsList?.recipientName else userMsgsList?.senderName
-                if (userMsgsList!!.isRead) {
-                    userMSG.setTypeface(null, Typeface.NORMAL);
-                } else {
-                    userMSG.setTypeface(null, Typeface.BOLD);
-                }
-                userMSG.text = userMsgsList?.message
-
-                dateTime.text = KotlinHelper.getTimeDifference(userMsgsList?.timeStamp!!)
-
-                Glide
-                    .with(context)
-                    .load(userMsgsList?.recipientImage)
-                    .placeholder(R.drawable.ic_launcher_foreground)
-                    .into(IV_profilePic);
-
-
+            LL_card.visibility = View.VISIBLE
+            ViewDivider.visibility = View.VISIBLE
+            userID.text = if (KotlinHelper.getSocialID()
+                    .equals(userMsgsList?.senderId)
+            ) userMsgsList?.recipientName else userMsgsList?.senderName
+            if (userMsgsList!!.isRead) {
+                userMSG.setTypeface(null, Typeface.NORMAL);
+            } else {
+                userMSG.setTypeface(null, Typeface.BOLD);
             }
+            userMSG.text = userMsgsList?.message
+
+            dateTime.text = KotlinHelper.getTimeDifference(userMsgsList?.timeStamp!!)
+
+            Glide
+                .with(context)
+                .load(userMsgsList?.recipientImage)
+                .placeholder(R.drawable.ic_launcher_foreground)
+                .into(IV_profilePic);
 
 
         }
+
+
+    }
 
 //        }
 
@@ -124,9 +125,19 @@ public class UserMsgsAdapter(var userChat: List<UserChat>?, var context: Context
         holder.bindViews(userChat!![position], uc!!, position, context)
 
         holder.LL_item.setOnClickListener {
-            SinchSdk.RECIPENT_ID = userChat!![position].senderId
-            SinchSdk.RECIPENT_NAME = userChat!![position].senderName
-            SinchSdk.RECIPENT_IMG = userChat!![position].recipientImage
+
+            if (uc!![position].senderId.equals(KotlinHelper.getSocialID())) {
+                SinchSdk.RECIPENT_ID = uc!![position].recipientId
+                SinchSdk.RECIPENT_NAME = uc!![position].recipientName
+                SinchSdk.RECIPENT_IMG = uc!![position].recipientImage
+
+            } else {
+                SinchSdk.RECIPENT_ID = uc!![position].senderId
+                SinchSdk.RECIPENT_NAME = uc!![position].senderName
+                SinchSdk.RECIPENT_IMG = uc!![position].recipientImage
+
+            }
+
             val intent = Intent(context, MessageActivity::class.java)
             context.startActivity(intent)
         }
