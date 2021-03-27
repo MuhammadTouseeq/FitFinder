@@ -26,11 +26,13 @@
             android:title="@string/title_profile_view"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
+
     <PreferenceCategory
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:title="General"
         app:iconSpaceReserved="false">
+
         <EditTextPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
