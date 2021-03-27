@@ -299,6 +299,12 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener, ApiResp
             }
 
         }
+
+        userImage.setOnClickListener {
+            Constants.SocialIdToView = storyData.userData?.get(0)?.SocialId
+            val intent = Intent(this@StoryFullViewActivity, MyProfile::class.java)
+            startActivity(intent)
+        }
     }
 
     @Throws(Throwable::class)
