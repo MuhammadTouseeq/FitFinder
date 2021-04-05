@@ -54,6 +54,8 @@ class FR_SearchCarList : AppCompatActivity(), GeneralCallBack, ApiResponseCallBa
         var json = intent?.getStringExtra("SearchCar")
         frSearchcar = Gson().fromJson(json, FR_SearchCar::class.java)
 
+
+
         json = intent?.getStringExtra("SearchCarForm")
         frSearchcarForm = Gson().fromJson(json, FR_SearchCar::class.java)
 

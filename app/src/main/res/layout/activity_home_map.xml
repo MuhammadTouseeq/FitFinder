@@ -65,16 +65,16 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
-                android:layout_margin="@dimen/_8sdp"
-                android:padding="@dimen/_8sdp">
+                android:layout_margin="1dp"
+                android:padding="@dimen/_6sdp">
 
-                <ImageView
+                <Button
                     android:id="@+id/btnRefresh"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:src="@drawable/sync"
-                    android:textColor="@android:color/white" />
+                    android:text="Refresh"
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 

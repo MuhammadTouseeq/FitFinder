@@ -93,7 +93,7 @@ public class UserMsgsAdapter(var userChat: List<UserChat>?, var context: Context
             }
             userMSG.text = userMsgsList?.message
 
-            dateTime.text = KotlinHelper.getTimeDifference(userMsgsList?.timeStamp!!)
+            dateTime.text = KotlinHelper.getTimeDifference(userMsgsList?.timeStamp!!,"")
 
             Glide
                 .with(context)

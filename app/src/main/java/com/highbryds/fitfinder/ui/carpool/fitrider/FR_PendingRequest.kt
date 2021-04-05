@@ -1,6 +1,5 @@
 package com.highbryds.fitfinder.ui.carpool.fitrider
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +8,6 @@ import android.view.View
 import android.view.Window
 import android.widget.Button
 import android.widget.RatingBar
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
@@ -28,15 +26,15 @@ import com.highbryds.fitfinder.ui.carpool.fitdriver.FD_CarpoolViewModel
 import com.highbryds.fitfinder.vm.CarPool.FR_SearchCarVM
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_f_r__pending_request.*
-import kotlinx.android.synthetic.main.activity_f_r__search_car_list.*
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class FR_PendingRequest : AppCompatActivity(), ApiResponseCallBack , GeneralCallBack {
+class FR_PendingRequest : AppCompatActivity(), ApiResponseCallBack, GeneralCallBack {
 
     @Inject
     lateinit var fr_SearchCarVM: FR_SearchCarVM
+
     @Inject
     lateinit var FD_CarpoolViewModel: FD_CarpoolViewModel
 
@@ -60,8 +58,9 @@ class FR_PendingRequest : AppCompatActivity(), ApiResponseCallBack , GeneralCall
         val rideRequest = RideRequest(null, KotlinHelper.getUsersData().SocialId, null, null)
         fr_SearchCarVM.getPendingRequest(rideRequest)
         fr_SearchCarVM.pendingRequest.observe(this, Observer {
-            // TODO: 12/29/2020 to check below condition
-            if (it.carpooldata != null) {
+            // TODO: 03/04/2021 to check below condition of empty carpool data
+
+            if (it.carpooldata != null && !it.carpooldata.isEmpty()) {
                 Log.d("PendingRequest", it.toString())
                 val adapter = FR_PendingRequestAdapter(it, this, 0, this)
                 RV_pending.adapter = adapter
@@ -70,6 +69,7 @@ class FR_PendingRequest : AppCompatActivity(), ApiResponseCallBack , GeneralCall
                 startActivity(intent)
                 finish()
             }
+            progress.visibility = View.GONE
 
         })
 
@@ -102,11 +102,16 @@ class FR_PendingRequest : AppCompatActivity(), ApiResponseCallBack , GeneralCall
         dialog.setCancelable(false)
         dialog.setContentView(R.layout.ratindialoge)
 
-        val submit  = dialog.findViewById(R.id.submit) as Button
-        val ratingBar  = dialog.findViewById(R.id.ratingBar) as RatingBar
+        val submit = dialog.findViewById(R.id.submit) as Button
+        val ratingBar = dialog.findViewById(R.id.ratingBar) as RatingBar
 
         submit.setOnClickListener {
-            val model = RideStatus(RIDE_STATUS.completed.name, carpoolstatus_id, ratingBar.rating.toDouble(), socialID)
+            val model = RideStatus(
+                RIDE_STATUS.completed.name,
+                carpoolstatus_id,
+                ratingBar.rating.toDouble(),
+                socialID
+            )
             FD_CarpoolViewModel.changeRideStatus(model)
             dialog.dismiss()
         }

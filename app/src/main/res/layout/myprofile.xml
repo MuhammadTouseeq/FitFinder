@@ -5,9 +5,9 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/profileView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/profileView">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,21 +31,21 @@
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/IV_bio"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
+                        android:layout_width="125dp"
+                        android:layout_height="125dp"
                         android:layout_marginLeft="@dimen/_5sdp"
                         android:layout_marginTop="50dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/tahir_raza_cropped" />
+                        android:src="@drawable/user_profile" />
 
                     <TextView
                         android:id="@+id/name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:text="Tahir R. Zaidi"
+                        android:text="-"
                         android:textColor="@color/white"
-                        android:textSize="30sp"
+                        android:textSize="20sp"
                         android:textStyle="bold"></TextView>
 
                     <TextView
@@ -53,9 +53,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="Passionate Mobile Apps Developer"
+                        android:text="-"
                         android:textColor="@color/white"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textStyle="normal"></TextView>
 
                     <TextView
@@ -64,9 +64,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
 
-                        android:text="tahir.raza@hotmail.com"
+                        android:text="-"
                         android:textColor="@color/white"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="normal"></TextView>
 
 
@@ -86,19 +86,18 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="60dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginBottom="15dp"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:layout_gravity="center"
+
+                    android:orientation="vertical"
+                    android:padding="@dimen/_6sdp">
 
                     <TextView
                         android:id="@+id/stories"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="2332"
+                        android:text="0"
                         android:textColor="@color/colorPrimary"
                         android:textSize="26sp"
                         android:textStyle="bold" />
@@ -106,11 +105,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
+                        android:layout_gravity="center"
                         android:text="Stories"
-
                         android:textColor="@color/black_de"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textStyle="normal" />
 
 
@@ -120,18 +118,18 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="60dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginBottom="15dp"
-                    android:orientation="vertical">
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+
+                    android:padding="@dimen/_6sdp">
 
                     <TextView
                         android:id="@+id/claps"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="2332"
+                        android:text="0"
                         android:textColor="@color/colorPrimary"
                         android:textSize="26sp"
                         android:textStyle="bold" />
@@ -139,11 +137,11 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
+                        android:layout_gravity="center"
                         android:text="Claps"
 
                         android:textColor="@color/black_de"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textStyle="normal" />
 
 
@@ -152,18 +150,17 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="60dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginBottom="15dp"
-                    android:orientation="vertical">
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_6sdp">
 
                     <TextView
                         android:id="@+id/comments"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="2332"
+                        android:text="0"
                         android:textColor="@color/colorPrimary"
                         android:textSize="26sp"
                         android:textStyle="bold" />
@@ -171,11 +168,11 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
+                        android:layout_gravity="center"
                         android:text="Comments"
 
                         android:textColor="@color/black_de"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textStyle="normal" />
 
 
@@ -198,9 +195,9 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:padding="@dimen/_5sdp"
-                    android:text="About Tahir Raza"
+                    android:text="About"
                     android:textColor="@color/black_de"
-                    android:textSize="24sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -212,9 +209,9 @@
                     android:maxLines="3"
                     android:minLines="1"
                     android:padding="@dimen/_8sdp"
-                    android:text="Hi! My name is Tahir Raza. I'm an Accomplished Applications Developer who is Adept at developing apps based on customer specifications, Specializes in corporate and industrial applications. am an effective leader and a presenter, skilled in enlisting the support of all team members in aligning with project and organizational goals."
+                    android:text="--"
                     android:textColor="@color/black_de"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="normal" />
 
             </LinearLayout>
@@ -252,18 +249,22 @@
     </RelativeLayout>
 
 
-
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:id="@+id/loadingView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="gone"
-        android:id="@+id/loadingView">
+        android:visibility="visible">
 
-        <include
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/loading_view"/>
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
+        <!-- <include
+             layout="@layout/loading_view"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content" />-->
 
     </RelativeLayout>
 

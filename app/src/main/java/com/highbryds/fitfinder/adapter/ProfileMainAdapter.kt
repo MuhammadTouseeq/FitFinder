@@ -40,7 +40,7 @@ class ProfileMainAdapter(var profileData: ArrayList<ProfileBioModel>, var contex
             Glide
                 .with(context)
                 .load(KotlinHelper.getUsersData().imageUrl)
-                .placeholder(R.drawable.ic_launcher_foreground)
+                .placeholder(R.drawable.user_profile)
                 .into(IV_bio);
         }
     }

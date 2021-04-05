@@ -25,7 +25,6 @@ import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
 import com.highbryds.fitfinder.callbacks.FTPCallback
 import com.highbryds.fitfinder.commonHelper.*
 import com.highbryds.fitfinder.model.UsersData
-import com.highbryds.fitfinder.ui.Main.MainActivity
 import com.highbryds.fitfinder.utils.PathUtil
 import com.highbryds.fitfinder.vm.Profile.UpdateProfileViewModel
 import com.karumi.dexter.Dexter
@@ -99,7 +98,7 @@ class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissi
                 heading.text.toString().isEmpty() || description.text.toString()
                     .isEmpty() || phone.text.toString().length != 11
             ) {
-                this.toast(this, "Please provide complete and proper info")
+                this.toast(this, "Please provide complete information.")
             } else {
 
                 val ph = "+92" + phone.text.toString().substring(1);
@@ -161,7 +160,7 @@ class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissi
                 // The SMS verification code has been sent to the provided phone number, we
                 // now need to ask the user to enter the code and then construct a credential
                 // by combining the code with a verification ID.
-                this@UpdateProfile.toast(this@UpdateProfile, "Code sent on entered number.")
+                this@UpdateProfile.toast(this@UpdateProfile, "Code sent on entered cell number.")
 
                 // Save verification ID and resending token so we can use them later
                 storedVerificationId = verificationId

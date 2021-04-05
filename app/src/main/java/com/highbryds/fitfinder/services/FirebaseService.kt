@@ -6,6 +6,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.media.AudioAttributes
@@ -15,6 +16,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.preference.PreferenceManager
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -31,6 +33,7 @@ import com.squareup.picasso.Target
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
 class FirebaseService : FirebaseMessagingService() {
 
@@ -39,9 +42,9 @@ class FirebaseService : FirebaseMessagingService() {
 
     @Override
     override fun onNewToken(token: String) {
-          super.onNewToken(token)
+        super.onNewToken(token)
         Log.d("NEW_TOKEN", token);
-      //  Log.d(TAG, "Refreshed token: $token")
+        //  Log.d(TAG, "Refreshed token: $token")
 
         PrefsHelper.putString(Constants.Pref_DeviceToken, token)
     }
@@ -74,26 +77,34 @@ class FirebaseService : FirebaseMessagingService() {
             insertChatMessages(uc)
 
         } else if (obj != null && obj.equals("help")) {
+
             try {
-                var data = emptyList<String>()
-                data = p0.getData().get("message")!!.split("|")
-                if (!data[2].equals(KotlinHelper.getUsersData().SocialId)) {
-                    val locationHelper = LocationHelper()
-                    locationHelper.LocationInitialize(getApplicationContext())
-                    val distance = JavaHelper.calculateDistance(
-                        LatLng(
-                            data[1].split(",")[0].toDouble(),
-                            data[1].split(",")[1].toDouble()
-                        ), LatLng(PrefsHelper.getDouble("LAT"), PrefsHelper.getDouble("LNG"))
-                    )
-                    if (distance <= 2.5) {
-                        PrefsHelper.putString(
-                            Constants.Pref_ToOpenStoryAuto,
-                            p0.getData().get("storyid")
-                        )
-                        sendNotification(data[0], "Help Alert")
-                    }
-                }
+                val prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+                var allowHelp:Boolean = prefs.getBoolean(getString(R.string.notifications_emergency), true);
+
+               if( allowHelp){
+                   var data = emptyList<String>()
+                   data = p0.getData().get("message")!!.split("|")
+                   if (!data[2].equals(KotlinHelper.getUsersData().SocialId)) {
+                       val locationHelper = LocationHelper()
+                       locationHelper.LocationInitialize(getApplicationContext())
+                       val distance = JavaHelper.calculateDistance(
+                           LatLng(
+                               data[1].split(",")[0].toDouble(),
+                               data[1].split(",")[1].toDouble()
+                           ), LatLng(PrefsHelper.getDouble("LAT"), PrefsHelper.getDouble("LNG"))
+                       )
+                       if (distance <= 2.5) {
+                           PrefsHelper.putString(
+                               Constants.Pref_ToOpenStoryAuto,
+                               p0.getData().get("storyid")
+                           )
+                           sendNotification(data[0], "Help Alert")
+                       }
+                   }
+
+               }
+
 
             } catch (e: Exception) {
             }

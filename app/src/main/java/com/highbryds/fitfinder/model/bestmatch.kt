@@ -20,5 +20,7 @@ data class bestmatch(
     @SerializedName("destination") val destination : FR_SearchCarDestinationPoint,
     @SerializedName("starting_point") val starting_point : FR_SearchCarStartingPoint,
     @SerializedName("SocialId") val socialId : String,
-    @SerializedName("_id") val _id : String
-)
+    @SerializedName("_id") val _id : String,
+    @SerializedName("driverinfo") val user_data : UserDetails?= null
+
+    )

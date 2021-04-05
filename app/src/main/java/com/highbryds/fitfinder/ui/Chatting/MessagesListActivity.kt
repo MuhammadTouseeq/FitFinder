@@ -5,14 +5,12 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.adapter.UserMsgsAdapter
 import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.room.Tables.UserChat
-
 import com.highbryds.fitfinder.vm.UserChatting.UserChattingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_messages_list.*
@@ -107,7 +105,7 @@ class MessagesListActivity : AppCompatActivity() {
 
             } else {
                 RV_userMsgsList.visibility = View.GONE
-                emptyView.visibility = View.VISIBLE
+                emp_layout.visibility = View.VISIBLE
             }
 
         })

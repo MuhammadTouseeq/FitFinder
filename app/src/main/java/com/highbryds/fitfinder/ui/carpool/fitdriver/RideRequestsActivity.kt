@@ -2,25 +2,20 @@ package com.highbryds.fitfinder.ui.carpool.fitdriver
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.adapters.RideRequestsAdapter
-import com.highbryds.fitfinder.adapters.StoryCommentsAdapter
 import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
 import com.highbryds.fitfinder.callbacks.RideActionCallback
-import com.highbryds.fitfinder.callbacks.StoryCallback
 import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.commonHelper.toast
 import com.highbryds.fitfinder.model.carpool.RIDE_STATUS
-import com.highbryds.fitfinder.model.carpool.RideRequest
 import com.highbryds.fitfinder.model.carpool.RideStatus
 import com.highbryds.fitfinder.ui.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.general_recycle_view.*
+import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -34,14 +29,11 @@ class RideRequestsActivity : BaseActivity(), ApiResponseCallBack {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.general_recycle_view)
-
-
-        //bindToolbar(toolbar,"My Request")
-        val toolbar: Toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
         getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
         getSupportActionBar()?.setDisplayShowHomeEnabled(true);
-        supportActionBar?.title = "My Request"
+        supportActionBar?.title = "My Requests"
+        toolbar.setNavigationOnClickListener { finish() }
 
         adapter = RideRequestsAdapter(applicationContext, arrayListOf())
         recycler_view.adapter = adapter
@@ -55,11 +47,11 @@ class RideRequestsActivity : BaseActivity(), ApiResponseCallBack {
                 val entity = adapter.getitem(position)
                 when (view.id) {
                     R.id.btnCancel -> {
-                        val model = RideStatus(RIDE_STATUS.cancelled.name, entity._id!! , null , null)
+                        val model = RideStatus(RIDE_STATUS.cancelled.name, entity._id!!, null, null)
                         FD_CarpoolViewModel.changeRideStatus(model)
                     }
                     R.id.btnRequestStatus -> {
-                        val model = RideStatus(RIDE_STATUS.accepted.name, entity._id!! , null , null)
+                        val model = RideStatus(RIDE_STATUS.accepted.name, entity._id!!, null, null)
                         FD_CarpoolViewModel.changeRideStatus(model)
                     }
                 }
@@ -67,9 +59,6 @@ class RideRequestsActivity : BaseActivity(), ApiResponseCallBack {
 
         }
 
-        //val arrData= mutableListOf<RideRequest>()
-        //   for (i in 0..9){ arrData.add(RideRequest()) }
-//        adapter.addData(arrData)
 
         FD_CarpoolViewModel.apiResponseCallBack = this
 
@@ -93,11 +82,11 @@ class RideRequestsActivity : BaseActivity(), ApiResponseCallBack {
 
                 RR_progress.visibility = View.GONE
                 if (it.size == 0) {
-                    emptyView.visibility = View.VISIBLE
+                    emp_layout.visibility = View.VISIBLE
                     recycler_view.visibility = View.GONE
                 } else {
 
-                    emptyView.visibility = View.GONE
+                    emp_layout.visibility = View.GONE
                     recycler_view.visibility = View.VISIBLE
                     adapter.clearData()
                     adapter.addData(it)

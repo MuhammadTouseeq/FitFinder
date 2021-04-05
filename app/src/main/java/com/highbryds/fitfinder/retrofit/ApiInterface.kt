@@ -181,4 +181,9 @@ interface ApiInterface {
     suspend fun changeRideStatus(
         @Body model: RideStatus
     ): Response<GeneralResponse>
+
+    @POST("users/feedback")
+    suspend fun userFeedback(
+        @Body model: Feedback
+    ): Response<GeneralResponse>
 }

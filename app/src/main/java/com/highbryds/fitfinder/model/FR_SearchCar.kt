@@ -23,7 +23,7 @@ data class FR_SearchCar (
     @SerializedName("SocialId") val socialId : String,
     @SerializedName("_id") val id : String?,
     @SerializedName("status") val status : String?,
-    @SerializedName("user_data") val user_data : UserDetails?= null,
+    @SerializedName("driverinfo") val user_data : UserDetails?= null,
     @SerializedName("others") val others : List<othermatch>? = null,
     @SerializedName("bestmatch") val bestmatch : List<bestmatch>? = null
 

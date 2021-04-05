@@ -513,8 +513,8 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             val chat = PrimaryDrawerItem().withIdentifier(3).withName("Messages")
             val profile = PrimaryDrawerItem().withIdentifier(4).withName("Profile")
             val settings = PrimaryDrawerItem().withIdentifier(5).withName("Settings")
-            val privayPolicy = PrimaryDrawerItem().withIdentifier(5).withName("Privacy Policy")
-            val logout = PrimaryDrawerItem().withIdentifier(6).withName("Logout")
+            val privayPolicy = PrimaryDrawerItem().withIdentifier(6).withName("Privacy Policy")
+            val logout = PrimaryDrawerItem().withIdentifier(7).withName("Logout")
 
 
             // get the reference to the slider and add the items
@@ -594,9 +594,16 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
                 com.highbryds.fitfinder.R.layout.marker_view,
                 null
             )
+
         val markerImage: ImageView =
             marker.findViewById<View>(com.highbryds.fitfinder.R.id.imgProfile) as CircleImageView
-        markerImage.setImageDrawable(resources.getDrawable(com.highbryds.fitfinder.R.drawable.marker_thinking_boy))
+        // markerImage.setImageDrawable(resources.getDrawable(com.highbryds.fitfinder.R.drawable.marker_thinking_boy))
+
+        Glide.with(this)
+            .asBitmap()
+            .load(story.userData?.get(0)?.imageUrl)
+            .into(markerImage)
+
         val displayMetrics = DisplayMetrics()
         (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
         marker.layoutParams = ViewGroup.LayoutParams(52, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -636,7 +643,13 @@ open class HomeMapActivity : BaseActivity(), OnMapReadyCallback, View.OnClickLis
             )
         val markerImage: ImageView =
             marker.findViewById<View>(com.highbryds.fitfinder.R.id.imgProfile) as CircleImageView
+        /* Glide.with(this)
+             .asBitmap()
+             .load(story.userData?.get(0)?.imageUrl)
+             .into(markerImage)*/
+/*
         markerImage.setImageDrawable(resources.getDrawable(com.highbryds.fitfinder.R.drawable.marker_thinking_boy))
+*/
         val displayMetrics = DisplayMetrics()
         (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
         marker.layoutParams = ViewGroup.LayoutParams(52, ViewGroup.LayoutParams.WRAP_CONTENT)

@@ -117,10 +117,14 @@ class KotlinHelper {
         }
 
 
-        fun getTimeDifference(msgDate: String): String {
+        fun getTimeDifference(msgDate: String, type: String): String {
+            var parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
 
+            if (type.equals("noSeconds")) {
 
-            val parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm")
+
+            }
 
             val msgDate: Date = parser.parse(msgDate)
 
@@ -128,7 +132,7 @@ class KotlinHelper {
             val miliSeconds: Long = Calendar.getInstance().timeInMillis - msgDate.time
 
 
-            val seconds: Long = TimeUnit.MILLISECONDS.toSeconds(miliSeconds)
+            val seconds: Long = TimeUnit.MILLISECONDS.toSeconds(Math.abs(miliSeconds))
             val minute = seconds / 60
             val hour = minute / 60
             val days = hour / 24
@@ -148,11 +152,21 @@ class KotlinHelper {
 
                     time_ago = "$hour hour ago"
 
+
                 } else {
 
                     time_ago = "$hour hours ago"
 
                 }
+
+
+                if (minute > 1) {
+
+
+                    val multiplier = hour * 60
+                    time_ago = time_ago + ", " + Math.abs(multiplier - minute) + " minutes ago"
+                }
+
 
             } else if (minute > 0) {
                 if (minute < 2) {
@@ -187,6 +201,15 @@ class KotlinHelper {
 
         fun getMeaningFullTime(msgDate: String): String {
             val currentFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+            val converterFormat = SimpleDateFormat("EEE, MMM d, ''yy  h:mm a")
+            val msgDateNew: Date = currentFormat.parse(msgDate)
+            val formats1: String = converterFormat.format(msgDateNew)
+            return formats1
+
+        }
+
+        fun getMeaningFullTimeForCarPool(msgDate: String): String {
+            val currentFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm")
             val converterFormat = SimpleDateFormat("EEE, MMM d, ''yy  h:mm a")
             val msgDateNew: Date = currentFormat.parse(msgDate)
             val formats1: String = converterFormat.format(msgDateNew)

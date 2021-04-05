@@ -15,6 +15,7 @@ data class UserDetails(
     @SerializedName("SocialId") var SocialId : String,
     @SerializedName("emailAdd") var emailAdd : String,
     @SerializedName("cellNumber") var cellNumber : String,
-    @SerializedName("SocialType") var SocialType : String
+    @SerializedName("SocialType") var SocialType : String,
+    @SerializedName("rating") var rating : Float
 )
 

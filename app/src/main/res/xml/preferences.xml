@@ -36,8 +36,8 @@
         <EditTextPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:defaultValue="@string/default_feedback_summary"
-            android:key="@string/key_gallery_name"
+            android:defaultValue=""
+            android:key="@string/key_user_app_feedback"
             android:summary="@string/default_feedback_summary"
             android:title="@string/key_send_feedback"
             app:iconSpaceReserved="false" />
@@ -55,7 +55,8 @@
         <Preference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:summary="@string/app_version"
+            android:key="@string/app_version"
+            android:summary=""
             android:title="@string/title_version"
             app:iconSpaceReserved="false" />
 
@@ -63,7 +64,7 @@
         <Preference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:summary="View our website"
+            android:summary="Visit our website"
             android:title="Website"
             app:iconSpaceReserved="false">
             <intent

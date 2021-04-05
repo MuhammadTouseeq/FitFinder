@@ -34,7 +34,7 @@
     <string name="title_profile_view">Profile visiblity</string>
     <string name="summary_profile_view">Make your profile public ?</string>
     <string name="key_upload_over_wifi">key_upload_over_wifi</string>
-    <string name="key_gallery_name">key_gallery_name</string>
+    <string name="key_user_app_feedback">key_user_app_feedback</string>
     <string name="key_upload_quality">key_upload_quality</string>
     <string name="notifications_emergency">notifications_emergency</string>
     <string name="key_notifications_new_message_ringtone">key_notifications_new_message_ringtone</string>
