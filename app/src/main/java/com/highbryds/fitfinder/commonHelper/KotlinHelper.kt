@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+
 class KotlinHelper {
     companion object {
         fun isJsonObjNull(obj: JSONObject, value: String): String {
@@ -29,7 +30,40 @@ class KotlinHelper {
             }
 
         }
+        interface GetData{
+            fun getColor(color:String)
 
+
+        }
+fun getCarColors(context: Context,getdata:GetData){
+    // setup the alert builder
+    // setup the alert builder
+    var carColor = ""
+    val builder = AlertDialog.Builder(context)
+    builder.setTitle("Pick a color")
+
+// add a list
+
+// add a list
+    val animals = arrayOf("White", "Black", "Silver", "Red", "Green","Blue","Grey","Golden","Sand beige","pink","yellow","Cream")
+    builder.setItems(
+        animals
+    ) { dialog, which ->
+
+        carColor= animals[which]
+        getdata.getColor(carColor)
+
+    }
+
+// create and show the alert dialog
+
+// create and show the alert dialog
+    val dialog = builder.create()
+    dialog.show()
+
+
+
+}
         fun getUniqueID(): String {
             return UUID.randomUUID().toString()
         }

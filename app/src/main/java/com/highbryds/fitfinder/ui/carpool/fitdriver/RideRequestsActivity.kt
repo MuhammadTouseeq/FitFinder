@@ -32,7 +32,7 @@ class RideRequestsActivity : BaseActivity(), ApiResponseCallBack {
         setSupportActionBar(toolbar)
         getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
         getSupportActionBar()?.setDisplayShowHomeEnabled(true);
-        supportActionBar?.title = "My Requests"
+        supportActionBar?.title = "Carpool Requests"
         toolbar.setNavigationOnClickListener { finish() }
 
         adapter = RideRequestsAdapter(applicationContext, arrayListOf())

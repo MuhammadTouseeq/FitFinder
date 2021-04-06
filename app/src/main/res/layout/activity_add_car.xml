@@ -19,32 +19,38 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="@dimen/_16sdp"
+            android:layout_margin="@dimen/_8sdp"
             android:orientation="vertical">
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/audioAnimation"
-                android:layout_width="@dimen/_80sdp"
-                android:layout_height="@dimen/_80sdp"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_100sdp"
 
                 android:layout_gravity="center"
                 android:visibility="visible"
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true"
-                app:lottie_rawRes="@raw/car"
+                app:lottie_rawRes="@raw/car_add_to_pool"
                 app:lottie_speed="0.9" />
 
+            <!--TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding=""
+                android:text="Enter your car details below"
+                android:textStyle="bold"></TextView>-->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Enter your car details below"
+                android:text="Register your car for the coming trip"
                 android:textStyle="bold"></TextView>
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp">
+                android:layout_marginTop="@dimen/_14sdp">
 
                 <AutoCompleteTextView
                     android:id="@+id/autoCompleteMake"
@@ -66,7 +72,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp">
+                android:layout_marginTop="@dimen/_14sdp">
 
                 <AutoCompleteTextView
                     android:id="@+id/autoCompleteModel"
@@ -89,7 +95,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp">
+                android:layout_marginTop="@dimen/_14sdp">
 
                 <EditText
                     android:id="@+id/edtRegNo"
@@ -107,32 +113,52 @@
                 android:id="@+id/containerColorPicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_14sdp"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="@dimen/_10sdp">
+                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="Pick Color"
-                    android:textSize="@dimen/_16sdp" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/businessLayout1"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/txtPickColor"
-                    android:layout_width="@dimen/_30sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:background="@color/colorPrimary" />
+                    <EditText
+                        android:id="@+id/edtColor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:hint="Pick a color"
+                        android:inputType="text"
+                        android:maxLength="10"
+                        android:textSize="16sp" />
+
+
+                </com.google.android.material.textfield.TextInputLayout>
+                <!--
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:text="Pick a color"
+                                    android:textSize="@dimen/_16sdp" />
+                -->
+
+                <!-- <TextView
+                     android:id="@+id/txtPickColor"
+                     android:layout_width="@dimen/_30sdp"
+                     android:layout_height="@dimen/_30sdp"
+                     android:background="@color/colorPrimary" />-->
             </LinearLayout>
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp"
-                android:background="#838AC844"
+                android:layout_marginTop="@dimen/_14sdp"
+                android:background="@color/colorGray"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -141,9 +167,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:drawableTop="@drawable/ic_baseline_seat"
+                    android:drawableTint="@android:color/black"
                     android:padding="@dimen/_10sdp"
-                    android:text="Seats"
-                    android:textColor="@android:color/white"
+                    android:text="Available seats"
+                    android:textColor="@android:color/black"
                     android:textSize="@dimen/_16sdp" />
 
                 <com.shawnlin.numberpicker.NumberPicker
@@ -153,19 +180,19 @@
                     android:background="@color/colorPrimary"
                     app:np_dividerColor="@android:color/white"
                     app:np_height="54dp"
-                    app:np_max="7"
+                    app:np_max="3"
                     app:np_min="1"
                     app:np_orientation="horizontal"
                     app:np_selectedTextColor="@android:color/white"
                     app:np_textColor="@android:color/white"
-                    app:np_value="3"
+                    app:np_value="1"
                     app:np_width="180dp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_14sdp"
                 android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -208,8 +235,8 @@
             <Button
                 android:id="@+id/btnSubmit"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:layout_marginTop="@dimen/_14sdp"
                 android:layout_marginBottom="@dimen/_30sdp"
                 android:text="Submit" />
 

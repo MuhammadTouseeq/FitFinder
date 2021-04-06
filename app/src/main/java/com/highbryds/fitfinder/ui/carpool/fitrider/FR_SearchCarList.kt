@@ -1,9 +1,9 @@
 package com.highbryds.fitfinder.ui.carpool.fitrider
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,9 +16,7 @@ import com.highbryds.fitfinder.callbacks.GeneralCallBack
 import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.commonHelper.toast
 import com.highbryds.fitfinder.model.FR_SearchCar
-import com.highbryds.fitfinder.model.NearbyStory
 import com.highbryds.fitfinder.model.carpool.RideRequest
-import com.highbryds.fitfinder.model.othermatch
 import com.highbryds.fitfinder.vm.CarPool.FR_SearchCarVM
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_f_r__search_car_list.*
@@ -44,7 +42,7 @@ class FR_SearchCarList : AppCompatActivity(), GeneralCallBack, ApiResponseCallBa
         setSupportActionBar(toolbar)
         getSupportActionBar()?.setDisplayHomeAsUpEnabled(true)
         getSupportActionBar()?.setDisplayShowHomeEnabled(true)
-        supportActionBar?.title = "Fit Driver"
+        supportActionBar?.title = "Fit Drivers"
         toolbar.setNavigationOnClickListener { finish() }
 
 
@@ -78,6 +76,7 @@ class FR_SearchCarList : AppCompatActivity(), GeneralCallBack, ApiResponseCallBa
     }
 
     override fun eventOccur(id: String) {
+        RR_progress.visibility = View.VISIBLE
         val rideRequest =
             RideRequest(
                 id,
@@ -103,7 +102,7 @@ class FR_SearchCarList : AppCompatActivity(), GeneralCallBack, ApiResponseCallBa
         val intent = Intent(this, FR_PendingRequest::class.java)
         intent.putExtra("id", id)
         startActivity(intent)
-        // }
+        RR_progress.visibility = View.GONE
         this.toast(this, success.toString())
     }
 }

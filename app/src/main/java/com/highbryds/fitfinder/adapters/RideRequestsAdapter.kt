@@ -1,31 +1,24 @@
 package com.highbryds.fitfinder.adapters
 
-import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.callbacks.RideActionCallback
-import com.highbryds.fitfinder.callbacks.StoryCallback
 import com.highbryds.fitfinder.commonHelper.JavaHelper
 import com.highbryds.fitfinder.model.carpool.RIDE_STATUS
 import com.highbryds.fitfinder.model.carpool.RideRequest
-import com.highbryds.fitfinder.ui.Chatting.context
 import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.karumi.dexter.listener.single.PermissionListener
-import com.log4k.d
 import kotlinx.android.synthetic.main.recycler_item_story_trending.view.txtUserName
 import kotlinx.android.synthetic.main.rv_item_ride_requests.view.*
 import kotlinx.android.synthetic.main.rv_item_story_comment.view.*
@@ -58,19 +51,16 @@ class RideRequestsAdapter(
 
         holder.btnCancel.setOnClickListener {
 
-            rideActionCallback?.onItemClicked(position,it)
+            rideActionCallback?.onItemClicked(position, it)
         }
 
-        if(arrData.get(position).status.equals("pending"))
-        {
+        if (arrData.get(position).status.equals("pending")) {
             holder.btnRequestStatus.setOnClickListener {
 
-                rideActionCallback?.onItemClicked(position,it)
+                rideActionCallback?.onItemClicked(position, it)
 
             }
-        }
-        else
-        {
+        } else {
             holder.btnRequestStatus.setOnClickListener(null)
         }
     }
@@ -110,27 +100,27 @@ class RideRequestsAdapter(
             {
                 // txtDateTime.setText(Utils.getDateTimeFromServer(createdAt,"EEE, d MMM yyyy h:mm a"))
 
-                txtDestination.text="To: ${destination?.name}"
+                txtDestination.text = "To: ${destination?.name}"
                 //txtDestination.isSelected=true
-               // txtStartingPoint.isSelected=true
-                txtStartingPoint.text="Form :${starting_point?.name}"
-                txtDateTime.text="Request Time : ${JavaHelper.parseDateToFormat(null,startingtime)}"
+                // txtStartingPoint.isSelected=true
+                txtStartingPoint.text = "Form :${starting_point?.name}"
+                txtDateTime.text =
+                    "Request Time : ${JavaHelper.parseDateToFormat(null, startingtime)}"
 
-                when(status)
-                {
-                    RIDE_STATUS.pending.name->{
-                btnRequestStatus.setText("Accept")
-                        btnCancel.visibility=View.VISIBLE
+                when (status) {
+                    RIDE_STATUS.pending.name -> {
+                        btnRequestStatus.setText("Accept")
+                        btnCancel.visibility = View.VISIBLE
 
                     }
-                    RIDE_STATUS.cancelled.name->{
+                    RIDE_STATUS.cancelled.name -> {
                         btnRequestStatus.setText("Cancelled")
-                        btnCancel.visibility=View.INVISIBLE
+                        btnCancel.visibility = View.INVISIBLE
 
                     }
-                    RIDE_STATUS.accepted.name->{
+                    RIDE_STATUS.accepted.name -> {
                         btnRequestStatus.setText("Accepted")
-btnCancel.visibility=View.INVISIBLE
+                        btnCancel.visibility = View.INVISIBLE
                     }
                 }
 
@@ -147,32 +137,33 @@ btnCancel.visibility=View.INVISIBLE
 
                 btnCall.setOnClickListener {
 
-                        Dexter.withContext(mcontext)
-                            .withPermission(
-                                android.Manifest.permission.CALL_PHONE
-                            ).withListener(object : PermissionListener{
-                                override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
-                                    val intent =
-                                        Intent(Intent.ACTION_CALL, Uri.parse("tel:" +usersData?.cellNumber))
-                                  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                    mcontext.startActivity(intent)
+                    Dexter.withContext(mcontext)
+                        .withPermission(
+                            android.Manifest.permission.CALL_PHONE
+                        ).withListener(object : PermissionListener {
+                            override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
+                                val intent =
+                                    Intent(
+                                        Intent.ACTION_CALL,
+                                        Uri.parse("tel:" + usersData?.cellNumber)
+                                    )
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                mcontext.startActivity(intent)
 
-                                }
+                            }
 
-                                override fun onPermissionRationaleShouldBeShown(
-                                    p0: PermissionRequest?,
-                                    p1: PermissionToken?
-                                ) {
+                            override fun onPermissionRationaleShouldBeShown(
+                                p0: PermissionRequest?,
+                                p1: PermissionToken?
+                            ) {
 
-                                }
+                            }
 
-                                override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
+                            override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
 
-                                }
+                            }
 
-                            }).check()
-
-
+                        }).check()
 
 
                 }

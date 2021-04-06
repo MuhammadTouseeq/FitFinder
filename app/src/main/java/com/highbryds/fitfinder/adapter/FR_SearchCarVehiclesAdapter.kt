@@ -95,6 +95,7 @@ class FR_SearchCarVehiclesAdapter(
         holder.bindViews(frSearchcar.bestmatch!![position], context)
 
         holder.requestRide.setOnClickListener {
+
             generalCallBack.eventOccur(frSearchcar.bestmatch!![position]._id)
         }
 

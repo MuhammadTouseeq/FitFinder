@@ -18,17 +18,14 @@ import com.highbryds.fitfinder.model.carpool.FD_CarPool
 import com.highbryds.fitfinder.ui.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_add_car.*
-import petrov.kristiyan.colorpicker.ColorPicker
-import petrov.kristiyan.colorpicker.ColorPicker.OnFastChooseColorListener
-import java.util.*
+import kotlinx.android.synthetic.main.toolbar.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 
 @AndroidEntryPoint
-class AddCarActivity : BaseActivity(), View.OnClickListener {
+class AddCarActivity : BaseActivity(), View.OnClickListener, KotlinHelper.Companion.GetData {
 
     @Inject
     lateinit var carViewModel: AddCarViewModel
@@ -36,11 +33,14 @@ class AddCarActivity : BaseActivity(), View.OnClickListener {
     val arrCarModels = mutableListOf<CarDetails>()
     lateinit var fdCarpool: FD_CarPool;
     var AC: String = "AC";
-    var pickedColor: String = "";
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_car)
-
+        setSupportActionBar(toolbar)
+        getSupportActionBar()?.setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar()?.setDisplayShowHomeEnabled(true);
+        supportActionBar?.title = "Add Car Details"
+        toolbar.setNavigationOnClickListener { finish() }
         var adapterCarMake: ArrayAdapter<CarData> =
             ArrayAdapter<CarData>(this, android.R.layout.simple_list_item_1, arrCarMake)
         var adapterCarModel: ArrayAdapter<CarDetails> =
@@ -80,8 +80,9 @@ class AddCarActivity : BaseActivity(), View.OnClickListener {
             }
 
         })
-        containerColorPicker.setOnClickListener(this)
+        //  containerColorPicker.setOnClickListener(this)
         btnSubmit.setOnClickListener(this)
+        edtColor.setOnClickListener(this)
 
 
         carViewModel.getCarMakeModels()
@@ -101,35 +102,38 @@ class AddCarActivity : BaseActivity(), View.OnClickListener {
     override fun onClick(p0: View?) {
 
         when (p0?.id) {
-            R.id.containerColorPicker -> {
+            R.id.edtColor -> {
 
-                val col = resources.getStringArray(R.array.colors)
-
-                var categoryList : ArrayList<String>?=null
-                categoryList = col.toCollection(ArrayList())
+                KotlinHelper.getCarColors(this, this)
 
 
+                /*     val col = resources.getStringArray(R.array.colors)
 
-//                val colors: ArrayList<String> =
-//                    resources.getStringArray(R.array.colors) as ArrayList<String>
+                     var categoryList : ArrayList<String>?=null
+                     categoryList = col.toCollection(ArrayList())
 
-                val colorPicker = ColorPicker(this@AddCarActivity)
 
-                colorPicker.setOnFastChooseColorListener(object : OnFastChooseColorListener {
-                    override fun setOnFastChooseColorListener(position: Int, color: Int) {
-                        // put code
-                        txtPickColor.setBackgroundColor(color)
-                        pickedColor = position.toString()
-                    }
 
-                    override fun onCancel() {
-                        // put code
-                    }
-                })
-                    //.setColors(categoryList)
-                    .setRoundColorButton(true)
-                    .setColumns(5)
-                    .show()
+     //                val colors: ArrayList<String> =
+     //                    resources.getStringArray(R.array.colors) as ArrayList<String>
+
+                     val colorPicker = ColorPicker(this@AddCarActivity)
+
+                     colorPicker.setOnFastChooseColorListener(object : OnFastChooseColorListener {
+                         override fun setOnFastChooseColorListener(position: Int, color: Int) {
+                             // put code
+                             txtPickColor.setBackgroundColor(color)
+                             pickedColor = position.toString()
+                         }
+
+                         override fun onCancel() {
+                             // put code
+                         }
+                     })
+                         //.setColors(categoryList)
+                         .setRoundColorButton(true)
+                         .setColumns(5)
+                         .show()*/
             }
             R.id.btnSubmit -> {
 
@@ -150,7 +154,7 @@ class AddCarActivity : BaseActivity(), View.OnClickListener {
                     return
                 }
 
-                if (pickedColor.isEmpty()) {
+                if (edtColor.text.isEmpty()) {
                     toast(applicationContext, "Please pick color of car")
 
                     return
@@ -169,7 +173,7 @@ class AddCarActivity : BaseActivity(), View.OnClickListener {
                     autoCompleteModel.text.toString(),
                     "FitDrive",
                     KotlinHelper.getUsersData().cellNumber,
-                    pickedColor,
+                    edtColor.text.toString(),
                     AC,
                     edtRegNo.text.toString(),
                     "Car",
@@ -198,11 +202,11 @@ class AddCarActivity : BaseActivity(), View.OnClickListener {
                 autoCompleteMake.setText(carmake)
                 autoCompleteModel.setText(carmodel)
                 edtRegNo.setText(regno)
-                pickedColor = color
-              //  txtPickColor.setBackgroundColor(Integer.parseInt(color))
-                number_picker.value = seatsleft
+                edtColor.setText(color)
+                number_picker.value = totalseats
                 edtCostPerSeat.setText("$preferredcost_max")
-                switchAC.isChecked = if (AC == "YES") true else false
+
+                switchAC.isChecked = if (aC.equals("YES")) true else false
             }
         }
     }
@@ -244,5 +248,9 @@ class AddCarActivity : BaseActivity(), View.OnClickListener {
         matcher = number.matcher(text)
 
         return matcher.matches()
+    }
+
+    override fun getColor(color: String) {
+        edtColor.setText(color)
     }
 }
