@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.adapters.MessageAdapter
+import com.highbryds.fitfinder.app.MainApplication
 import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
 import com.highbryds.fitfinder.commonHelper.JavaHelper
 import com.highbryds.fitfinder.commonHelper.KotlinHelper
@@ -41,6 +42,7 @@ class MessageActivity : AppCompatActivity(), ApiResponseCallBack {
 
     lateinit var textBody: String
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_message)
@@ -56,24 +58,23 @@ class MessageActivity : AppCompatActivity(), ApiResponseCallBack {
         }
 
         userChattingViewModel.apiResponseCallBack = this
-        //name.text = SinchSdk.RECIPENT_NAME
-        //SinchSdk.USER_ID = KotlinHelper.getUsersData().SocialId
+
         context = this
         instance = SinchSdk.getInstance(this)
-        // instance!!.callClient.addCallClientListener(SinchCallClientListener())
-
         userChattingViewModel.getMSG(SinchSdk.RECIPENT_ID, SinchSdk.USER_ID)
         mMessageAdapter = MessageAdapter(
             this,
             this,
             getDatabaseDao.getallChat(SinchSdk.RECIPENT_ID, SinchSdk.USER_ID)?.value
         )
-        // mMessageAdapter = MessageAdapter(this,this, getDatabaseDao.getallChat()?.value)
+
         val messagesList = findViewById<View>(R.id.lstMessages) as ListView
         messagesList.adapter = mMessageAdapter
 
 
         userChattingViewModel.userMsgs.observe(this, Observer {
+
+
             mMessageAdapter!!.loadChat(it)
             mMessageAdapter!!.notifyDataSetChanged()
         })
@@ -114,8 +115,6 @@ class MessageActivity : AppCompatActivity(), ApiResponseCallBack {
                 JavaHelper.getDateTimeSeconds(),
                 KotlinHelper.getUsersData().SocialId
             )
-
-            // FirebaseInstanceId.getInstance().getToken()
             userChattingViewModel.sendChat(chattingViewModel)
             txtTextBody.setText("")
         } else {
@@ -141,5 +140,15 @@ class MessageActivity : AppCompatActivity(), ApiResponseCallBack {
     override fun onResume() {
         super.onResume()
         getDatabaseDao.updateReadStatus(SinchSdk.RECIPENT_ID)
+        MainApplication.activityResumed();
+
     }
+
+    override fun onPause() {
+        super.onPause()
+        MainApplication.activityPaused();
+
+
+    }
+
 }

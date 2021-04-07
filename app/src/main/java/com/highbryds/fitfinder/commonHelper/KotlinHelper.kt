@@ -198,7 +198,7 @@ fun getCarColors(context: Context,getdata:GetData){
 
 
                     val multiplier = hour * 60
-                    time_ago = time_ago + ", " + Math.abs(multiplier - minute) + " minutes ago"
+                    time_ago = time_ago.replace("ago","") + ", " + Math.abs(multiplier - minute) + " minutes ago"
                 }
 
 
