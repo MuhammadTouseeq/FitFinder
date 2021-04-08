@@ -125,7 +125,8 @@ class UserProfileMain : AppCompatActivity(), ApiResponseCallBack {
                             ) else 0,
                             it.body()?.user_details?.get(0)?.Gender!!,
                             it.body()?.user_details?.get(0)?.City!!,
-                            it.body()?.user_details?.get(0)?.Country!!
+                            it.body()?.user_details?.get(0)?.Country!!,
+                            ""
                         )
                         KotlinHelper.updateUserInfo(usersData)
 

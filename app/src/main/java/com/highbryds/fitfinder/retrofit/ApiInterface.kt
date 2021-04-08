@@ -102,7 +102,8 @@ interface ApiInterface {
         @Field("enableCall") enableCall: String?,
         @Field("enableChat") enableChat: String?,
         @Field("helpCategory") helpCategory: String?,
-        @Field("desc") desc: String?): Response<WrapperUploadStory>
+        @Field("desc") desc: String?
+    ): Response<WrapperUploadStory>
 
 
 //    @POST("users/getnearbystories")
@@ -124,13 +125,13 @@ interface ApiInterface {
     ): Response<List<StoryComment>>
 
     @POST("users/getuserProfile/{SocialID}")
-    suspend fun getUserProfile(@Path("SocialID") SocialID: String) : Response<UserProfile>
+    suspend fun getUserProfile(@Path("SocialID") SocialID: String): Response<UserProfile>
 
     @POST("users/getstory")
-    suspend fun getStoryByID(@Body body: SingleStoryModel) : Response<dataTemp>
+    suspend fun getStoryByID(@Body body: SingleStoryModel): Response<dataTemp>
 
     @POST("users/submitSpam")
-    suspend fun submitSpam(@Body body: StorySpam) : Response<GeneralResponse>
+    suspend fun submitSpam(@Body body: StorySpam): Response<GeneralResponse>
 
 
     @POST("users/deletecomment/{commentId}/{storyid}")
@@ -146,7 +147,6 @@ interface ApiInterface {
     ): Response<WrapperStoryViews>
 
 
-
     @POST("users/gettrendingStories")
     suspend fun getTrendingStories(): Response<WrapperStory>
 
@@ -154,7 +154,7 @@ interface ApiInterface {
     /**
      * Car Pooling Web Services
      */
-@POST("carpool/getallCars")
+    @POST("carpool/getallCars")
     suspend fun getCarMakeModels(): Response<List<CarData>>
 
     @POST("carpool/searchcarpool")
@@ -174,7 +174,7 @@ interface ApiInterface {
 
     @FormUrlEncoded
     @POST("carpool/getActiveRideRequests")
-    suspend fun getMyRideRequest(@Field("FitDriverSocialId")  socialId:String) : Response<CarpoolData>
+    suspend fun getMyRideRequest(@Field("FitDriverSocialId") socialId: String): Response<CarpoolData>
 
 
     @POST("carpool/ChangerideStatus")
@@ -186,4 +186,7 @@ interface ApiInterface {
     suspend fun userFeedback(
         @Body model: Feedback
     ): Response<GeneralResponse>
+
+    @POST("users/changeProfileStatus")
+    suspend fun userProfileVisibility(@Body userProfileVisibility: UserProfileVisibility): Response<GeneralResponse>
 }

@@ -724,9 +724,14 @@ class StoryFullViewActivity : AppCompatActivity(), View.OnClickListener, ApiResp
                     }
 
                     R.id.profile -> {
-                        Constants.SocialIdToView = storyData.userData?.get(0)?.SocialId
-                        val intent = Intent(this@StoryFullViewActivity, MyProfile::class.java)
-                        startActivity(intent)
+                        if (storyData.userData!!.get(0).profileType.equals("private", true)) {
+                            toast(this@StoryFullViewActivity, "Profile is private")
+                        } else {
+                            Constants.SocialIdToView = storyData.userData?.get(0)?.SocialId
+                            val intent = Intent(this@StoryFullViewActivity, MyProfile::class.java)
+                            startActivity(intent)
+                        }
+
                     }
                 }
                 // Toast.makeText(this@StoryFullViewActivity, "You Clicked : " + item.title, Toast.LENGTH_SHORT).show()

@@ -38,7 +38,7 @@ class FR_SearchCarVehiclesAdapter(
 
 
         fun bindViews(frSearchcar: bestmatch, context: Context) {
-//frSearchcar.bestmatch.get(0).user_data.rating
+            //frSearchcar.bestmatch.get(0).user_data.rating
             name.text = frSearchcar.regno
             driverRating.rating = frSearchcar.user_data?.rating!!
 

@@ -332,7 +332,8 @@ class UpdateProfile : AppCompatActivity(), ApiResponseCallBack, MultiplePermissi
             ),
             gender.editText!!.text.toString().trim(),
             city.text.toString().trim(),
-            country.text.toString().trim()
+            country.text.toString().trim(),
+            ""
         )
         if (filePart != null) {
             // updateProfileViewModel.uploadProfile(filePart!!, model , usersData)

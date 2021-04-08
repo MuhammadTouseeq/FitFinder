@@ -104,8 +104,7 @@ class RideRequestsAdapter(
                 //txtDestination.isSelected=true
                 // txtStartingPoint.isSelected=true
                 txtStartingPoint.text = "Form :${starting_point?.name}"
-                txtDateTime.text =
-                    "Request Time : ${JavaHelper.parseDateToFormat(null, startingtime)}"
+                txtDateTime.text = "Request Time : ${JavaHelper.parseDateToFormat(null, startingtime)}"
 
                 when (status) {
                     RIDE_STATUS.pending.name -> {

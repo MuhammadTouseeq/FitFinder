@@ -6,20 +6,23 @@ import androidx.fragment.app.viewModels
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreference
 import com.highbryds.fitfinder.BuildConfig
 import com.highbryds.fitfinder.R
 import com.highbryds.fitfinder.callbacks.ApiResponseCallBack
 import com.highbryds.fitfinder.commonHelper.KotlinHelper
 import com.highbryds.fitfinder.commonHelper.toast
+import com.highbryds.fitfinder.model.UserProfileVisibility
 import com.highbryds.fitfinder.model.carpool.Feedback
 import com.highbryds.fitfinder.vm.Profile.ProfileSettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-
 class ProfileSettingsFragment() : PreferenceFragmentCompat(), ApiResponseCallBack,
     SharedPreferences.OnSharedPreferenceChangeListener {
     lateinit var data: EditTextPreference
+    lateinit var profileSwitch : SwitchPreference
+    var isProfile = true
     val ProfileSettingsViewModel: ProfileSettingsViewModel by viewModels()
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -32,14 +35,14 @@ class ProfileSettingsFragment() : PreferenceFragmentCompat(), ApiResponseCallBac
             BuildConfig.VERSION_NAME
         )
 
+
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         when (key) {
 
             "key_user_app_feedback" -> {
-                data =
-                    findPreference(resources.getString(R.string.key_user_app_feedback))!!
+                data = findPreference(resources.getString(R.string.key_user_app_feedback))!!
                 if (!data?.text.equals("")) {
                     ProfileSettingsViewModel.uploadData(
                         Feedback(
@@ -52,12 +55,24 @@ class ProfileSettingsFragment() : PreferenceFragmentCompat(), ApiResponseCallBac
                 }
 
             }
+
+            "key_profile_view" -> {
+                isProfile = sharedPreferences.getBoolean("key_profile_view", true)
+                val isProfileString = if (isProfile) "Public" else "Private"
+                val userProfileVisibility =
+                    UserProfileVisibility(KotlinHelper.getSocialID(), isProfileString)
+                ProfileSettingsViewModel.uploadProfilePref(userProfileVisibility, this)
+            }
         }
     }
 
     override fun onResume() {
         super.onResume()
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        if (KotlinHelper.getUsersData().profileType.equals("Private", true)) {
+            profileSwitch =  findPreference("key_profile_view")!!
+            profileSwitch.isChecked = false
+        }
     }
 
     override fun onPause() {
@@ -71,7 +86,12 @@ class ProfileSettingsFragment() : PreferenceFragmentCompat(), ApiResponseCallBac
     }
 
     override fun getSuccess(success: String) {
-        activity?.toast(requireActivity(), "Thanks for your valuable Feedback.")
-        data?.text = ""
+        if (success.equals("1")) {
+
+        } else {
+            activity?.toast(requireActivity(), "Thanks for your valuable Feedback.")
+            data?.text = ""
+        }
+
     }
 }

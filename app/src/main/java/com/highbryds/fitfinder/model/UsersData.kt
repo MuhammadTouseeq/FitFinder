@@ -17,7 +17,8 @@ data class UsersData(
     @SerializedName("age") var age: Int?,
     @SerializedName("Gender")var Gender : String?,
     @SerializedName("City")var City : String?,
-    @SerializedName("Country") var Country : String?){
+    @SerializedName("Country") var Country : String?,
+    @SerializedName("profileType") var profileType: String?){
 
 //    // for update profile constructor
     constructor(name: String,
@@ -26,5 +27,5 @@ data class UsersData(
                 SocialType: String,
                 emailAdd: String,
                 cellNumber: String,
-                imageUrl: String) : this(null , null ,name , deviceToken,SocialId ,SocialType ,emailAdd ,cellNumber, imageUrl,null,null,null,null)
+                imageUrl: String) : this(null , null ,name , deviceToken,SocialId ,SocialType ,emailAdd ,cellNumber, imageUrl,null,null,null,null, null)
 }
