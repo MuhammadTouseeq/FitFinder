@@ -10,6 +10,24 @@ import dagger.hilt.android.HiltAndroidApp
 @HiltAndroidApp
 @Suppress("DEPRECATION")
 class MainApplication : Application() {
+        companion object {
+
+        private var activityVisible = false
+
+        fun isActivityVisible(): Boolean {
+            return activityVisible
+        }
+
+        fun activityResumed() {
+            activityVisible = true
+        }
+
+        fun activityPaused() {
+            activityVisible = false
+        }
+
+    }
+
 
     override fun onCreate() {
         super.onCreate()
@@ -27,4 +45,6 @@ class MainApplication : Application() {
             .setUseDefaultSharedPreference(true)
             .build()
     }
+
+
 }

@@ -60,9 +60,9 @@ class UserChattingViewModel @ViewModelInject constructor(
             if (response.isSuccessful) {
 
                 msgTo.value = response.body()?.chatting
-                apiResponseCallBack.getSuccess("Message Send")
+                apiResponseCallBack.getSuccess("Message Sent")
             } else {
-                apiResponseCallBack.getError("Message Error")
+                apiResponseCallBack.getError("Error occured while sending msg.")
             }
         } catch (e: Exception) {
             apiResponseCallBack.getError(e.toString())

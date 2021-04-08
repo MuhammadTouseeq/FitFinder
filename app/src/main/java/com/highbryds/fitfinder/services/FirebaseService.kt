@@ -21,6 +21,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.highbryds.fitfinder.R
+import com.highbryds.fitfinder.app.MainApplication
 import com.highbryds.fitfinder.commonHelper.*
 import com.highbryds.fitfinder.room.Dao
 import com.highbryds.fitfinder.room.Tables.UserChat
@@ -74,36 +75,43 @@ class FirebaseService : FirebaseMessagingService() {
             uc.type = 0
             uc.timeStamp = p0.getData().get("messageTime")
             uc.setRead(false)
+
+            if (MainApplication.isActivityVisible()) {
+                uc.setRead(true)
+
+
+            }
             insertChatMessages(uc)
 
         } else if (obj != null && obj.equals("help")) {
 
             try {
                 val prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-                var allowHelp:Boolean = prefs.getBoolean(getString(R.string.notifications_emergency), true);
+                var allowHelp: Boolean =
+                    prefs.getBoolean(getString(R.string.notifications_emergency), true);
 
-               if( allowHelp){
-                   var data = emptyList<String>()
-                   data = p0.getData().get("message")!!.split("|")
-                   if (!data[2].equals(KotlinHelper.getUsersData().SocialId)) {
-                       val locationHelper = LocationHelper()
-                       locationHelper.LocationInitialize(getApplicationContext())
-                       val distance = JavaHelper.calculateDistance(
-                           LatLng(
-                               data[1].split(",")[0].toDouble(),
-                               data[1].split(",")[1].toDouble()
-                           ), LatLng(PrefsHelper.getDouble("LAT"), PrefsHelper.getDouble("LNG"))
-                       )
-                       if (distance <= 2.5) {
-                           PrefsHelper.putString(
-                               Constants.Pref_ToOpenStoryAuto,
-                               p0.getData().get("storyid")
-                           )
-                           sendNotification(data[0], "Help Alert")
-                       }
-                   }
+                if (allowHelp) {
+                    var data = emptyList<String>()
+                    data = p0.getData().get("message")!!.split("|")
+                    if (!data[2].equals(KotlinHelper.getUsersData().SocialId)) {
+                        val locationHelper = LocationHelper()
+                        locationHelper.LocationInitialize(getApplicationContext())
+                        val distance = JavaHelper.calculateDistance(
+                            LatLng(
+                                data[1].split(",")[0].toDouble(),
+                                data[1].split(",")[1].toDouble()
+                            ), LatLng(PrefsHelper.getDouble("LAT"), PrefsHelper.getDouble("LNG"))
+                        )
+                        if (distance <= 2.5) {
+                            PrefsHelper.putString(
+                                Constants.Pref_ToOpenStoryAuto,
+                                p0.getData().get("storyid")
+                            )
+                            sendNotification(data[0], "Help Alert")
+                        }
+                    }
 
-               }
+                }
 
 
             } catch (e: Exception) {
