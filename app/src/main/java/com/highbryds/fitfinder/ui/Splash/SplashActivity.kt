@@ -13,6 +13,7 @@ import com.highbryds.fitfinder.commonHelper.PrefsHelper
 import com.highbryds.fitfinder.commonHelper.toast
 import com.highbryds.fitfinder.ui.Main.HomeMapActivity
 import com.highbryds.fitfinder.ui.OnBoarding.FirstScreen
+import com.highbryds.fitfinder.ui.OnBoarding.OnBoardingActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -50,7 +51,7 @@ class SplashActivity : AppCompatActivity() {
                 val intent = Intent(this , HomeMapActivity::class.java)
                 startActivity(intent)
             }else{
-                val intent = Intent(this , FirstScreen::class.java)
+                val intent = Intent(this , OnBoardingActivity::class.java)
                 startActivity(intent)
             }
             finish()

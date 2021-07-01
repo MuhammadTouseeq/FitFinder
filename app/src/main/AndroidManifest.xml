@@ -64,7 +64,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.carpool.fitrider.FR_SearchCarList" />
+         <activity android:name=".ui.carpool.fitrider.FR_SearchCarList" />
+         <activity android:name=".ui.OnBoarding.OnBoardingActivity" />
         <activity android:name=".ui.carpool.fitrider.FR_Adress_Activity" />
         <activity
             android:name=".ui.carpool.fitrider.FR_RequestForm"

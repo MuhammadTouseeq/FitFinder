@@ -185,6 +185,9 @@ dependencies {
     implementation 'com.shawnlin:number-picker:2.4.11'
 
     implementation 'petrov.kristiyan:colorpicker-library:1.1.10'
+
+    // AndroidX Capable version
+    implementation 'com.github.AppIntro:AppIntro:6.1.0'
 }
 
 kapt {
