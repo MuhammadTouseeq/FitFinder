@@ -3,15 +3,15 @@
 
 Our app is intelligent enough to nudge nearby audience with push notifications , people can wish to hide their profile, cell number etc. and can relay on our in app chat messaging. 
 
-Technology/ Stack used 🎓
-Kotlin
-MVVM
-XML
-Node js
-Mongodb
-LiveData
-Room 
-Android Studio
+## Technology/ Stack used 🎓
+-Kotlin
+-MVVM
+-XML
+-Node js
+-Mongodb
+-LiveData
+-Room 
+-Android Studio
 
 ## Demo Apk 
 
