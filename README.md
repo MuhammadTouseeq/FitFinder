@@ -21,6 +21,9 @@ Our app is intelligent enough to nudge nearby audience with push notifications ,
 
 (https://www.youtube.com/watch?v=Y-FDRwO34Fc&feature=youtu.be)
 
+|         Urgent Need Blood             |    
+| :-----------------------------------: |
+|        <img src="1.jpeg" width="150" height="300">  |       
 
 ### Contact 
 
